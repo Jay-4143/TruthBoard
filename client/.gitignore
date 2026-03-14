@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Production
+dist/
+build/
+
+# Typescript
+*.tsbuildinfo
+
+# Vite
+vite.config.js.timestamp-*
+
+# IDE
+.vscode/
+.idea/

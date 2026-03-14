@@ -1,0 +1,220 @@
+# TruthBoard — Task Breakdown
+
+> All tasks are ordered by development phase.
+> Each task is designed to be completed in a single implementation session.
+
+---
+
+## Phase 1 — Foundation & Auth System
+
+### Task 1.1: Refactor User Model & Auth System
+- [x] Upgrade `User.js` model with new fields: `avatar`, `role`, `isVerified`, `bio`, `location`, `reviewCount`
+- [x] Add role-based enum: `user`, `companyOwner`, `admin`
+- [x] Update `authController.js` — add `getMe`, `updateProfile`, `changePassword`
+- [x] Update `authRoutes.js` with new endpoints
+- [x] Add input validation with `express-validator`
+- [x] Add `roleMiddleware.js` for role-based access control
+
+### Task 1.2: Security Hardening
+- [ ] Install and configure `helmet`, `express-rate-limit`, `express-mongo-sanitize`
+- [ ] Add rate limiting to auth routes (5 req/min for login)
+- [ ] Add global error handler middleware
+- [ ] Add request logger middleware (morgan)
+- [ ] Configure CORS properly for frontend origin
+
+---
+
+## Phase 2 — Company System
+
+### Task 2.1: Category System
+- [ ] Create `Category.js` model
+- [ ] Create `categoryController.js` & `categoryRoutes.js`
+- [ ] Seed initial categories (Technology, Finance, Food, Health, Education, etc.)
+
+### Task 2.2: Refactor Company Model
+- [ ] Upgrade `Company.js` with new fields: `logo`, `category` (ref), `claimedBy`, `isClaimed`, `contactEmail`, `averageRating`, `totalReviews`, `ratingDistribution`, `trustScore`
+- [ ] Add text index on `name` for search
+- [ ] Add compound indexes for sorting/filtering
+
+### Task 2.3: Company Controller Expansion
+- [x] Add company search endpoint with text search
+- [ ] Add category filtering endpoint
+- [ ] Add trending companies endpoint (sorted by review count + rating)
+- [ ] Add company claim endpoint
+- [ ] Add pagination to company listing (cursor-based)
+- [ ] Update seed script with new company fields
+
+---
+
+## Phase 3 — Review System
+
+### Task 3.1: Refactor Review Model
+- [ ] Upgrade `Review.js` with new fields: `status`, `isEdited`, `editHistory`, `sentimentScore`, `isNegativeFlagged`, `isVerified`, `flagCount`
+- [ ] Add unique compound index `{ userId, companyId }` — one review per user per company
+- [ ] Add compound indexes for common query patterns
+
+### Task 3.2: Review CRUD Enhancements
+- [ ] Update `reviewController.js` — add edit review (with edit history)
+- [ ] Add delete review endpoint (soft delete via status)
+- [ ] Add single review GET endpoint
+- [ ] Add user reviews endpoint (GET reviews by userId)
+- [ ] Add review sorting (newest, highest, lowest)
+- [ ] Add review filtering by rating
+- [ ] Add pagination
+
+### Task 3.3: Rating Aggregation Logic
+- [ ] Create `ratingService.js` utility
+- [ ] Implement `recalculateCompanyRating()` — runs on review create/edit/delete
+- [ ] Updates: `averageRating`, `totalReviews`, `ratingDistribution`, `trustScore`
+- [ ] Trust score formula: weighted average favoring recent + verified reviews
+
+### Task 3.4: Review Flagging System
+- [ ] Create `ReviewFlag.js` model
+- [ ] Create flag review endpoint (POST /api/reviews/:id/flag)
+- [ ] Increment `flagCount` on review
+- [ ] Validate one flag per user per review
+
+---
+
+## Phase 4 — Company Responses
+
+### Task 4.1: Company Response System
+- [ ] Create `CompanyResponse.js` model
+- [ ] Create `responseController.js` & `responseRoutes.js`
+- [ ] Validate only company owner can respond
+- [ ] One response per review constraint
+- [ ] Include response when fetching reviews (populate)
+
+---
+
+## Phase 5 — AI Negative Review Detection
+
+### Task 5.1: Sentiment Analysis Service
+- [ ] Create `sentimentService.js` in `server/services/`
+- [ ] Build keyword dictionary for negative sentiment scoring
+- [ ] Implement `analyze(text)` function → returns score 0–1
+- [ ] Add unit tests for the sentiment scorer
+
+### Task 5.2: Auto-Flagging Integration
+- [ ] After review creation, run sentiment analysis
+- [ ] If rating ≤ 2 AND sentimentScore ≥ 0.6 → set `isNegativeFlagged: true`
+- [ ] Create notification for company owner
+- [ ] Log the flagging event
+
+---
+
+## Phase 6 — Notification System
+
+### Task 6.1: In-App Notifications
+- [ ] Create `Notification.js` model
+- [ ] Create `notificationController.js` & `notificationRoutes.js`
+- [ ] Create `notificationService.js` — helper to create notifications
+- [ ] Endpoints: get notifications, mark as read, mark all as read
+
+### Task 6.2: Notification Triggers
+- [ ] Trigger on: new review on claimed company
+- [ ] Trigger on: negative review auto-flagged
+- [ ] Trigger on: company responds to user's review
+- [ ] Trigger on: review manually flagged (notify admin)
+- [ ] Trigger on: review moderation result (notify author)
+
+### Task 6.3: Email Notifications (Optional Enhancement)
+- [ ] Setup Nodemailer / SendGrid integration
+- [ ] Send email for high-priority notifications (negative reviews)
+- [ ] Create email templates
+
+---
+
+## Phase 7 — Frontend: Core Pages Redesign
+
+### Task 7.1: Design System & Layout
+- [ ] Create shared layout component with Navbar + Footer
+- [ ] Create reusable components: StarRating, ReviewCard, CompanyCard, SearchBar, Pagination, Toast/Alert
+- [ ] Setup global styles, color palette, typography in Tailwind config
+
+### Task 7.2: Home Page
+- [x] Hero section with search bar
+- [ ] Trending companies section
+- [ ] Category browsing tiles
+- [ ] Recent reviews feed
+- [x] Responsive design
+
+### Task 7.3: Company Search & Category Pages
+- [ ] Search results page with filtering
+- [ ] Category page with company cards
+- [ ] Sort by: rating, review count, newest
+
+### Task 7.4: Company Detail Page
+- [ ] Company header: logo, name, rating, trust score, rating distribution bar
+- [ ] Reviews list with sorting/filtering
+- [ ] Company response displayed under review
+- [ ] "Write a Review" CTA
+- [ ] Pagination for reviews
+
+### Task 7.5: Review Pages
+- [ ] Write Review page with star selector, title, text
+- [ ] Edit Review page (pre-filled)
+- [ ] Review detail page (single review + company response)
+
+### Task 7.6: Auth Pages Redesign
+- [ ] Login page with modern UI
+- [ ] Register page with validation feedback
+- [ ] Forgot password page (placeholder)
+
+---
+
+## Phase 8 — Frontend: Dashboards
+
+### Task 8.1: User Dashboard
+- [ ] User profile page — edit name, bio, location, avatar
+- [ ] User reviews list — all reviews by the logged-in user
+- [ ] Review edit/delete actions from dashboard
+
+### Task 8.2: Company Owner Dashboard
+- [ ] Company overview — stats: total reviews, avg rating, trust score
+- [ ] Review management — all reviews with respond/flag actions
+- [ ] Negative review alerts section (AI-flagged)
+- [ ] Notification feed
+
+### Task 8.3: Admin Panel
+- [ ] User management — list, role change, ban
+- [ ] Review moderation — flagged review queue, approve/reject
+- [ ] Company management — add, edit, delete companies
+- [ ] Platform stats — total users, reviews, companies, flagged count
+
+---
+
+## Phase 9 — Search & Discovery
+
+### Task 9.1: Full-Text Search
+- [ ] Backend: MongoDB text search on company name
+- [ ] Frontend: search bar with live suggestions (debounced)
+- [ ] Search results page with relevant sorting
+
+### Task 9.2: Advanced Filtering
+- [ ] Filter by category
+- [ ] Filter by minimum rating
+- [ ] Sort by: relevance, highest rated, most reviewed, newest
+
+---
+
+## Phase 10 — Security, Performance & QA
+
+### Task 10.1: Performance Optimization
+- [ ] Add `.lean()` to all read-only queries
+- [ ] Add response compression middleware
+- [ ] Frontend: lazy loading for pages (React.lazy + Suspense)
+- [ ] Frontend: optimize re-renders with React.memo where needed
+
+### Task 10.2: Final Security Audit
+- [ ] Validate all inputs server-side
+- [ ] Verify all protected routes check JWT
+- [ ] Verify role-based access on admin/owner endpoints
+- [ ] Test for common vulnerabilities (injection, XSS)
+
+### Task 10.3: Final QA & Polish
+- [ ] Cross-browser testing
+- [ ] Responsive design verification (mobile, tablet, desktop)
+- [ ] Error state handling on all pages
+- [ ] Loading states on all async operations
+- [ ] 404 page
