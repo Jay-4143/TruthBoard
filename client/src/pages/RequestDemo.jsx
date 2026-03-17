@@ -56,10 +56,10 @@ const RequestDemo = () => {
           {/* Left Column: Copy & Badges */}
           <div className="lg:w-1/2 text-white">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-8">
-              Discover Trustpilot's incredible suite of tools
+              Discover Truthboard's incredible suite of tools
             </h1>
             <p className="text-xl md:text-2xl font-medium mb-12 opacity-95 max-w-lg">
-              Book a 30 minute demo with a Trustpilot expert to learn why we're trusted by 25,000 business customers
+              Book a 30 minute demo with a Truthboard expert to learn why we're trusted by 25,000 business customers
             </p>
             
             {/* Badges */}

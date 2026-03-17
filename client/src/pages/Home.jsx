@@ -121,7 +121,7 @@ const Home = () => {
     <div className="bg-white overflow-hidden">
 
       {/* ═══════════════════════════════════════════════════════════
-          SECTION 1 — HERO  (Trustpilot-style dark + organic shapes)
+          SECTION 1 — HERO  (Truthboard-style dark + organic shapes)
          ═══════════════════════════════════════════════════════════ */}
       <section className="relative bg-[#1a1a2e] overflow-hidden">
         {/* Animated organic background shapes */}

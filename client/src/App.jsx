@@ -9,6 +9,13 @@ import Categories from './pages/Categories';
 import RequestDemo from './pages/RequestDemo';
 import BusinessSignup from './pages/BusinessSignup';
 import DashboardAnalytics from './pages/DashboardAnalytics';
+import SocialMediaTools from './pages/SocialMediaTools';
+import TrustBoxWidgets from './pages/TrustBoxWidgets';
+import ReviewInsights from './pages/ReviewInsights';
+import VisitorInsights from './pages/VisitorInsights';
+import DataSolutionsPage from './pages/DataSolutions';
+import AboutTruthboard from './pages/AboutTruthboard';
+import ContactTruthboard from './pages/ContactTruthboard';
 
 import { AuthProvider } from './context/AuthContext';
 import { Navigation, Footer } from './components/Navigation';
@@ -21,7 +28,10 @@ function AppContent() {
                          location.pathname === '/request demo' ||
                          location.pathname === '/request%20demo' ||
                          location.pathname === '/business/signup' ||
-                         location.pathname === '/features/dashboard-analytics';
+                         location.pathname === '/datasolutions' ||
+                         location.pathname === '/about' ||
+                         location.pathname === '/contact' ||
+                         location.pathname.startsWith('/features/');
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -38,6 +48,14 @@ function AppContent() {
           <Route path="/request demo" element={<RequestDemo />} />
           <Route path="/business/signup" element={<BusinessSignup />} />
           <Route path="/features/dashboard-analytics" element={<DashboardAnalytics />} />
+          <Route path="/features/social-media-tools" element={<SocialMediaTools />} />
+          <Route path="/features/trustbox-widgets" element={<TrustBoxWidgets />} />
+          <Route path="/features/review-insights" element={<ReviewInsights />} />
+          <Route path="/features/visitor-insights" element={<VisitorInsights />} />
+          <Route path="/datasolutions" element={<DataSolutionsPage />} />
+          <Route path="/about" element={<AboutTruthboard />} />
+          <Route path="/contact" element={<ContactTruthboard />} />
+          
           <Route path="/write-review" element={<WriteReview />} />
           <Route path="/write_review" element={<WriteReview />} />
           <Route path="/company/:companyId/review" element={<WriteReview />} />

@@ -13,76 +13,75 @@ const HeroSection = () => (
       
       {/* Left Text Column */}
       <div className="lg:w-1/2">
-        <h3 className="text-sm font-bold mb-4 tracking-wide">Dashboard and Analytics</h3>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] mb-6 text-black">
+        <h3 className="text-[13px] font-medium mb-3 tracking-wide text-black/50">Dashboard and Analytics</h3>
+        <h1 className="text-4xl md:text-5xl font-[900] leading-[1.1] mb-6 text-black tracking-tight">
           Stay on top of your review data
         </h1>
-        <p className="text-xl md:text-2xl font-medium mb-10 leading-snug">
+        <p className="text-[18px] font-normal mb-10 leading-relaxed text-black/70 max-w-lg">
           We’ll crunch the numbers behind your reviews, giving you the insights needed to get the most out of your customer feedback and build a customer-centric business.
         </p>
-        <Link to="/request-demo" className="bg-[#1c1c1c] text-white px-8 py-4 rounded-full font-bold text-[15px] hover:bg-black transition-colors w-fit shadow-xl inline-block">
+        <Link to="/request-demo" className="bg-[#1c1c1c] text-white px-10 py-4 rounded-full font-bold text-[14px] hover:bg-black transition-all hover:scale-105 shadow-xl inline-block">
           Book a demo
         </Link>
       </div>
 
       {/* Right Graphic Column: Phone Mockup */}
-      <div className="lg:w-1/2 flex justify-center lg:justify-end relative h-[500px] w-full items-center">
-        {/* Deep Pink Backdrop circle */}
-        <div className="absolute right-[10%] w-[450px] h-[450px] bg-[#d92c6a] rounded-full blur-[2px]" />
+      <div className="lg:w-1/2 flex justify-center lg:justify-end relative h-[650px] w-full items-center">
+        {/* Backdrop circle */}
+        <div className="absolute right-[5%] w-[500px] h-[500px] bg-[#d92c6a] rounded-full blur-[1px]" />
         
-        {/* Phone Frame */}
-        <div className="relative w-[320px] h-[600px] border-[12px] border-[#6b032d] bg-[#ff4e8a] rounded-[48px] shadow-2xl flex flex-col gap-6 p-6 overflow-hidden z-10 translate-y-12">
+        {/* Phone Mockup Frame */}
+        <div className="relative w-[320px] h-[620px] border-[12px] border-[#3b001a] bg-[#ff4e8a] rounded-[54px] shadow-2xl z-10 overflow-visible">
           
           {/* Top Analytics Card */}
           <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="bg-[#fcfaf5] rounded-[20px] p-5 shadow-lg w-full -ml-16 pr-16"
+            initial={{ x: -40, y: 20, opacity: 0 }}
+            animate={{ x: -180, y: 30, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="absolute top-0 left-0 bg-[#fcfaf5] rounded-[28px] px-8 py-6 shadow-2xl w-[420px] z-20"
           >
-            <div className="flex gap-4 justify-between mb-6 border-b border-gray-200 pb-4">
-              <div>
-                <p className="text-[10px] font-bold text-gray-800">Reviews collected</p>
-                <p className="text-3xl font-black">69</p>
-                <div className="h-[3px] w-8 bg-[#8b003a] mt-1" />
+            <div className="flex gap-4 justify-between mb-6 border-b border-gray-100 pb-5">
+              <div className="flex-1">
+                <p className="text-[11px] font-bold text-gray-800">Reviews collected</p>
+                <p className="text-[36px] font-[900] text-black mt-1 leading-none">69</p>
+                <div className="h-[4px] w-12 bg-[#ff4e8a] mt-2 rounded-full" />
               </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-800">Invitations delivered</p>
-                <p className="text-2xl font-black">100</p>
+              <div className="flex-1 text-center border-l border-gray-100 pl-4">
+                <p className="text-[11px] font-bold text-gray-800">Invitations delivered</p>
+                <p className="text-[30px] font-[900] text-black mt-1 leading-none">100</p>
               </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-800">Current TrustScore</p>
-                <p className="text-xl font-black">4.4</p>
+              <div className="flex-1 text-right border-l border-gray-100 pl-4">
+                <p className="text-[11px] font-bold text-gray-800">Current TrustScore</p>
+                <p className="text-[30px] font-[900] text-black mt-1 leading-none">4.4</p>
               </div>
             </div>
             {/* Bar Chart Mockup */}
-            <div className="flex items-end justify-between h-24 gap-1.5 px-2">
-              {[40, 20, 45, 100, 30, 50, 40, 20, 60, 110, 45, 60].map((h, i) => (
-                <div key={i} className="flex-1 rounded-sm bg-[#ff4e8a] opacity-80" style={{ height: `${h}%` }} />
+            <div className="flex items-end justify-between h-24 gap-2.5 px-1">
+              {[35, 55, 45, 100, 25, 70, 40, 20, 80, 110, 50, 60].map((h, i) => (
+                <div key={i} className="flex-1 rounded-sm bg-[#ff4e8a]" style={{ height: `${h}%`, opacity: i % 4 === 0 ? 1 : 0.4 }} />
               ))}
             </div>
-            <div className="h-1 w-12 bg-[#3b001a] mt-4 mx-auto rounded-full" />
           </motion.div>
 
           {/* Bottom Source Card */}
           <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="bg-[#fcfaf5] rounded-[20px] p-5 shadow-lg w-[110%] -ml-4"
+            initial={{ x: 20, y: 300, opacity: 0 }}
+            animate={{ x: -130, y: 330, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="absolute top-0 left-0 bg-[#fcfaf5] rounded-[28px] px-8 py-6 shadow-2xl w-[400px] z-30"
           >
-            <h4 className="text-2xl font-black mb-4">Source of reviews</h4>
-            <div className="space-y-3">
+            <h4 className="text-[26px] font-[900] mb-5 text-black leading-tight tracking-tight">Source of reviews</h4>
+            <div className="space-y-4">
               {[
-                ['Organic', '80%'],
-                ['Manual Invitation', '50%'],
-                ['Automatic Invitation', '30%'],
-                ['Basic Invitation', '10%']
-              ].map(([label, width], i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <span className="text-[10px] font-bold w-28 text-gray-900">{label}</span>
-                  <div className="flex-1 h-2 bg-[#f0e6e6] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#3b001a] rounded-full" style={{ width }} />
+                { label: 'Organic', width: '80%' },
+                { label: 'Manual Invitation', width: '55%' },
+                { label: 'Automatic Invitation', width: '35%' },
+                { label: 'Basic Invitation', width: '15%' }
+              ].map((row, i) => (
+                <div key={i} className="flex items-center gap-5">
+                  <span className="text-[10px] font-bold w-36 text-gray-800 uppercase tracking-widest">{row.label}</span>
+                  <div className="flex-1 h-2.5 bg-[#f0e6e6] rounded-full overflow-hidden">
+                    <div className="h-full bg-[#3b001a] rounded-full transition-all duration-1000" style={{ width: row.width }} />
                   </div>
                 </div>
               ))}
@@ -103,7 +102,7 @@ const DidYouKnow = () => (
     <div className="max-w-[1200px] mx-auto">
       <h4 className="text-sm font-bold mb-4">Did you know?</h4>
       <h2 className="text-3xl md:text-4xl lg:text-[42px] font-black leading-tight max-w-4xl">
-        Trustpilot gets over 4 million new reviews every month - that's a lot of content to analyze!
+        Truthboard gets over 4 million new reviews every month - that's a lot of content to analyze!
       </h2>
     </div>
   </section>
@@ -143,7 +142,7 @@ const AnalyticsExplorer = () => (
             </div>
             <div className="flex items-center gap-1 group">
               <Star className="w-3 h-3 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-[10px] font-bold tracking-tight">Trustpilot</span>
+              <span className="text-[10px] font-bold tracking-tight">Truthboard</span>
             </div>
           </div>
         </motion.div>
@@ -166,7 +165,7 @@ const AnalyticsExplorer = () => (
             </div>
             <div className="flex items-center gap-1 group">
               <Star className="w-3 h-3 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-[10px] font-bold tracking-tight">Trustpilot</span>
+              <span className="text-[10px] font-bold tracking-tight">Truthboard</span>
             </div>
           </div>
         </motion.div>
@@ -189,7 +188,7 @@ const AnalyticsExplorer = () => (
             </div>
             <div className="flex items-center gap-1 group">
               <Star className="w-3 h-3 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-[10px] font-bold tracking-tight">Trustpilot</span>
+              <span className="text-[10px] font-bold tracking-tight">Truthboard</span>
             </div>
           </div>
         </motion.div>
@@ -407,8 +406,8 @@ const DashboardAnalytics = () => {
   return (
     <div className="bg-white min-h-screen font-sans antialiased">
       <BusinessNav />
-      {/* Spacer for fixed nav */}
-      <div className="pt-[72px]" /> 
+      {/* Hero section padding handles navbar clearance */}
+      <div className="pt-0" /> 
       <HeroSection />
       <DidYouKnow />
       <AnalyticsExplorer />

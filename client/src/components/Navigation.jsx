@@ -212,7 +212,7 @@ const Footer = () => (
       <div className="mb-12">
         <Link to="/" className="flex items-center gap-2">
           <span className="text-[#00b67a] text-3xl">★</span>
-          <span className="text-2xl font-black tracking-tight">Trustpilot</span>
+          <span className="text-2xl font-black tracking-tight">Truthboard</span>
         </Link>
       </div>
 
@@ -222,7 +222,7 @@ const Footer = () => (
         <div>
           <h4 className="text-sm font-bold mb-6 text-gray-200">About us</h4>
           <ul className="space-y-4 text-sm text-gray-400">
-            <li className="hover:text-white cursor-pointer transition-colors">How Trustpilot works</li>
+            <li className="hover:text-white cursor-pointer transition-colors">How Truthboard works</li>
             <li className="hover:text-white cursor-pointer transition-colors">Our story</li>
             <li className="hover:text-white cursor-pointer transition-colors">What we believe</li>
             <li className="hover:text-white cursor-pointer transition-colors flex items-center gap-2">
@@ -230,7 +230,7 @@ const Footer = () => (
             </li>
             <li className="hover:text-white cursor-pointer transition-colors">Blog</li>
             <li className="hover:text-white cursor-pointer transition-colors">Press</li>
-            <li className="hover:text-white cursor-pointer transition-colors">Trustpilot Legal</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Truthboard Legal</li>
             <li className="hover:text-white cursor-pointer transition-colors">Investor Relations</li>
           </ul>
         </div>
@@ -324,7 +324,7 @@ const Footer = () => (
           Do not sell or share my personal information
         </p>
         <div className="text-[11px] text-gray-500 font-medium">
-          &copy; {new Date().getFullYear()} Trustpilot Inc. All rights reserved.
+          &copy; {new Date().getFullYear()} Truthboard Inc. All rights reserved.
         </div>
       </div>
     </div>

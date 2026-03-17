@@ -8,7 +8,7 @@ import {
   ChevronRight, Star, Menu, X, Globe, Zap, Heart, ChevronDown,
   Search, ExternalLink, Play, BarChart2, PieChart, Activity,
   Database, Layout, Share2, Layers, Briefcase, Info, Mail, 
-  Instagram, Twitter, Facebook, Youtube, Linkedin
+  Instagram, Twitter, Facebook, Youtube, Linkedin, Image as ImageIcon
 } from 'lucide-react';
 
 /* ───── Crash-Proof CountUp ───── */
@@ -73,7 +73,7 @@ export const BusinessNav = () => {
           links: ['Service reviews', 'Product reviews', 'Location reviews', 'Review invitations'],
           marginTop: 'mt-8',
           secondTitle: 'Accelerate conversions',
-          secondLinks: ['Review SEO & AI Discovery', 'Trustpilot widgets', 'Social media tools', 'Marketing assets']
+          secondLinks: ['Review SEO & AI Discovery', 'Truthboard widgets', 'Social media tools', 'Marketing assets']
         },
         {
           title: 'Engage with feedback',
@@ -96,13 +96,13 @@ export const BusinessNav = () => {
       width: 'w-[280px]',
       columns: [
         {
-          links: ['About Trustpilot', 'Trustpilot for Consumers', 'Trustpilot Data Solutions']
+          links: ['About Truthboard', 'Truthboard for Consumers', 'Truthboard Data Solutions']
         }
       ]
     }
   };
 
-  const navItems = ['Solutions', 'Features', 'Pricing', 'Resources', 'Company', 'Categories', 'Blog'];
+  const navItems = ['Solutions', 'Features', 'Pricing', 'Resources', 'Company'];
 
   return (
     <nav className={`fixed w-full top-0 z-[100] transition-all duration-300 ${scrolled?'bg-black/95 backdrop-blur-md py-3 shadow-lg':'bg-black py-4'}`}>
@@ -117,7 +117,7 @@ export const BusinessNav = () => {
             return (
               <div 
                 key={item} 
-                className="relative h-full py-6"
+                className="relative h-full py-4"
                 onMouseEnter={() => hasDropdown && setHoveredMenu(item)}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
@@ -316,45 +316,50 @@ const FeatureGrid = () => {
     { 
       title: 'Enhanced insights', 
       desc: 'Explore all your data in simple charts or export data to view your own way.', 
-      bg: 'bg-[#fee2e2]', 
-      iconColor: 'text-[#e74c3c]', 
+      bg: 'bg-[#ffebf0]', 
+      iconColor: 'text-[#ff4e8a]', 
       icon: BarChart2,
       link: '/features/dashboard-analytics'
     },
     { 
       title: 'Customizable assets', 
       desc: 'Create social proof ads in minutes and boost widget performance with testimonials.', 
-      bg: 'bg-[#fef3c7]', 
-      iconColor: 'text-[#f39c12]', 
-      icon: Palette 
+      bg: 'bg-[#fff5e6]', 
+      iconColor: 'text-[#f59e0b]', 
+      icon: ImageIcon,
+      link: '/features/social-media-tools'
     },
     { 
       title: 'Brand-boosting customization', 
       desc: 'Make invitations and reminders your own, and adjust widgets to fit your website.', 
       bg: 'bg-[#ffedd5]', 
       iconColor: 'text-[#e67e22]', 
-      icon: CheckCircle2 
+      icon: CheckCircle2,
+      link: '/features/trustbox-widgets'
     },
     { 
       title: 'Review follow-up questions', 
       desc: 'Get more from your reviewers.', 
       bg: 'bg-[#f3f4f6]', 
       iconColor: 'text-[#636e72]', 
-      icon: MessageCircleQuestion 
+      icon: MessageCircleQuestion,
+      link: '/features/review-insights'
     },
     { 
       title: 'Review highlights', 
       desc: 'Maximum flexibility to showcase your strengths with help from AI.', 
       bg: 'bg-[#d1fae5]', 
       iconColor: 'text-[#00b67a]', 
-      icon: Star 
+      icon: Star,
+      link: '/features/trustbox-widgets'
     },
     { 
       title: 'Visitor insights', 
       desc: 'Reveal where your profile visitors are located, which reviews interest them most, and who else they shop with.', 
       bg: 'bg-[#dcfce7]', 
       iconColor: 'text-[#059669]', 
-      icon: Users 
+      icon: Users,
+      link: '/features/visitor-insights'
     }
   ];
 
@@ -405,29 +410,96 @@ const FeatureGrid = () => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   SCROLLING LOGOS – styled text logos like Trustpilot
+   SCROLLING LOGOS – styled text logos like Truthboard
    ═══════════════════════════════════════════════════════ */
 const ScrollingLogos = () => {
   const logos = [
-    { name:'canvasfactory', font:'italic', weight:400, size:18 },
-    { name:'affirm', font:'normal', weight:800, size:22 },
-    { name:'TRAVELZOO', font:'normal', weight:900, size:18, letterSpacing:2 },
-    { name:'cheapOair', font:'normal', weight:700, size:20 },
-    { name:'Care.com', font:'normal', weight:600, size:20 },
-    { name:'Discount', font:'normal', weight:800, size:18, color:'#e74c3c' },
-    { name:'GRUBHUB', font:'normal', weight:900, size:17, letterSpacing:1 },
-    { name:'Panda', font:'normal', weight:700, size:20 }
+    // Amica
+    <div className="flex items-center gap-1">
+      <span className="text-[24px] font-bold text-[#00a38d] tracking-tight">amica</span>
+    </div>,
+    // Vivid Seats
+    <div className="flex items-center">
+      <div className="flex items-center">
+        <div className="w-10 h-7 bg-[#3b00ff] rounded-sm flex items-center justify-center -rotate-6 shadow-sm">
+          <div className="w-5 h-5 bg-white rounded-full"></div>
+        </div>
+        <span className="text-[22px] font-black text-[#ff008a] ml-1">vividseats</span>
+      </div>
+    </div>,
+    // Kaplan
+    <div className="flex flex-col items-center">
+      <span className="text-[22px] font-bold text-[#3b008d] tracking-tighter uppercase">Kaplan</span>
+      <div className="w-full h-[3px] bg-[#3b008d] rounded-full -mt-1 shadow-sm" />
+    </div>,
+    // Experian
+    <div className="flex items-center gap-2">
+      <div className="flex gap-[2px]">
+        <div className="w-2.5 h-2.5 rounded-full bg-[#3b008d]" /><div className="w-2.5 h-2.5 rounded-full bg-[#ff008a]" /><div className="w-2.5 h-2.5 rounded-full bg-[#00bcd4]" />
+      </div>
+      <span className="text-[22px] font-bold text-[#3d2a71]">experian.</span>
+    </div>,
+    // MAPFRE
+    <div className="flex items-center gap-1.5">
+      <div className="w-7 h-7 rounded-full border-4 border-[#d32f2f] flex items-center justify-center">
+        <div className="w-2.5 h-2.5 bg-[#d32f2f] rounded-full shadow-inner" />
+      </div>
+      <span className="text-[24px] font-black text-[#d32f2f] tracking-tighter uppercase">MAPFRE</span>
+    </div>,
+    // Affirm
+    <div className="flex items-center relative">
+      <span className="text-[24px] font-bold text-black">affirm</span>
+      <div className="absolute -bottom-1 left-0 w-full h-[4px] bg-[#00bcd4] rounded-full"></div>
+    </div>,
+    // Travelzoo
+    <div className="flex items-center">
+      <span className="text-[24px] font-black tracking-tighter"><span className="text-[#0038a8]">TRAVEL</span><span className="text-[#e31837]">ZOO</span></span>
+    </div>,
+    // cheapOair
+    <div className="flex items-center gap-1">
+      <span className="text-[24px] font-bold text-[#0066cc]">cheap</span>
+      <div className="w-7 h-7 bg-[#ff6600] rounded-t-xl rounded-b-md relative shadow-sm">
+        <div className="absolute top-1 left-2 w-3 h-2.5 border-2 border-white rounded-t-sm"></div>
+      </div>
+      <span className="text-[24px] font-bold text-[#0066cc]">air</span>
+    </div>,
+    // Care.com
+    <div className="flex items-center gap-1">
+      <span className="text-[22px] font-bold text-[#2d3a4b]">Care.com</span>
+    </div>,
+    // Rakuten
+    <div className="flex items-center gap-1">
+      <span className="text-[22px] font-bold text-[#bf0000]">Rakuten <span className="font-bold text-[#333]">kobo</span></span>
+    </div>,
+    // Rainbow
+    <div className="flex items-center">
+      <span className="text-[26px] font-black text-[#0066cc] italic" style={{fontFamily: 'serif'}}>Rainbow</span>
+    </div>,
+    // AMSCOT
+    <div className="bg-[#0038a8] px-4 py-1.5 rounded-md shadow-md">
+      <span className="text-[20px] font-black text-[#ffcc00] tracking-tight italic">AMSCOT</span>
+    </div>,
+    // Canvas Factory
+    <div className="flex items-center gap-2">
+      <div className="w-7 h-7 border-[3px] border-[#1a73e8] rounded-md flex items-center justify-center">
+        <div className="w-3.5 h-3.5 bg-[#1a73e8] rounded-full"></div>
+      </div>
+      <span className="text-[20px] font-black text-[#1a73e8] italic">canvasfactory</span>
+    </div>
   ];
+
   return (
-    <div className="py-14 bg-white overflow-hidden border-b border-gray-100">
-      <div className="flex gap-16 animate-marquee items-center whitespace-nowrap">
-        {[...logos,...logos,...logos,...logos].map((l,i) => (
-          <span key={i} className="shrink-0 text-gray-400 hover:text-gray-800 transition-colors cursor-pointer select-none" style={{ fontStyle:l.font, fontWeight:l.weight, fontSize:l.size, letterSpacing:l.letterSpacing||0, color:l.color||undefined }}>{l.name}</span>
+    <div className="py-24 bg-white overflow-hidden border-b border-gray-100">
+      <div className="flex gap-32 animate-marquee items-center whitespace-nowrap">
+        {[...logos, ...logos, ...logos].map((Logo, i) => (
+          <div key={i} className="shrink-0 transition-transform duration-500 cursor-pointer opacity-100 hover:scale-110">
+            {Logo}
+          </div>
         ))}
       </div>
       <style>{`
-        @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        .animate-marquee { animation:marquee 20s linear infinite; }
+        @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-33.33%)} }
+        .animate-marquee { animation:marquee 30s linear infinite; }
         .animate-marquee:hover { animation-play-state:paused; }
       `}</style>
     </div>
@@ -494,7 +566,7 @@ const DataSolutions = () => (
       <div className="lg:w-1/2">
         <h2 className="text-[30px] md:text-[36px] font-black text-gray-800 mb-6 leading-tight">TruthBoard Data Solutions</h2>
         <p className="text-[15px] text-gray-500 leading-relaxed mb-10 max-w-lg">Embed rich consumer sentiment and trust signals into every strategic business decision, with data solutions, an intelligence layer that embeds trust everywhere to provide a deeper layer of insight beyond surface-level metrics.</p>
-        <button className="bg-[#1a1c21] text-white px-9 py-4 rounded-full font-black text-[15px] hover:bg-black transition-all shadow-lg">Learn more</button>
+        <Link to="/datasolutions" className="bg-[#1a1c21] text-white px-9 py-4 rounded-full font-black text-[15px] hover:bg-black transition-all shadow-lg inline-block">Learn more</Link>
       </div>
       <div className="lg:w-1/2 relative">
         {/* Big green circle bg */}
