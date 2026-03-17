@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 
@@ -15,6 +15,7 @@ const Navigation = () => {
   const profileRef = useRef(null);
   const searchRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,19 +57,19 @@ const Navigation = () => {
   }, [searchQuery]);
 
   return (
-    <nav className="bg-[#1a1a2e] text-white sticky top-0 z-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <nav className="bg-[#191919] text-white sticky top-0 z-50 shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Left Side: Logo & Conditional Search */}
         <div className="flex items-center gap-8 flex-1">
           <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-[#00b67a] text-xl">★</span>
-            <span className="text-lg font-bold tracking-tight hidden sm:block">TruthBoard</span>
+            <span className="text-[#00b67a] text-2xl md:text-3xl">★</span>
+            <span className="text-xl md:text-2xl font-bold tracking-tight hidden sm:block">TruthBoard</span>
           </Link>
 
           <div 
              ref={searchRef}
-             className={`relative flex-1 max-w-md hidden lg:block transition-all duration-300 ${scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}
+             className={`relative flex-1 max-w-md hidden lg:block transition-all duration-300 ${scrolled && location.pathname === '/' ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}
           >
             <div className="relative">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 absolute left-3 top-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,7 +84,7 @@ const Navigation = () => {
               />
             </div>
             
-            {showResults && searchResults.length > 0 && scrolled && (
+            {showResults && searchResults.length > 0 && scrolled && location.pathname === '/' && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl text-gray-900 overflow-hidden border border-gray-100 animate-in fade-in slide-in-from-top-2">
                 {searchResults.map((company) => (
                   <Link
@@ -108,9 +109,12 @@ const Navigation = () => {
 
         {/* Right Side: Links & Auth */}
         <div className="hidden lg:flex items-center gap-6 ml-4">
-          <Link to="/write-review" className="text-sm font-bold hover:text-[#00b67a] transition-colors whitespace-nowrap">Write a review</Link>
-          <Link to="/categories" className="text-sm font-bold hover:text-[#00b67a] transition-colors whitespace-nowrap">Categories</Link>
-          <Link to="/blog" className="text-sm font-bold hover:text-[#00b67a] transition-colors whitespace-nowrap">Blog</Link>
+          {location.pathname !== '/write-review' && (
+            <Link to="/write-review" className="text-sm font-bold hover:text-[#00b67a] transition-colors whitespace-nowrap">Write a review</Link>
+          )}
+
+          <Link to="/categories" className="text-sm font-bold hover:text-[#00b67a] transition-colors">Categories</Link>
+          <Link to="/blog" className="text-sm font-bold hover:text-[#00b67a] transition-colors">Blog</Link>
           
           <button className="text-white hover:text-[#00b67a] transition-colors ml-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -174,9 +178,8 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#16162b] border-t border-gray-800 px-4 py-6 space-y-4 animate-in slide-in-from-top-2 duration-300">
-           <Link to="/write-review" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800">Write a review</Link>
+       {mobileMenuOpen && (
+        <div className="lg:hidden bg-[#191919] border-t border-gray-800 px-4 py-6 space-y-4 animate-in slide-in-from-top-2 duration-300">
            <Link to="/categories" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800">Categories</Link>
            <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800">Blog</Link>
            
@@ -203,46 +206,126 @@ const Navigation = () => {
 
 /* ─── Footer Implementation ─── */
 const Footer = () => (
-  <footer className="bg-[#1a1a2e] text-white pt-16 pb-8 border-t border-gray-800">
+  <footer className="bg-[#191919] text-white pt-16 pb-8 border-t border-gray-800 font-sans">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12">
-        <div className="col-span-2 lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-6">
-              <span className="text-[#00b67a] text-2xl">★</span>
-              <span className="text-xl font-bold tracking-tight">TruthBoard</span>
-            </Link>
-            <p className="text-gray-400 text-sm max-w-xs leading-relaxed mb-8">
-              Every review is a story. Share your experience and help others find companies they can trust.
-            </p>
-            <div className="flex gap-4">
-               {['𝕏', 'fb', 'in', 'ig'].map(icon => (
-                 <div key={icon} className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-[#00b67a] cursor-pointer transition-all">{icon}</div>
-               ))}
-            </div>
-        </div>
-        
-        {['About', 'Community', 'Business'].map((header, i) => (
-          <div key={header}>
-            <h4 className="text-sm font-bold mb-6 text-gray-200 uppercase tracking-wider">{header}</h4>
-            <ul className="space-y-4 text-sm text-gray-400">
-              {header === 'About' && ['Our Story', 'Careers', 'Contact', 'Blog'].map(item => <li key={item} className="hover:text-[#00b67a] cursor-pointer transition-colors">{item}</li>)}
-              {header === 'Community' && ['Trust & Safety', 'Help Center', 'Guidelines', 'Verify Identity'].map(item => <li key={item} className="hover:text-[#00b67a] cursor-pointer transition-colors">{item}</li>)}
-              {header === 'Business' && ['Business Login', 'Solution', 'Pricing', 'Resources'].map(item => <li key={item} className="hover:text-[#00b67a] cursor-pointer transition-colors">{item}</li>)}
-            </ul>
-          </div>
-        ))}
+      {/* Footer Top: Logo */}
+      <div className="mb-12">
+        <Link to="/" className="flex items-center gap-2">
+          <span className="text-[#00b67a] text-3xl">★</span>
+          <span className="text-2xl font-black tracking-tight">Trustpilot</span>
+        </Link>
       </div>
-      
-      <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500 uppercase tracking-widest font-bold">
-             <span className="hover:text-gray-300 pointer-events-none">Privacy</span>
-             <span className="hover:text-gray-300 pointer-events-none">Terms</span>
-             <span className="hover:text-gray-300 pointer-events-none">Cookies</span>
-             <span className="hover:text-gray-300 pointer-events-none">Legal</span>
+
+      {/* Footer Grid: 5 Columns */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-12">
+        {/* Column 1: About us */}
+        <div>
+          <h4 className="text-sm font-bold mb-6 text-gray-200">About us</h4>
+          <ul className="space-y-4 text-sm text-gray-400">
+            <li className="hover:text-white cursor-pointer transition-colors">How Trustpilot works</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Our story</li>
+            <li className="hover:text-white cursor-pointer transition-colors">What we believe</li>
+            <li className="hover:text-white cursor-pointer transition-colors flex items-center gap-2">
+              Jobs <span className="bg-[#b4ffff] text-black px-1.5 py-0.5 rounded text-[10px] font-bold">Hiring!</span>
+            </li>
+            <li className="hover:text-white cursor-pointer transition-colors">Blog</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Press</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Trustpilot Legal</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Investor Relations</li>
+          </ul>
+        </div>
+
+        {/* Column 2: Review community */}
+        <div>
+          <h4 className="text-sm font-bold mb-6 text-gray-200">Review community</h4>
+          <ul className="space-y-4 text-sm text-gray-400">
+            <li className="hover:text-white cursor-pointer transition-colors">Join the community</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Leave a review</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Search for a company</li>
+          </ul>
+        </div>
+
+        {/* Column 3: Businesses */}
+        <div>
+          <h4 className="text-sm font-bold mb-6 text-gray-200">Businesses</h4>
+          <ul className="space-y-4 text-sm text-gray-400">
+            <li className="hover:text-white cursor-pointer transition-colors">Features</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Pricing</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Partners</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Agency Partners</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Find us on Capterra</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Find us on G2</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Data Solutions</li>
+          </ul>
+        </div>
+
+        {/* Column 4: Resources */}
+        <div>
+          <h4 className="text-sm font-bold mb-6 text-gray-200">Resources</h4>
+          <ul className="space-y-4 text-sm text-gray-400">
+            <li className="hover:text-white cursor-pointer transition-colors">Business Blog</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Webinars and Videos</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Guides and Reports</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Customer Stories</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Developers</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Tech Blog</li>
+            <li className="hover:text-white cursor-pointer transition-colors">System Status</li>
+          </ul>
+        </div>
+
+        {/* Column 5: Contact */}
+        <div>
+          <h4 className="text-sm font-bold mb-6 text-gray-200">Contact</h4>
+          <ul className="space-y-4 text-sm text-gray-400">
+            <li className="hover:text-white cursor-pointer transition-colors">Contact Sales</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Help Center</li>
+            <li className="hover:text-white cursor-pointer transition-colors">Our Offices</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Footer Middle: Country & Social */}
+      <div className="mt-20 pt-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+        {/* Country Selector Mockup */}
+        <div className="relative group">
+          <div className="flex items-center gap-3 bg-[#111111] border border-gray-700 rounded p-3 pr-10 cursor-pointer min-w-[240px]">
+            <img src="https://flagcdn.com/us.svg" className="w-5 h-4 object-cover" alt="US" />
+            <span className="text-sm font-medium">United States</span>
+            <svg className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
-          <p className="text-sm text-gray-500">
-            &copy; 2026 TruthBoard. Built for trust.
-          </p>
+        </div>
+
+        {/* Social Icons */}
+        <div className="flex items-center gap-6">
+          <span className="text-sm font-bold text-gray-300 mr-2">Follow us on</span>
+          <div className="flex gap-4">
+             {['in', 'f', '𝕏', 'y'].map((platform, idx) => (
+                <div key={idx} className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-white cursor-pointer transition-colors text-lg font-bold">
+                  {platform}
+                </div>
+             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Bottom: Links & Copyright */}
+      <div className="mt-12 pt-8 border-t border-[#2a2a2a]">
+        <div className="flex flex-wrap gap-x-6 gap-y-4 text-xs font-bold text-gray-400 mb-8">
+          <span className="hover:text-white cursor-pointer">Terms and Conditions</span>
+          <span className="hover:text-white cursor-pointer">Privacy Policy</span>
+          <span className="hover:text-white cursor-pointer">Company Guidelines</span>
+          <span className="hover:text-white cursor-pointer">Trademark Guidelines</span>
+          <span className="hover:text-white cursor-pointer">Manage cookies</span>
+          <span className="hover:text-white cursor-pointer">Modern Slavery Statement</span>
+        </div>
+        <p className="text-[11px] font-medium text-gray-500 hover:text-white cursor-pointer mb-8">
+          Do not sell or share my personal information
+        </p>
+        <div className="text-[11px] text-gray-500 font-medium">
+          &copy; {new Date().getFullYear()} Trustpilot Inc. All rights reserved.
+        </div>
       </div>
     </div>
   </footer>

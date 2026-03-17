@@ -19,7 +19,11 @@
   "dependencies": {
     "@vitejs/plugin-react": "^6.0.1",
     "axios": "^1.13.6",
+    "countup.js": "^2.10.0",
+    "framer-motion": "^12.36.0",
+    "lucide-react": "^0.577.0",
     "react": "^19.2.4",
+    "react-countup": "^6.5.3",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1"
   }

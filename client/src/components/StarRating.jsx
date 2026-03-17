@@ -36,10 +36,7 @@ const StarRating = ({ rating, setRating, interactive = false, size = "h-8 w-8" }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={`${
-                size === "h-12 w-12" ? "h-8 w-8" : 
-                size === "h-8 w-8" ? "h-6 w-6" : "h-4 w-4"
-              } text-white`}
+              className="h-[60%] w-[60%] text-white"
               viewBox="0 0 20 20"
               fill="currentColor"
             >

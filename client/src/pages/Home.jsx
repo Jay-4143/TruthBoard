@@ -169,7 +169,34 @@ const Home = () => {
             {/* Dropdown */}
             {showDropdown && (
               <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden z-[100] border border-gray-100 text-left animate-in fade-in slide-in-from-top-4 duration-300 backdrop-blur-sm">
-                {isSearching ? (
+                {searchQuery.trim().length === 0 ? (
+                  /* Recent Searches Section */
+                  <div className="p-2">
+                    <div className="px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider">Recent Searches</div>
+                    {localStorage.getItem('recentCompanies') ? (
+                      <ul>
+                        {JSON.parse(localStorage.getItem('recentCompanies')).map(company => (
+                          <li key={company._id}>
+                            <Link to={`/company/${company.slug}`}
+                              className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors duration-150 rounded-xl">
+                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 font-bold text-sm mr-3 border border-gray-200">
+                                {company.name.charAt(0)}
+                              </div>
+                              <div className="flex-1">
+                                <div className="font-semibold text-gray-900 text-sm">{company.name}</div>
+                              </div>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="px-4 py-4 text-sm text-gray-400 italic">No recent searches</div>
+                    )}
+                  </div>
+                ) : isSearching ? (
                   <div className="p-4 text-gray-500 flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin" /> Searching...
                   </div>

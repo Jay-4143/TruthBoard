@@ -14,8 +14,16 @@ const createReview = async (req, res) => {
       return res.status(404).json({ message: 'Company not found' });
     }
 
+    console.log('Create Review Request Body:', req.body);
+    console.log('User status in createReview:', req.user ? req.user._id : 'NULL');
+
+    if (!req.user || !req.user._id) {
+      console.log('ERROR: req.user is NULL or missing _id');
+      return res.status(401).json({ message: 'Your session has expired. Please log in again.' });
+    }
+
     const review = await Review.create({
-      userId: req.user.id,
+      userId: req.user._id,
       companyId,
       rating,
       title,
