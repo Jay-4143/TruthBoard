@@ -498,17 +498,17 @@ const DataSolutionsNav = () => {
                   <div className="bg-white rounded-2xl shadow-[0_12px_44px_rgb(0,0,0,0.1)] p-6 border border-gray-100 relative z-20 overflow-hidden">
                     <ul className="space-y-4">
                       <li>
-                        <Link to="/about" target="_blank" className="text-[15px] text-gray-700 hover:text-black cursor-pointer font-medium transition-colors">
+                        <Link to="/about" className="text-[15px] text-gray-700 hover:text-black cursor-pointer font-medium transition-colors">
                           About Truthboard
                         </Link>
                       </li>
                       <li>
-                        <Link to="/business" target="_blank" className="text-[15px] text-gray-700 hover:text-black cursor-pointer font-medium transition-colors">
+                        <Link to="/business" className="text-[15px] text-gray-700 hover:text-black cursor-pointer font-medium transition-colors">
                           Truthboard for Business
                         </Link>
                       </li>
                       <li>
-                        <Link to="/" target="_blank" className="text-[15px] text-gray-700 hover:text-black cursor-pointer font-medium transition-colors">
+                        <Link to="/" className="text-[15px] text-gray-700 hover:text-black cursor-pointer font-medium transition-colors">
                           Truthboard for Consumers
                         </Link>
                       </li>

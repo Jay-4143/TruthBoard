@@ -31,6 +31,10 @@ const createReview = async (req, res) => {
       dateOfExperience
     });
 
+    // Increment review count for user
+    const User = require('../models/User');
+    await User.findByIdAndUpdate(req.user._id, { $inc: { reviewCount: 1 } });
+
     res.status(201).json(review);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -48,7 +52,70 @@ const getCompanyReviews = async (req, res) => {
   }
 };
 
+const getMyReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ userId: req.user._id })
+      .populate('companyId', 'name slug website')
+      .sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateReview = async (req, res) => {
+  try {
+    const { rating, title, reviewText, dateOfExperience } = req.body;
+    const review = await Review.findById(req.params.id);
+
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    if (review.userId.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'User not authorized to update this review' });
+    }
+
+    review.rating = rating || review.rating;
+    review.title = title || review.title;
+    review.reviewText = reviewText || review.reviewText;
+    review.dateOfExperience = dateOfExperience || review.dateOfExperience;
+
+    const updatedReview = await review.save();
+    res.json(updatedReview);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteReview = async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    if (review.userId.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'User not authorized to delete this review' });
+    }
+
+    await Review.findByIdAndDelete(req.params.id);
+
+    // Decrement review count for user
+    const User = require('../models/User');
+    await User.findByIdAndUpdate(req.user._id, { $inc: { reviewCount: -1 } });
+
+    res.json({ message: 'Review removed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getCompanyReviews,
-  createReview
+  createReview,
+  getMyReviews,
+  updateReview,
+  deleteReview
 };

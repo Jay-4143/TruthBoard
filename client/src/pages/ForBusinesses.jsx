@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as CountUpModule from 'react-countup';
 import { 
@@ -10,6 +10,8 @@ import {
   Database, Layout, Share2, Layers, Briefcase, Info, Mail, 
   Instagram, Twitter, Facebook, Youtube, Linkedin, Image as ImageIcon
 } from 'lucide-react';
+
+import api from '../services/api';
 
 /* ───── Crash-Proof CountUp ───── */
 const SafeCountUp = (props) => {
@@ -48,8 +50,13 @@ export const BusinessNav = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => { const h = () => setScrolled(window.scrollY > 20); window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h); }, []);
+  useEffect(() => { 
+    const h = () => setScrolled(window.scrollY > 20); 
+    window.addEventListener('scroll', h); 
+    return () => window.removeEventListener('scroll', h); 
+  }, []);
   
   const menuData = {
     'Solutions': {
@@ -104,13 +111,36 @@ export const BusinessNav = () => {
 
   const navItems = ['Solutions', 'Features', 'Pricing', 'Resources', 'Company'];
 
+  const handleLinkClick = (linkName) => {
+    const routeMap = {
+      'About Truthboard': '/about',
+      'Truthboard for Consumers': '/',
+      'Truthboard for Business': '/business',
+      'Truthboard Data Solutions': '/datasolutions',
+      'For Businesses': '/business',
+      'Pricing': '/pricing',
+      'Blog': '/blog',
+      'Dashboard analytics': '/features/dashboard-analytics',
+      'Social media tools': '/features/social-media-tools',
+      'Truthboard widgets': '/features/trustbox-widgets',
+      'Review insights': '/features/review-insights',
+      'Visitor insights': '/features/visitor-insights'
+    };
+    if (routeMap[linkName]) {
+      navigate(routeMap[linkName]);
+    }
+    setHoveredMenu(null);
+    setOpen(false);
+  };
+
   return (
-    <nav className={`fixed w-full top-0 z-[100] transition-all duration-300 ${scrolled?'bg-black/95 backdrop-blur-md py-3 shadow-lg':'bg-black py-4'}`}>
+    <nav className={`fixed w-full top-0 z-[100] transition-all duration-500 ${scrolled?'bg-black/95 backdrop-blur-md py-3 shadow-lg':'bg-black py-4'}`}>
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <Star className="w-7 h-7 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
           <div className="flex flex-col"><span className="text-xl font-bold tracking-tight leading-none text-white">TruthBoard</span><span className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400 mt-0.5">For Business</span></div>
         </Link>
+        
         <div className="hidden lg:flex items-center gap-8 h-full">
           {navItems.map(item => {
             const hasDropdown = !!menuData[item];
@@ -121,7 +151,7 @@ export const BusinessNav = () => {
                 onMouseEnter={() => hasDropdown && setHoveredMenu(item)}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <div className="flex items-center gap-1 cursor-pointer text-white/90 hover:text-white transition-colors font-semibold text-[14px]">
+                <div className="flex items-center gap-1 cursor-pointer text-white/90 hover:text-white transition-colors font-semibold text-[14px]" onClick={() => !hasDropdown && handleLinkClick(item)}>
                   {item}
                   {hasDropdown && (
                     <ChevronDown className={`w-3.5 h-3.5 opacity-60 transition-transform duration-200 ${hoveredMenu === item ? 'rotate-180' : ''}`}/>
@@ -131,27 +161,24 @@ export const BusinessNav = () => {
                 {/* Dropdown Menu */}
                 {hasDropdown && hoveredMenu === item && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-[150]">
-                    {/* Up Arrow indicator */}
                     <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-100/50 rounded-tl-[2px]" />
-                    
                     <div className={`bg-white rounded-[16px] shadow-[0_12px_44px_rgb(0,0,0,0.15)] p-8 ${menuData[item].width} flex gap-8 relative overflow-hidden border border-gray-100`}>
                       {menuData[item].columns.map((col, idx) => (
                         <div key={idx} className="flex-1">
                           {col.title && <h4 className="font-bold text-[14px] text-gray-900 mb-4 pb-3 border-b border-gray-100">{col.title}</h4>}
                           <ul className="space-y-3.5">
                             {col.links.map(link => (
-                              <li key={link} className="text-[14px] text-gray-600 hover:text-gray-900 hover:underline cursor-pointer cursor-pointer font-medium">
+                              <li key={link} onClick={() => handleLinkClick(link)} className="text-[14px] text-gray-600 hover:text-gray-900 hover:underline cursor-pointer font-medium">
                                 {link}
                               </li>
                             ))}
                           </ul>
-                          
                           {col.secondTitle && (
                             <div className={col.marginTop}>
                               <h4 className="font-bold text-[14px] text-gray-900 mb-4 pb-3 border-b border-gray-100">{col.secondTitle}</h4>
                               <ul className="space-y-3.5">
                                 {col.secondLinks.map(link => (
-                                  <li key={link} className="text-[14px] text-gray-600 hover:text-gray-900 hover:underline cursor-pointer cursor-pointer font-medium">
+                                  <li key={link} onClick={() => handleLinkClick(link)} className="text-[14px] text-gray-600 hover:text-gray-900 hover:underline cursor-pointer font-medium">
                                     {link}
                                   </li>
                                 ))}
@@ -167,13 +194,35 @@ export const BusinessNav = () => {
             );
           })}
         </div>
+
         <div className="hidden lg:flex items-center gap-6">
           <Link to="/login" className="text-white hover:text-[#00b67a] transition-colors font-bold text-[14px]">Log in</Link>
           <Link to="/business/signup" className="bg-transparent text-white px-6 py-2.5 rounded-full font-bold text-[14px] border border-white/80 hover:bg-white hover:text-black transition-all">Create free account</Link>
         </div>
-        <button onClick={()=>setOpen(!open)} className="lg:hidden p-2 text-white">{open?<X/>:<Menu/>}</button>
+
+        <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-white">
+          {open ? <X /> : <Menu />}
+        </button>
       </div>
-      <AnimatePresence>{open&&<motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:'auto'}} exit={{opacity:0,height:0}} className="lg:hidden absolute top-full left-0 w-full bg-black border-t border-white/10 overflow-hidden"><div className="p-6 space-y-4">{items.map(i=><div key={i.n} className="text-base font-bold text-white py-2 border-b border-white/5 flex justify-between">{i.n}{i.d&&<ChevronRight className="w-4 h-4 text-white/40"/>}</div>)}<div className="pt-6 space-y-3"><Link to="/login" className="block text-center text-white py-2.5 font-bold border border-white/20 rounded-full">Log in</Link><Link to="/business/signup" className="block text-center bg-[#00b67a] text-white py-3 rounded-full font-bold">Create free account</Link></div></div></motion.div>}</AnimatePresence>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:'auto'}} exit={{opacity:0,height:0}} className="lg:hidden absolute top-full left-0 w-full bg-black border-t border-white/10 overflow-hidden">
+            <div className="p-6 space-y-4">
+              {navItems.map(i => (
+                <div key={i} onClick={() => menuData[i] ? null : handleLinkClick(i)} className="text-base font-bold text-white py-2 border-b border-white/5 flex justify-between">
+                  {i}
+                  {menuData[i] && <ChevronDown className="w-4 h-4 text-white/40" />}
+                </div>
+              ))}
+              <div className="pt-6 space-y-3">
+                <Link to="/login" className="block text-center text-white py-2.5 font-bold border border-white/20 rounded-full">Log in</Link>
+                <Link to="/business/signup" className="block text-center bg-[#00b67a] text-white py-3 rounded-full font-bold">Create free account</Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
@@ -284,13 +333,26 @@ const Hero = () => (
 /* ═══════════════════════════════════════════════════════
    SEARCH + STATS
    ═══════════════════════════════════════════════════════ */
-const TrustSearch = () => (
+const TrustSearch = ({ searchTerm, setSearchTerm, handleCheck, loading }) => (
   <section className="py-20 bg-white text-center">
     <div className="max-w-xl mx-auto px-6">
       <h2 className="text-[22px] font-bold text-gray-800 mb-8">See what customers are saying about your business:</h2>
       <div className="bg-white rounded-full shadow-xl p-1.5 flex border border-gray-100 mb-5 max-w-lg mx-auto">
-        <input type="text" placeholder="Website URL" className="flex-1 px-6 py-3 outline-none font-medium text-[15px] placeholder-gray-300"/>
-        <button className="bg-[#1a1c21] text-white px-8 py-3 rounded-full font-black text-[15px] hover:bg-black">Check</button>
+        <input 
+          type="text" 
+          placeholder="Website URL" 
+          className="flex-1 px-6 py-3 outline-none font-medium text-[15px] placeholder-gray-300"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleCheck()}
+        />
+        <button 
+          onClick={handleCheck}
+          disabled={loading}
+          className="bg-[#1a1c21] text-white px-8 py-3 rounded-full font-black text-[15px] hover:bg-black disabled:opacity-50"
+        >
+          {loading ? '...' : 'Check'}
+        </button>
       </div>
       <p className="text-gray-400 text-[13px] font-bold">* ex. www.truthboard.com</p>
     </div>
@@ -616,23 +678,56 @@ const DataSolutions = () => (
    INTEGRATION PARTNER CARDS
    ═══════════════════════════════════════════════════════ */
 const IntegrationPartners = () => (
-  <section className="py-20 bg-[#fbfbfb]">
-    <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all">
-        <div><h3 className="text-[24px] font-black text-gray-800 mb-4">Salesforce integration</h3><p className="text-[14px] text-gray-500 mb-8 leading-relaxed">Seamlessly integrate Salesforce with TruthBoard and turn your CRM into a reliable hub for trusted review data.</p></div>
-        <button className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-black text-[14px] w-fit hover:bg-black transition-all">Find out more</button>
+  <section className="py-24 bg-[#fcfcfb]">
+    <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row gap-8 items-start">
+      {/* Column 1 */}
+      <div className="flex-1 flex flex-col gap-8 w-full">
+        {/* Salesforce Card */}
+        <div className="bg-[#f9fafb] p-12 rounded-[32px] border border-gray-100 hover:shadow-xl transition-all">
+          <h3 className="text-[26px] font-bold text-[#1a1c21] mb-5 tracking-tight leading-snug">Salesforce integration</h3>
+          <p className="text-[15px] text-[#1a1c21] mb-10 leading-relaxed font-normal">
+            Seamlessly integrate Salesforce with TruthBoard and turn your CRM into a reliable hub for trusted review data.
+          </p>
+        <Link to="/features/salesforce-integration" className="bg-[#1a1c21] text-white px-8 py-4 rounded-full font-bold text-[15px] w-fit hover:bg-black transition-all text-center">
+          Find out more
+        </Link>
+        </div>
+
+        {/* Pricing Card */}
+        <div className="bg-[#f9fafb] p-12 rounded-[32px] border border-gray-100 hover:shadow-xl transition-all">
+          <h3 className="text-[26px] font-bold text-[#1a1c21] mb-5 tracking-tight leading-snug">Find the right Pricing plan for your business</h3>
+          <p className="text-[15px] text-[#1a1c21] mb-12 leading-relaxed font-normal">
+            Whether you're a new business or a household name, we have a range of plans to help you reach more customers than ever before.
+          </p>
+          <Link to="/pricing" className="bg-[#1a1c21] text-white px-8 py-4 rounded-full font-bold text-[15px] w-fit hover:bg-black transition-all text-center">
+            View our pricing plans
+          </Link>
+        </div>
       </div>
-      <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all">
-        <div><h3 className="text-[24px] font-black text-gray-800 mb-4">TruthBoard is a founding member of the Coalition for Trusted reviews</h3><p className="text-[14px] text-gray-500 mb-8 leading-relaxed">TruthBoard, Amazon, Booking.com, Expedia Group, Glassdoor and Tripadvisor have formed the Coalition for Trusted Reviews. A shared commitment to protecting the integrity of online consumer reviews worldwide.</p></div>
-        <button className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-black text-[14px] w-fit hover:bg-black transition-all">View all referral partners</button>
-      </div>
-      <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all">
-        <div><h3 className="text-[24px] font-black text-gray-800 mb-4">Find the right Pricing plan for your business</h3><p className="text-[14px] text-gray-500 mb-8 leading-relaxed">Whether you're a new business or a household name, we have a range of plans to help you reach more customers than ever before.</p></div>
-        <button className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-black text-[14px] w-fit hover:bg-black transition-all">View our pricing plans</button>
-      </div>
-      <div className="bg-[#00b67a] p-10 rounded-3xl flex flex-col justify-between hover:shadow-2xl transition-all text-white">
-        <div><h3 className="text-[24px] font-black mb-4">TruthBoard's Marketing widgets</h3><p className="text-[14px] text-white/90 mb-8 leading-relaxed">73.6% of TruthBoard visitors say they are more likely to make a purchase from a website that's displaying TruthBoard reviews on-site.</p></div>
-        <button className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-black text-[14px] w-fit hover:bg-black transition-all">Learn more</button>
+
+      {/* Column 2 */}
+      <div className="flex-1 flex flex-col gap-8 w-full md:mt-12">
+        {/* Coalition Card */}
+        <div className="bg-[#f9fafb] p-12 rounded-[32px] border border-gray-100 hover:shadow-xl transition-all">
+          <h3 className="text-[26px] font-bold text-[#1a1c21] mb-5 tracking-tight leading-snug">TruthBoard is a founding member of the Coalition for Trusted reviews</h3>
+          <p className="text-[15px] text-[#1a1c21] mb-12 leading-relaxed font-normal">
+            TruthBoard, Amazon, Booking.com, Expedia Group, Glassdoor and Tripadvisor have formed the Coalition for Trusted Reviews. A shared commitment to protecting the integrity of online consumer reviews worldwide.
+          </p>
+          <Link to="/datasolutions" className="bg-[#1a1c21] text-white px-8 py-4 rounded-full font-bold text-[15px] w-fit hover:bg-black transition-all text-center">
+            View all referral partners
+          </Link>
+        </div>
+
+        {/* Green Marketing Card */}
+        <div className="bg-[#00b67a] p-12 rounded-[32px] hover:shadow-2xl transition-all text-white relative overflow-hidden">
+          <h3 className="text-[26px] font-bold mb-5 tracking-tight leading-snug">TruthBoard's Marketing widgets</h3>
+          <p className="text-[15px] text-white mb-10 leading-relaxed font-normal">
+            73.6% of TruthBoard visitors say they are more likely to make a purchase from a website that's displaying TruthBoard reviews on-site.
+          </p>
+          <Link to="/datasolutions" className="bg-[#1a1c21] text-white px-8 py-4 rounded-full font-bold text-[15px] w-fit hover:bg-black transition-all text-center">
+            Learn more
+          </Link>
+        </div>
       </div>
     </div>
   </section>
@@ -707,7 +802,7 @@ const FinalCTA = () => (
       <h2 className="text-[28px] md:text-[36px] font-black mb-10 leading-tight">Ready to unlock the full potential of reviews?</h2>
       <div className="flex flex-col items-center gap-5">
         <Link to="/request-demo" className="bg-[#4162ff] text-white px-12 py-4.5 rounded-full font-black text-[16px] hover:bg-[#3453e0] transition-all shadow-2xl inline-block">Book a demo</Link>
-        <Link to="#" className="text-white font-black underline underline-offset-8 hover:text-[#1a1c21] transition-colors text-[15px]">View our pricing plans</Link>
+        <Link to="/pricing" className="text-white font-black underline underline-offset-8 hover:text-[#1a1c21] transition-colors text-[15px]">View our pricing plans</Link>
       </div>
     </div>
   </section>
@@ -738,24 +833,317 @@ export const DetailedFooter = () => (
 /* ═══════════════════════════════════════════════════════
    MAIN PAGE
    ═══════════════════════════════════════════════════════ */
-const ForBusinesses = () => (
-  <ErrorBoundary>
-    <div className="bg-white min-h-screen font-sans selection:bg-[#00b67a] selection:text-white overflow-x-hidden antialiased scroll-smooth">
-      <BusinessNav />
-      <Hero />
-      <TrustSearch />
-      <WhyConsumers />
-      <FeatureGrid />
-      <ScrollingLogos />
-      <GoFurther />
-      <DataSolutions />
-      <IntegrationPartners />
-      <ToolsIntegration />
-      <GetInspired />
-      <FinalCTA />
-      <DetailedFooter />
-    </div>
-  </ErrorBoundary>
-);
+const ForBusinesses = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResult, setSearchResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [view, setView] = useState('landing'); // 'landing', 'results', 'signup'
+  const navigate = useNavigate();
+
+  const handleCheck = async () => {
+    if (!searchTerm) return;
+    setLoading(true);
+    try {
+      const { data } = await api.get(`/companies/domain/${encodeURIComponent(searchTerm.trim())}`);
+      setSearchResult(data);
+      setView('results');
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setView('signup');
+      } else {
+        console.error('Search failed:', err);
+        alert('Something went wrong. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderContent = () => {
+    if (view === 'results' || view === 'signup') {
+      const isSignup = view === 'signup';
+      const rating = isSignup ? 0 : searchResult?.averageRating;
+      const roundedRating = Math.round(rating);
+      
+      let levelText = 'No ratings yet';
+      let levelColor = 'bg-[#ebedf0]';
+      
+      if (!isSignup) {
+        if (rating >= 4.5) { levelText = 'Excellent'; levelColor = 'bg-[#00b67a]'; }
+        else if (rating >= 4.0) { levelText = 'Great'; levelColor = 'bg-[#73cf11]'; }
+        else if (rating >= 3.5) { levelText = 'Average'; levelColor = 'bg-[#ffce00]'; }
+        else if (rating >= 3.0) { levelText = 'Poor'; levelColor = 'bg-[#ffad00]'; }
+        else { levelText = 'Bad'; levelColor = 'bg-[#ff645d]'; }
+      }
+
+      return (
+        <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden bg-[#fcfcfb] min-h-screen">
+          {/* Authentic Organic Blob Backgrounds */}
+          <div className="absolute top-[-100px] right-[-150px] w-[600px] h-[600px] bg-[#00b67a] rounded-full opacity-100 pointer-events-none blur-0" />
+          <div className="absolute bottom-[10%] left-[-200px] w-[550px] h-[550px] bg-[#00b67a] rounded-full opacity-100 pointer-events-none blur-0" />
+          <div className="absolute bottom-[-150px] right-[-50px] w-[350px] h-[350px] bg-[#00b67a] rounded-full opacity-100 pointer-events-none blur-0" />
+          <div className="absolute bottom-0 left-[15%] w-[150px] h-[150px] bg-[#00b67a]/10 rounded-full pointer-events-none" />
+          
+          <div className="relative z-10 pt-60 pb-32">
+            <section className="text-center mb-12">
+              <div className="max-w-4xl mx-auto px-6">
+                <p className="text-[#1a1c21] font-medium text-[16px] mb-1">{isSignup ? searchTerm : searchResult?.website}</p>
+                <p className="text-gray-500 font-medium text-[14px] mb-[40px] tracking-wide">Your TruthScore</p>
+                
+                <h1 className="text-[72px] font-bold text-[#1a1c21] mb-8 tracking-tight leading-none">{levelText}</h1>
+
+                <div className="flex justify-center gap-1.5 mb-10">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div 
+                      key={i} 
+                      className={`w-14 h-14 flex items-center justify-center rounded-[2px] transition-colors duration-300 ${
+                        i <= roundedRating ? levelColor : 'bg-[#ebedf0]'
+                      }`}
+                    >
+                      <Star className={`w-9 h-9 ${i <= roundedRating ? 'text-white' : 'text-[#caced3]'} fill-current`} />
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-[24px] font-bold text-[#1a1c21] mb-1">{isSignup ? '0/5' : `${rating}/5`}</p>
+                <p className="text-gray-500 font-medium text-[16px]">Reviews received <span className="underline cursor-pointer font-bold">{isSignup ? '0' : searchResult?.reviewCount}</span></p>
+              </div>
+            </section>
+
+            <div className="max-w-5xl mx-auto px-6">
+              {isSignup ? (
+                <div className="bg-white rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-20 border border-gray-50">
+                   {/* Signup content preserved */}
+                   <h2 className="text-[30px] font-bold text-gray-900 mb-8 tracking-tight text-center">Create a free account</h2>
+                  <p className="text-gray-600 font-medium text-[16px] mb-12 leading-relaxed text-center max-w-2xl mx-auto">
+                    TruthBoard can help you make more sales by building a trusted brand and learning from your customers. Claim your TruthBoard profile for free today.
+                  </p>
+                  
+                  <div className="space-y-5 max-w-2xl mx-auto">
+                    <button className="w-full flex items-center justify-center gap-3 py-4 border border-gray-200 text-gray-800 rounded-xl font-bold text-[15px] hover:bg-gray-50 transition-all border-b-[4px] active:border-b-[1px] active:translate-y-[1px]">
+                      <svg className="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                      Sign up with Google
+                    </button>
+                    
+                    <div className="relative py-8 flex items-center justify-center">
+                      <div className="absolute w-full border-t border-gray-100" />
+                      <span className="relative bg-white px-6 text-[12px] font-bold text-gray-400 uppercase tracking-widest">OR</span>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-[14px] font-medium text-gray-700 ml-1">Email address <span className="text-red-500">*</span></label>
+                        <input type="email" placeholder="e.g. name@company.com" className="w-full px-5 py-4 border border-gray-300 rounded-lg outline-none focus:border-[#00b67a] text-[15px] font-medium placeholder:text-gray-300 shadow-sm" />
+                      </div>
+                      <button onClick={() => navigate('/business/signup')} className="w-full bg-[#1a1c21] text-white py-4.5 rounded-full font-bold text-[15px] hover:bg-black transition-all shadow-xl active:scale-[0.98]">
+                        Sign up with email
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-white rounded-[16px] shadow-[0_4px_30px_rgba(0,0,0,0.05)] p-12 border border-gray-100 relative z-20 overflow-hidden">
+                  <div className="relative z-10 w-full">
+                    <h2 className="text-[36px] font-bold text-[#1a1c21] mb-4 tracking-tight">See what Trustpilot can do for you</h2>
+                    <p className="text-[#1a1c21] font-medium text-[16px] mb-12 leading-relaxed">Book a 30 minute demo with a Trustpilot expert to learn why we’re trusted by 25,000 business customers.</p>
+                    
+                    <form className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4" onSubmit={(e) => {e.preventDefault(); alert("Thanks! We'll contact you soon."); setView('landing');}}>
+                      <div className="space-y-2">
+                        <label className="text-[14px] font-medium text-[#1a1c21]">First name<span className="text-red-500">*</span></label>
+                        <input type="text" placeholder="First name" required className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium bg-white transition-all shadow-sm" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[14px] font-medium text-[#1a1c21]">Last name<span className="text-red-500">*</span></label>
+                        <input type="text" placeholder="Last name" required className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium bg-white transition-all shadow-sm" />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="text-[14px] font-medium text-[#1a1c21]">Business email<span className="text-red-500">*</span></label>
+                        <input type="email" placeholder="Business email" required className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium bg-white transition-all shadow-sm" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[14px] font-medium text-[#1a1c21]">Phone number<span className="text-red-500">*</span></label>
+                        <input type="tel" placeholder="Phone number" required className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium bg-white transition-all shadow-sm" />
+                      </div>
+                      
+                      <div className="space-y-2 md:col-span-2">
+                        <label className="text-[14px] font-medium text-[#1a1c21]">Country<span className="text-red-500">*</span></label>
+                        <div className="relative">
+                          <select className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium appearance-none bg-white transition-all shadow-sm">
+                            <option>Country</option>
+                            <option>India</option>
+                            <option>United States</option>
+                            <option>United Kingdom</option>
+                          </select>
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                            <ChevronDown className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <label className="text-[14px] font-medium text-[#1a1c21]">Company name<span className="text-red-500">*</span></label>
+                        <input type="text" placeholder="Company name" required className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium bg-white transition-all shadow-sm" defaultValue={searchResult?.name} />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 md:col-span-2">
+                        <div className="space-y-2">
+                          <label className="text-[14px] font-medium text-[#1a1c21]">Annual revenue<span className="text-red-500">*</span></label>
+                          <div className="relative">
+                            <select className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium appearance-none bg-white transition-all shadow-sm">
+                              <option>Annual revenue</option>
+                              <option>$0 - $1M</option>
+                              <option>$1M - $10M</option>
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                              <ChevronDown className="w-4 h-4" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[14px] font-medium text-[#1a1c21]">Number of employees<span className="text-red-500">*</span></label>
+                          <div className="relative">
+                            <select className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium appearance-none bg-white transition-all shadow-sm">
+                              <option>Number of employees</option>
+                              <option>1-10</option>
+                              <option>11-50</option>
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                              <ChevronDown className="w-4 h-4" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <label className="text-[14px] font-medium text-[#1a1c21]">Website URL<span className="text-red-500">*</span></label>
+                        <input type="text" placeholder="Website URL" required className="w-full px-4 py-3 border border-gray-300 rounded-[4px] outline-none focus:border-[#00b67a] text-[15px] font-medium bg-white transition-all shadow-sm" defaultValue={searchResult?.website} />
+                      </div>
+
+                      <button type="submit" className="md:col-span-2 bg-[#1a1c21] text-white py-4 rounded-full font-bold text-[18px] hover:bg-black transition-all shadow-lg mt-4 active:scale-[0.99]">
+                        Request Demo
+                      </button>
+
+                      <p className="md:col-span-2 text-[11px] text-gray-500 leading-tight mt-4 text-left">
+                        By clicking above you accept our <span className="underline cursor-pointer">Privacy Policy</span> and agree to us contacting you via call or email about our products and services. You may unsubscribe at any time.
+                      </p>
+                    </form>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* "Get inspired" Section */}
+            {!isSignup && (
+              <section className="mt-32 pb-10">
+                <div className="max-w-6xl mx-auto px-6">
+                  <h2 className="text-[36px] font-bold text-[#1a1c21] text-center mb-16">Get inspired</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {[
+                      {
+                        title: "What are consumer insights and how do I use them? An introduction",
+                        color: "bg-[#4a0e1e]",
+                        illustration: (
+                          <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                            <div className="absolute left-[-20px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[60px] border-t-transparent border-b-[60px] border-b-transparent border-l-[100px] border-l-white opacity-90" />
+                            <div className="flex gap-4 items-center">
+                              <div className="w-12 h-12 bg-[#ff7ba9] rounded-full" />
+                              <div className="w-16 h-16 bg-[#ff7ba9] rounded-full" />
+                              <div className="w-20 h-20 bg-[#ff7ba9] rounded-full" />
+                            </div>
+                          </div>
+                        )
+                      },
+                      {
+                        title: "The complete guide to marketing with customer reviews",
+                        color: "bg-[#ff8a00]",
+                        illustration: (
+                          <div className="relative w-full h-full flex items-center justify-center">
+                            <div className="grid grid-cols-4 gap-4 px-8">
+                              {[...Array(12)].map((_, i) => (
+                                <Star key={i} className="w-8 h-8 fill-[#4a2e12] text-[#4a2e12] rotate-[15deg]" />
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      },
+                      {
+                        title: "Social proof: What is it, and why is it important for eCommerce?",
+                        color: "bg-[#bcd8eb]",
+                        illustration: (
+                          <div className="relative w-full h-full flex items-center justify-center">
+                            <div className="relative">
+                              <Heart className="w-32 h-32 fill-[#a34f2a] text-[#a34f2a]" />
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-[2px] h-full bg-[#bcd8eb] rotate-12 translate-x-2" />
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      }
+                    ].map((card, i) => (
+                      <motion.div 
+                        key={i}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: i * 0.15 }}
+                        className="group cursor-pointer"
+                      >
+                        <div className={`aspect-[16/9] ${card.color} rounded-[20px] mb-6 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]`}>
+                          {card.illustration}
+                        </div>
+                        <h3 className="text-[20px] font-bold text-[#1a1c21] leading-snug mb-4 group-hover:text-[#00b67a] transition-colors">
+                          {card.title}
+                        </h3>
+                        <a href="#" className="inline-flex items-center text-[#06509a] font-bold text-[16px] group/link">
+                          Read more 
+                          <span className="ml-1 transition-transform group-hover/link:translate-x-1">→</span>
+                        </a>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Default Landing View
+    return (
+      <div className="animate-in fade-in duration-700">
+        <Hero />
+        <TrustSearch 
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          handleCheck={handleCheck}
+          loading={loading}
+        />
+        <WhyConsumers />
+        <FeatureGrid />
+        <ScrollingLogos />
+        <GoFurther />
+        <DataSolutions />
+        <IntegrationPartners />
+        <ToolsIntegration />
+        <GetInspired />
+        <FinalCTA />
+      </div>
+    );
+  };
+
+  return (
+    <ErrorBoundary>
+      <div className="bg-white min-h-screen font-sans selection:bg-[#00b67a] selection:text-white overflow-x-hidden antialiased scroll-smooth">
+        <BusinessNav />
+        {renderContent()}
+        <DetailedFooter />
+      </div>
+    </ErrorBoundary>
+  );
+};
 
 export default ForBusinesses;

@@ -123,9 +123,9 @@ const Home = () => {
       {/* ═══════════════════════════════════════════════════════════
           SECTION 1 — HERO  (Truthboard-style dark + organic shapes)
          ═══════════════════════════════════════════════════════════ */}
-      <section className="relative bg-[#1a1a2e] overflow-hidden">
-        {/* Animated organic background shapes */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <section className="relative bg-[#1a1a2e]">
+        {/* Animated organic background shapes — wrapped in overflow-hidden to prevent scrollbars */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-b-[40px] md:rounded-b-[80px]">
           <div className="absolute -top-40 right-0 w-[600px] h-[600px] bg-orange-500 rounded-full opacity-80 animate-[float_8s_ease-in-out_infinite]" />
           <div className="absolute bottom-0 -left-20 w-[400px] h-[400px] bg-teal-400 rounded-full opacity-70 animate-[float_10s_ease-in-out_infinite_reverse]" />
           <div className="absolute bottom-20 right-40 w-[250px] h-[250px] bg-green-400 rounded-full opacity-60 animate-[float_12s_ease-in-out_infinite_2s]" />

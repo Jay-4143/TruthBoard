@@ -183,7 +183,12 @@ const Navigation = () => {
            <Link to="/categories" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800">Categories</Link>
            <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800">Blog</Link>
            
-           {!user && (
+           {user ? (
+             <div className="pt-2">
+                <Link to="/my-reviews" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800 text-gray-300">My reviews</Link>
+                <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800 text-gray-300">Profile</Link>
+             </div>
+           ) : (
              <div className="pt-2">
                 <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800">Log in</Link>
              </div>

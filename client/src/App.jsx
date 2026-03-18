@@ -16,21 +16,29 @@ import VisitorInsights from './pages/VisitorInsights';
 import DataSolutionsPage from './pages/DataSolutions';
 import AboutTruthboard from './pages/AboutTruthboard';
 import ContactTruthboard from './pages/ContactTruthboard';
+import MyReviews from './pages/MyReviews';
+import EditReview from './pages/EditReview';
+import SalesforceIntegration from './pages/SalesforceIntegration';
+import Pricing from './pages/Pricing';
+import Blog from './pages/Blog';
 
 import { AuthProvider } from './context/AuthContext';
 import { Navigation, Footer } from './components/Navigation';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
+
+import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 
 function AppContent() {
   const location = useLocation();
-  const isBusinessPage = location.pathname === '/business' || 
-                         location.pathname === '/request-demo' || 
-                         location.pathname === '/request demo' ||
-                         location.pathname === '/request%20demo' ||
-                         location.pathname === '/business/signup' ||
+  const isBusinessPage = location.pathname.startsWith('/business') || 
+                         location.pathname.startsWith('/request') || 
                          location.pathname === '/datasolutions' ||
                          location.pathname === '/about' ||
                          location.pathname === '/contact' ||
+                         location.pathname === '/pricing' ||
+                         location.pathname === '/blog' ||
+                         location.pathname.includes('/company') ||
                          location.pathname.startsWith('/features/');
 
   return (
@@ -55,13 +63,21 @@ function AppContent() {
           <Route path="/datasolutions" element={<DataSolutionsPage />} />
           <Route path="/about" element={<AboutTruthboard />} />
           <Route path="/contact" element={<ContactTruthboard />} />
+          <Route path="/features/salesforce-integration" element={<SalesforceIntegration />} />
+          <Route path="/features/salesforce_integration" element={<SalesforceIntegration />} />
+          <Route path="/features/salesforce integration" element={<SalesforceIntegration />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/business/pricing" element={<Pricing />} />
+          <Route path="/blog" element={<Blog />} />
           
           <Route path="/write-review" element={<WriteReview />} />
           <Route path="/write_review" element={<WriteReview />} />
           <Route path="/company/:companyId/review" element={<WriteReview />} />
           
           <Route element={<ProtectedRoute />}>
-            {/* Future protected routes */}
+            <Route path="/my-reviews" element={<MyReviews />} />
+            <Route path="/edit-review/:reviewId" element={<EditReview />} />
+            <Route path="/edit review/:reviewId" element={<EditReview />} />
           </Route>
         </Routes>
       </main>
@@ -72,11 +88,14 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </AuthProvider>
+    <GlobalErrorBoundary>
+      <AuthProvider>
+        <Router>
+          <ScrollToTop />
+          <AppContent />
+        </Router>
+      </AuthProvider>
+    </GlobalErrorBoundary>
   );
 }
 
