@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CorporateNav, CorporateFooter } from './AboutTruthboard';
 
-const ContactTruthboard = () => {
+const ContactTruthBoard = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Contact us - Truthboard Corporate";
+    document.title = "Contact us - TruthBoard Corporate";
   }, []);
 
   const contactSections = [
@@ -18,7 +18,7 @@ const ContactTruthboard = () => {
     },
     {
       title: "Help Center",
-      content: "Find articles, videos, and more resources about how Truthboard works.",
+      content: "Find articles, videos, and more resources about how TruthBoard works.",
       linkText: "Learn more",
       link: "#"
     },
@@ -91,7 +91,7 @@ const ContactTruthboard = () => {
                 <div className="space-y-6 mt-4">
                   {section.subItems.map((item, id) => (
                     <div key={id}>
-                      <span className="block text-[14px] font-black mb-1">{item.label}</span>
+                      <span className="block text-[14px] font-bold mb-1">{item.label}</span>
                       <a href={`mailto:${item.value}`} className="text-[14px] font-bold underline underline-offset-4">{item.value}</a>
                     </div>
                   ))}
@@ -119,7 +119,7 @@ const ContactTruthboard = () => {
 
       {/* Offices Section */}
       <section className="max-w-[1240px] mx-auto py-32 px-6 md:px-12">
-        <h2 className="text-[44px] font-[900] tracking-tighter mb-20 text-[#1c1c1c]">Truthboard Global Offices</h2>
+        <h2 className="text-[44px] font-[900] tracking-tighter mb-20 text-[#1c1c1c]">TruthBoard Global Offices</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-20 gap-y-24">
           {offices.map((office, idx) => (
             <div key={idx} className="flex flex-col">
@@ -128,7 +128,7 @@ const ContactTruthboard = () => {
                 {office.address}
               </p>
               <div className="mt-auto">
-                <span className="block text-[14px] font-black mb-1 uppercase tracking-wider text-gray-400">Telephone number</span>
+                <span className="block text-[14px] font-bold mb-1 uppercase tracking-wider text-gray-400">Telephone number</span>
                 <a href={`tel:${office.phone}`} className="text-[14px] font-bold underline underline-offset-4">{office.phone}</a>
               </div>
             </div>
@@ -141,4 +141,4 @@ const ContactTruthboard = () => {
   );
 };
 
-export default ContactTruthboard;
+export default ContactTruthBoard;

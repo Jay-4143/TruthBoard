@@ -28,7 +28,7 @@ class GlobalErrorBoundary extends Component {
                </svg>
             </div>
             
-            <h1 className="text-3xl font-black text-gray-900 mb-4 tracking-tight">Application Error</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">Application Error</h1>
             <p className="text-gray-500 font-medium mb-8 leading-relaxed">
               We encountered an unexpected issue while loading this page. Our team has been notified.
             </p>
@@ -42,7 +42,7 @@ class GlobalErrorBoundary extends Component {
             
             <button 
               onClick={() => window.location.href = '/'}
-              className="w-full bg-[#00b67a] hover:bg-[#009966] text-white py-4 rounded-full font-black text-[15px] shadow-lg shadow-green-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full bg-[#00b67a] hover:bg-[#009966] text-white py-4 rounded-full font-bold text-[15px] shadow-lg shadow-green-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               Back to Home
             </button>
@@ -57,7 +57,7 @@ class GlobalErrorBoundary extends Component {
           
           <div className="mt-12 flex items-center gap-2 opacity-40">
              <span className="text-[#00b67a] text-xl">★</span>
-             <span className="text-sm font-black text-[#002e21] tracking-tighter">TruthBoard Safety System</span>
+             <span className="text-sm font-bold text-[#002e21] tracking-tighter">TruthBoard Safety System</span>
           </div>
         </div>
       );

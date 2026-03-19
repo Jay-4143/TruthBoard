@@ -1,9 +1,84 @@
 const Company = require('../models/Company');
+const Category = require('../models/Category');
+const mongoose = require('mongoose');
 
 const getCompanies = async (req, res) => {
   try {
-    const companies = await Company.find({});
+    const { category, minRating, location, page = 1, limit = 10 } = req.query;
+    const query = {};
+
+    if (minRating) {
+      query.trustScore = { $gte: parseFloat(minRating) };
+    }
+
+    if (location) {
+      query.location = { $regex: new RegExp(`^${location}$`, 'i') };
+    }
+
+    if (category) {
+      // Find category by slug if it's not a valid ObjectId
+      const categoryDoc = await Category.findOne({ 
+        $or: [
+          { slug: category },
+          { _id: mongoose.Types.ObjectId.isValid(category) ? category : null }
+        ].filter(Boolean)
+      });
+      if (categoryDoc) {
+        query.category = categoryDoc._id;
+      }
+    }
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    const companies = await Company.find(query)
+      .populate('category')
+      .sort({ name: 1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Company.countDocuments(query);
+    console.log(`GET /api/companies - Category: ${category}, Query: ${JSON.stringify(query)}, Found: ${companies.length}/${total}`);
+
+    res.json({
+      companies,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+      total
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getTrendingCompanies = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 5;
+    const companies = await Company.find({})
+      .sort({ totalReviews: -1, trustScore: -1 })
+      .limit(limit)
+      .populate('category');
     res.json(companies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const claimCompany = async (req, res) => {
+  try {
+    const company = await Company.findById(req.params.id);
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+
+    if (company.isClaimed) {
+      return res.status(400).json({ message: 'Company is already claimed' });
+    }
+
+    company.isClaimed = true;
+    company.claimedBy = req.user._id;
+    await company.save();
+
+    res.json({ message: 'Company claimed successfully', company });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -11,7 +86,7 @@ const getCompanies = async (req, res) => {
 
 const getCompanyBySlug = async (req, res) => {
   try {
-    const company = await Company.findOne({ slug: req.params.slug });
+    const company = await Company.findOne({ slug: req.params.slug }).populate('category');
     if (company) {
       res.json(company);
     } else {
@@ -30,9 +105,24 @@ const searchCompanies = async (req, res) => {
     }
     
     const limit = parseInt(req.query.limit) || 10;
-    const companies = await Company.find({
-      name: { $regex: q, $options: 'i' }
-    }).limit(limit);
+    
+    // Use text search if query is longer than 2 chars, otherwise regex
+    let companies;
+    if (q.length > 2) {
+      companies = await Company.find(
+        { $text: { $search: q } },
+        { score: { $meta: 'textScore' } }
+      )
+      .sort({ score: { $meta: 'textScore' } })
+      .limit(limit)
+      .populate('category');
+    } else {
+      companies = await Company.find({
+        name: { $regex: q, $options: 'i' }
+      })
+      .limit(limit)
+      .populate('category');
+    }
     
     res.json(companies);
   } catch (error) {
@@ -47,42 +137,18 @@ const getCompanyByDomain = async (req, res) => {
       return res.status(400).json({ message: 'Domain is required' });
     }
 
-    console.log('Search request for domain:', domain);
-    // Clean domain: remove http, https, www
     let cleanDomain = domain.toLowerCase().trim();
     cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0];
-    console.log('Cleaned domain:', cleanDomain);
 
-    // Find company by website
-    console.log('Searching for company in DB...');
     const company = await Company.findOne({
       website: { $regex: cleanDomain, $options: 'i' }
-    });
-    console.log('Company found:', company ? company.name : 'NOT FOUND');
+    }).populate('category');
 
     if (!company) {
       return res.status(404).json({ message: 'Company not found' });
     }
 
-    // Get reviews and calculate stats
-    console.log('Fetching reviews for:', company._id);
-    const Review = require('../models/Review');
-    const reviews = await Review.find({ companyId: company._id });
-    console.log('Reviews count:', reviews.length);
-    
-    const count = reviews.length;
-    const averageRating = count > 0 
-      ? (reviews.reduce((acc, r) => acc + r.rating, 0) / count).toFixed(1)
-      : 0;
-
-    console.log('Calculated stats:', { averageRating, count });
-    res.json({
-      name: company.name,
-      website: company.website,
-      averageRating: parseFloat(averageRating),
-      reviewCount: count,
-      slug: company.slug
-    });
+    res.json(company);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -92,5 +158,7 @@ module.exports = {
   getCompanies,
   getCompanyBySlug,
   searchCompanies,
-  getCompanyByDomain
+  getCompanyByDomain,
+  getTrendingCompanies,
+  claimCompany
 };

@@ -80,7 +80,7 @@ export const BusinessNav = () => {
           links: ['Service reviews', 'Product reviews', 'Location reviews', 'Review invitations'],
           marginTop: 'mt-8',
           secondTitle: 'Accelerate conversions',
-          secondLinks: ['Review SEO & AI Discovery', 'Truthboard widgets', 'Social media tools', 'Marketing assets']
+          secondLinks: ['Review SEO & AI Discovery', 'TruthBoard widgets', 'Social media tools', 'Marketing assets']
         },
         {
           title: 'Engage with feedback',
@@ -103,7 +103,7 @@ export const BusinessNav = () => {
       width: 'w-[280px]',
       columns: [
         {
-          links: ['About Truthboard', 'Truthboard for Consumers', 'Truthboard Data Solutions']
+          links: ['About TruthBoard', 'TruthBoard for Consumers', 'TruthBoard Data Solutions']
         }
       ]
     }
@@ -113,16 +113,16 @@ export const BusinessNav = () => {
 
   const handleLinkClick = (linkName) => {
     const routeMap = {
-      'About Truthboard': '/about',
-      'Truthboard for Consumers': '/',
-      'Truthboard for Business': '/business',
-      'Truthboard Data Solutions': '/datasolutions',
+      'About TruthBoard': '/about',
+      'TruthBoard for Consumers': '/',
+      'TruthBoard for Business': '/business',
+      'TruthBoard Data Solutions': '/datasolutions',
       'For Businesses': '/business',
       'Pricing': '/pricing',
       'Blog': '/blog',
       'Dashboard analytics': '/features/dashboard-analytics',
       'Social media tools': '/features/social-media-tools',
-      'Truthboard widgets': '/features/trustbox-widgets',
+      'TruthBoard widgets': '/features/trustbox-widgets',
       'Review insights': '/features/review-insights',
       'Visitor insights': '/features/visitor-insights'
     };
@@ -271,7 +271,7 @@ const HeroImageStack = () => (
           <span className="text-[9px] font-bold text-gray-500 uppercase">Apple</span>
         </div>
         <div className="flex gap-0.5 mb-1.5">{[1,2,3,4,5].map(i=><div key={i} className="w-3.5 h-3.5 bg-[#00b67a] rounded-[2px]"/>)}</div>
-        <p className="text-[10px] font-black text-gray-800 tracking-tight leading-none">Excellent 4.8</p>
+        <p className="text-[10px] font-bold text-gray-800 tracking-tight leading-none">Excellent 4.8</p>
       </motion.div>
 
       {/* Micro card */}
@@ -318,11 +318,11 @@ const Hero = () => (
   <section className="relative pt-24 lg:pt-40 pb-16 lg:pb-28 bg-[#00b67a] overflow-hidden">
     <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-xl text-[#1a1c21]">
-        <motion.h1 variants={fadeInUp} className="text-[30px] md:text-[44px] font-black leading-[1.1] mb-6 tracking-tight">The world's largest independent customer feedback platform</motion.h1>
+        <motion.h1 variants={fadeInUp} className="text-[30px] md:text-[44px] font-bold leading-[1.1] mb-6 tracking-tight">The world's largest independent customer feedback platform</motion.h1>
         <motion.p variants={fadeInUp} className="text-[15px] md:text-[17px] text-[#1a1c21]/80 font-medium mb-8 leading-relaxed max-w-lg">Attract and keep customers with TruthBoard's review platform and powerful analytics tools.</motion.p>
         <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 mb-12">
-          <Link to="/request-demo" className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-black text-[15px] hover:bg-black transition-all shadow-lg text-center flex items-center justify-center">Book a demo</Link>
-          <Link to="/business/signup" className="bg-[#4162ff] text-white px-7 py-3.5 rounded-full font-black text-[15px] hover:bg-[#3453e0] transition-all shadow-lg text-center flex items-center justify-center">Start for free</Link>
+          <Link to="/request-demo" className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-bold text-[15px] hover:bg-black transition-all shadow-lg text-center flex items-center justify-center">Book a demo</Link>
+          <Link to="/business/signup" className="bg-[#4162ff] text-white px-7 py-3.5 rounded-full font-bold text-[15px] hover:bg-[#3453e0] transition-all shadow-lg text-center flex items-center justify-center">Start for free</Link>
         </motion.div>
       </motion.div>
       <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}} className="hidden lg:block h-[520px]"><HeroImageStack/></motion.div>
@@ -349,7 +349,7 @@ const TrustSearch = ({ searchTerm, setSearchTerm, handleCheck, loading }) => (
         <button 
           onClick={handleCheck}
           disabled={loading}
-          className="bg-[#1a1c21] text-white px-8 py-3 rounded-full font-black text-[15px] hover:bg-black disabled:opacity-50"
+          className="bg-[#1a1c21] text-white px-8 py-3 rounded-full font-bold text-[15px] hover:bg-black disabled:opacity-50"
         >
           {loading ? '...' : 'Check'}
         </button>
@@ -361,10 +361,10 @@ const TrustSearch = ({ searchTerm, setSearchTerm, handleCheck, loading }) => (
 
 const WhyConsumers = () => (
   <section className="py-20 bg-white text-center border-b border-gray-50">
-    <h2 className="text-[30px] font-black text-gray-800 mb-16 px-6">Why consumers rely on TruthBoard</h2>
+    <h2 className="text-[30px] font-bold text-gray-800 mb-16 px-6">Why consumers rely on TruthBoard</h2>
     <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
       {[{v:350,s:'m',l:'reviews on TruthBoard.com'},{v:1.3,s:' million',l:'businesses globally with TruthBoard reviews',d:1},{v:190,s:',000+',l:'new reviews every day'}].map((s,i)=>(
-        <div key={i} className="group"><div className="text-[42px] font-black text-[#1a1c21] mb-1 leading-none group-hover:text-[#00b67a] transition-colors">{i===0&&'+'}<SafeCountUp end={s.v} decimals={s.d||0}/>{s.s}</div><p className="text-[14px] font-bold text-gray-500">{s.l}</p></div>
+        <div key={i} className="group"><div className="text-[42px] font-bold text-[#1a1c21] mb-1 leading-none group-hover:text-[#00b67a] transition-colors">{i===0&&'+'}<SafeCountUp end={s.v} decimals={s.d||0}/>{s.s}</div><p className="text-[14px] font-bold text-gray-500">{s.l}</p></div>
       ))}
     </div>
   </section>
@@ -428,7 +428,7 @@ const FeatureGrid = () => {
   return (
     <section className="py-24 bg-[#fbfbfb]">
       <div className="max-w-[1200px] mx-auto px-6">
-        <h2 className="text-[32px] font-black text-center text-gray-900 mb-16">New Gold Release Features</h2>
+        <h2 className="text-[32px] font-bold text-center text-gray-900 mb-16">New Gold Release Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((f, i) => {
             const CardContent = (
@@ -486,7 +486,7 @@ const ScrollingLogos = () => {
         <div className="w-10 h-7 bg-[#3b00ff] rounded-sm flex items-center justify-center -rotate-6 shadow-sm">
           <div className="w-5 h-5 bg-white rounded-full"></div>
         </div>
-        <span className="text-[22px] font-black text-[#ff008a] ml-1">vividseats</span>
+        <span className="text-[22px] font-bold text-[#ff008a] ml-1">vividseats</span>
       </div>
     </div>,
     // Kaplan
@@ -506,7 +506,7 @@ const ScrollingLogos = () => {
       <div className="w-7 h-7 rounded-full border-4 border-[#d32f2f] flex items-center justify-center">
         <div className="w-2.5 h-2.5 bg-[#d32f2f] rounded-full shadow-inner" />
       </div>
-      <span className="text-[24px] font-black text-[#d32f2f] tracking-tighter uppercase">MAPFRE</span>
+      <span className="text-[24px] font-bold text-[#d32f2f] tracking-tighter uppercase">MAPFRE</span>
     </div>,
     // Affirm
     <div className="flex items-center relative">
@@ -515,7 +515,7 @@ const ScrollingLogos = () => {
     </div>,
     // Travelzoo
     <div className="flex items-center">
-      <span className="text-[24px] font-black tracking-tighter"><span className="text-[#0038a8]">TRAVEL</span><span className="text-[#e31837]">ZOO</span></span>
+      <span className="text-[24px] font-bold tracking-tighter"><span className="text-[#0038a8]">TRAVEL</span><span className="text-[#e31837]">ZOO</span></span>
     </div>,
     // cheapOair
     <div className="flex items-center gap-1">
@@ -535,18 +535,18 @@ const ScrollingLogos = () => {
     </div>,
     // Rainbow
     <div className="flex items-center">
-      <span className="text-[26px] font-black text-[#0066cc] italic" style={{fontFamily: 'serif'}}>Rainbow</span>
+      <span className="text-[26px] font-bold text-[#0066cc] italic" style={{fontFamily: 'serif'}}>Rainbow</span>
     </div>,
     // AMSCOT
     <div className="bg-[#0038a8] px-4 py-1.5 rounded-md shadow-md">
-      <span className="text-[20px] font-black text-[#ffcc00] tracking-tight italic">AMSCOT</span>
+      <span className="text-[20px] font-bold text-[#ffcc00] tracking-tight italic">AMSCOT</span>
     </div>,
     // Canvas Factory
     <div className="flex items-center gap-2">
       <div className="w-7 h-7 border-[3px] border-[#1a73e8] rounded-md flex items-center justify-center">
         <div className="w-3.5 h-3.5 bg-[#1a73e8] rounded-full"></div>
       </div>
-      <span className="text-[20px] font-black text-[#1a73e8] italic">canvasfactory</span>
+      <span className="text-[20px] font-bold text-[#1a73e8] italic">canvasfactory</span>
     </div>
   ];
 
@@ -606,14 +606,14 @@ const GoFurther = () => (
       </div>
       {/* RIGHT: Text */}
       <div className="lg:w-1/2">
-        <h2 className="text-[30px] md:text-[36px] font-black text-gray-800 mb-8 leading-tight">Go further with TruthBoard solutions</h2>
+        <h2 className="text-[30px] md:text-[36px] font-bold text-gray-800 mb-8 leading-tight">Go further with TruthBoard solutions</h2>
         <ul className="space-y-4 mb-10">
           {["Invite all of your customers to review your business.","Let them know you're listening by engaging with feedback.","Use customer testimonials as social proof to help accelerate conversions at every stage of the purchasing journey.","Inform your strategy with insights and data to navigate to success."].map((b,i)=>(
             <li key={i} className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#1a1c21] mt-2.5 shrink-0"/><p className="text-[15px] text-gray-600 leading-relaxed">{b}</p></li>
           ))}
         </ul>
-        <p className="font-black text-gray-800 text-[15px] mb-5">Want to learn more?</p>
-        <Link to="/request-demo" className="bg-[#4162ff] inline-block text-white px-8 py-4 rounded-full font-black text-[15px] hover:bg-[#3453e0] transition-all shadow-xl text-center">Book a demo</Link>
+        <p className="font-bold text-gray-800 text-[15px] mb-5">Want to learn more?</p>
+        <Link to="/request-demo" className="bg-[#4162ff] inline-block text-white px-8 py-4 rounded-full font-bold text-[15px] hover:bg-[#3453e0] transition-all shadow-xl text-center">Book a demo</Link>
       </div>
     </div>
   </section>
@@ -626,9 +626,9 @@ const DataSolutions = () => (
   <section className="bg-gray-50 py-20 overflow-hidden">
     <div className="max-w-[1200px] mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
       <div className="lg:w-1/2">
-        <h2 className="text-[30px] md:text-[36px] font-black text-gray-800 mb-6 leading-tight">TruthBoard Data Solutions</h2>
+        <h2 className="text-[30px] md:text-[36px] font-bold text-gray-800 mb-6 leading-tight">TruthBoard Data Solutions</h2>
         <p className="text-[15px] text-gray-500 leading-relaxed mb-10 max-w-lg">Embed rich consumer sentiment and trust signals into every strategic business decision, with data solutions, an intelligence layer that embeds trust everywhere to provide a deeper layer of insight beyond surface-level metrics.</p>
-        <Link to="/datasolutions" className="bg-[#1a1c21] text-white px-9 py-4 rounded-full font-black text-[15px] hover:bg-black transition-all shadow-lg inline-block">Learn more</Link>
+        <Link to="/datasolutions" className="bg-[#1a1c21] text-white px-9 py-4 rounded-full font-bold text-[15px] hover:bg-black transition-all shadow-lg inline-block">Learn more</Link>
       </div>
       <div className="lg:w-1/2 relative">
         {/* Big green circle bg */}
@@ -663,7 +663,7 @@ const DataSolutions = () => (
           </div>
           {/* Excellent badge */}
           <div className="flex items-center gap-3 mt-4">
-            <span className="text-[14px] font-black text-gray-800">Excellent</span>
+            <span className="text-[14px] font-bold text-gray-800">Excellent</span>
             <div className="flex gap-0.5">{[1,2,3,4,5].map(i=><div key={i} className="w-6 h-6 bg-[#00b67a] rounded-[2px] flex items-center justify-center"><Star className="w-4 h-4 text-white fill-current"/></div>)}</div>
             <Star className="w-4 h-4 text-[#00b67a] fill-current ml-1"/>
             <span className="text-[13px] font-bold text-gray-800">TruthBoard</span>
@@ -739,16 +739,16 @@ const IntegrationPartners = () => (
 const ToolsIntegration = () => {
   const tools = [
     { name:'salesforce', style:'text-[#00A1E0] text-2xl font-bold italic' },
-    { name:'HubSpot', style:'text-[#FF7A59] text-3xl font-black' },
+    { name:'HubSpot', style:'text-[#FF7A59] text-3xl font-bold' },
     { name:'Hootsuite', style:'text-[#143059] text-2xl font-bold' },
-    { name:'zendesk', style:'text-[#03363D] text-2xl font-black' },
-    { name:'WOOCOMMERCE', style:'text-[#96588A] text-xl font-black tracking-wide' },
-    { name:'shopify', style:'text-[#96bf48] text-2xl font-black' }
+    { name:'zendesk', style:'text-[#03363D] text-2xl font-bold' },
+    { name:'WOOCOMMERCE', style:'text-[#96588A] text-xl font-bold tracking-wide' },
+    { name:'shopify', style:'text-[#96bf48] text-2xl font-bold' }
   ];
   return (
     <section className="py-24 bg-white text-center">
       <div className="max-w-5xl mx-auto px-6">
-        <h2 className="text-[28px] font-black text-[#00b67a] mb-20">We easily integrate with your existing tools</h2>
+        <h2 className="text-[28px] font-bold text-[#00b67a] mb-20">We easily integrate with your existing tools</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-12 mb-20 items-center">
           {tools.map((t,i)=><div key={i} className="flex justify-center cursor-pointer hover:scale-110 transition-transform"><span className={t.style}>{t.name}</span></div>)}
         </div>
@@ -776,13 +776,13 @@ const GetInspired = () => {
   return (
     <section className="py-24 bg-[#fbfbfb]">
       <div className="max-w-5xl mx-auto px-6">
-        <h2 className="text-[28px] font-black text-center text-gray-800 mb-16">Get inspired</h2>
+        <h2 className="text-[28px] font-bold text-center text-gray-800 mb-16">Get inspired</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {articles.map((a,i)=>(
             <motion.div key={i} whileHover={{y:-6}} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col hover:shadow-xl transition-all">
               <div className={`h-48 ${a.color} p-8`}>{a.graphic}</div>
               <div className="p-7 flex-1 flex flex-col justify-between">
-                <h3 className="text-[15px] font-black text-gray-800 mb-5 leading-relaxed">{a.title}</h3>
+                <h3 className="text-[15px] font-bold text-gray-800 mb-5 leading-relaxed">{a.title}</h3>
                 <Link to="#" className="text-[#4162ff] font-bold text-[14px] flex items-center gap-1.5 group">Read more <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"/></Link>
               </div>
             </motion.div>
@@ -799,10 +799,10 @@ const GetInspired = () => {
 const FinalCTA = () => (
   <section className="py-24 bg-[#00b67a] text-center text-white relative overflow-hidden">
     <div className="max-w-4xl mx-auto px-6 relative z-10">
-      <h2 className="text-[28px] md:text-[36px] font-black mb-10 leading-tight">Ready to unlock the full potential of reviews?</h2>
+      <h2 className="text-[28px] md:text-[36px] font-bold mb-10 leading-tight">Ready to unlock the full potential of reviews?</h2>
       <div className="flex flex-col items-center gap-5">
-        <Link to="/request-demo" className="bg-[#4162ff] text-white px-12 py-4.5 rounded-full font-black text-[16px] hover:bg-[#3453e0] transition-all shadow-2xl inline-block">Book a demo</Link>
-        <Link to="/pricing" className="text-white font-black underline underline-offset-8 hover:text-[#1a1c21] transition-colors text-[15px]">View our pricing plans</Link>
+        <Link to="/request-demo" className="bg-[#4162ff] text-white px-12 py-4.5 rounded-full font-bold text-[16px] hover:bg-[#3453e0] transition-all shadow-2xl inline-block">Book a demo</Link>
+        <Link to="/pricing" className="text-white font-bold underline underline-offset-8 hover:text-[#1a1c21] transition-colors text-[15px]">View our pricing plans</Link>
       </div>
     </div>
   </section>
@@ -813,11 +813,11 @@ export const DetailedFooter = () => (
     <div className="max-w-[1200px] mx-auto px-6">
       <div className="flex items-center gap-2 mb-14"><Star className="w-6 h-6 text-[#00b67a] fill-current"/><span className="text-xl font-bold">TruthBoard</span></div>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-20">
-        <div><h4 className="font-black mb-6 text-[13px]">About us</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>How TruthBoard works</li><li>Our story</li><li>What we believe</li><li>Jobs <span className="bg-[#00b67a] text-black px-1.5 py-0.5 rounded text-[9px] ml-1 font-black">Hiring!</span></li><li>Blog</li><li>Press</li></ul></div>
-        <div><h4 className="font-black mb-6 text-[13px]">Review community</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Join the community</li><li>Leave a review</li><li>Search for a company</li></ul></div>
-        <div><h4 className="font-black mb-6 text-[13px]">Businesses</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Features</li><li>Pricing</li><li>Partners</li><li>Agency Partners</li><li>Find us on Capterra</li><li>Find us on G2</li><li>Data Solutions</li></ul></div>
-        <div><h4 className="font-black mb-6 text-[13px]">Resources</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Business Blog</li><li>Webinars and Videos</li><li>Guides and Reports</li><li>Customer Stories</li><li>Developers</li><li>Tech Blog</li><li>System Status</li></ul></div>
-        <div><h4 className="font-black mb-6 text-[13px]">Contact</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Contact Sales</li><li>Help Center</li><li>Our Offices</li></ul></div>
+        <div><h4 className="font-bold mb-6 text-[13px]">About us</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>How TruthBoard works</li><li>Our story</li><li>What we believe</li><li>Jobs <span className="bg-[#00b67a] text-black px-1.5 py-0.5 rounded text-[9px] ml-1 font-bold">Hiring!</span></li><li>Blog</li><li>Press</li></ul></div>
+        <div><h4 className="font-bold mb-6 text-[13px]">Review community</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Join the community</li><li>Leave a review</li><li>Search for a company</li></ul></div>
+        <div><h4 className="font-bold mb-6 text-[13px]">Businesses</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Features</li><li>Pricing</li><li>Partners</li><li>Agency Partners</li><li>Find us on Capterra</li><li>Find us on G2</li><li>Data Solutions</li></ul></div>
+        <div><h4 className="font-bold mb-6 text-[13px]">Resources</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Business Blog</li><li>Webinars and Videos</li><li>Guides and Reports</li><li>Customer Stories</li><li>Developers</li><li>Tech Blog</li><li>System Status</li></ul></div>
+        <div><h4 className="font-bold mb-6 text-[13px]">Contact</h4><ul className="space-y-3 text-[13px] text-gray-500"><li>Contact Sales</li><li>Help Center</li><li>Our Offices</li></ul></div>
       </div>
       <div className="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-8 mb-10">
         <div className="flex items-center gap-2 text-[14px] font-bold text-gray-400"><span>Country</span><div className="flex items-center gap-2 bg-[#2a2d34] px-3 py-1.5 rounded border border-white/5 ml-2"><span className="text-[13px] text-gray-300">🇺🇸 United States</span><ChevronDown className="w-3.5 h-3.5 text-gray-500"/></div></div>
@@ -944,8 +944,8 @@ const ForBusinesses = () => {
               ) : (
                 <div className="bg-white rounded-[16px] shadow-[0_4px_30px_rgba(0,0,0,0.05)] p-12 border border-gray-100 relative z-20 overflow-hidden">
                   <div className="relative z-10 w-full">
-                    <h2 className="text-[36px] font-bold text-[#1a1c21] mb-4 tracking-tight">See what Trustpilot can do for you</h2>
-                    <p className="text-[#1a1c21] font-medium text-[16px] mb-12 leading-relaxed">Book a 30 minute demo with a Trustpilot expert to learn why we’re trusted by 25,000 business customers.</p>
+                    <h2 className="text-[36px] font-bold text-[#1a1c21] mb-4 tracking-tight">See what TruthBoard can do for you</h2>
+                    <p className="text-[#1a1c21] font-medium text-[16px] mb-12 leading-relaxed">Book a 30 minute demo with a TruthBoard expert to learn why we’re trusted by 25,000 business customers.</p>
                     
                     <form className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4" onSubmit={(e) => {e.preventDefault(); alert("Thanks! We'll contact you soon."); setView('landing');}}>
                       <div className="space-y-2">

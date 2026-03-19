@@ -1,4 +1,4 @@
-const checkRole = (...roles) => {
+const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ message: 'Not authorized, no user found' });
@@ -12,4 +12,4 @@ const checkRole = (...roles) => {
   };
 };
 
-module.exports = { checkRole };
+module.exports = { authorize };

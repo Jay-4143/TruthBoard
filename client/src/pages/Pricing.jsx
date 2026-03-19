@@ -18,7 +18,7 @@ class LocalErrorBoundary extends Component {
   render() {
     if (this.state.hasError) return (
       <div className="p-20 bg-white min-h-screen text-red-600 font-mono border-8 border-red-100 flex flex-col items-center justify-center text-center">
-        <h1 className="text-4xl font-black mb-4">Pricing Page Encountered an Issue</h1>
+        <h1 className="text-4xl font-bold mb-4">Pricing Page Encountered an Issue</h1>
         <p className="text-xl max-w-2xl mx-auto">Error: {this.state.error?.toString()}</p>
         <button onClick={() => window.location.reload()} className="mt-10 px-8 py-3 bg-black text-white rounded-full font-bold shadow-xl hover:scale-105 transition-transform">Reload Pricing Page</button>
       </div>
@@ -111,14 +111,14 @@ const PricingContent = () => {
     },
     'Company': {
       width: 'w-[280px]',
-      columns: [{ links: ['About Truthboard', 'Truthboard for Consumers', 'Truthboard Data Solutions'] }]
+      columns: [{ links: ['About TruthBoard', 'TruthBoard for Consumers', 'TruthBoard Data Solutions'] }]
     }
   };
 
   const handleLinkClick = (linkName) => {
     const routeMap = {
-      'About Truthboard': '/about', 'Truthboard for Consumers': '/', 'Truthboard for Business': '/business',
-      'Truthboard Data Solutions': '/datasolutions', 'Pricing': '/pricing', 'Blog': '/blog',
+      'About TruthBoard': '/about', 'TruthBoard for Consumers': '/', 'TruthBoard for Business': '/business',
+      'TruthBoard Data Solutions': '/datasolutions', 'Pricing': '/pricing', 'Blog': '/blog',
       'Engage with feedback': '/features/review-insights', 'Accelerate conversions': '/features/social-media-tools',
       'Improve with insights': '/features/dashboard-analytics', 'Service reviews': '/features/review-insights'
     };
@@ -127,13 +127,13 @@ const PricingContent = () => {
   };
 
   const logos = [
-     <div key="1" className="flex items-center gap-1 font-bold text-[#bf0000] text-xl">Rakuten <span className="text-black/80 font-black">kobo</span></div>,
-     <div key="2" className="flex items-center gap-1 font-black text-[#0066cc] italic text-2xl">Rainbow</div>,
-     <div key="3" className="flex items-center gap-2 font-black text-[#1a1c21] text-2xl">ROCKET <span className="text-gray-400 font-bold italic">Loans</span></div>,
-     <div key="4" className="flex items-center gap-1 font-black text-[#00bcd4] text-2xl">SoFi <div className="flex gap-1"><div className="w-1.5 h-1.5 bg-[#00bcd4] rounded-full"/><div className="w-1.5 h-1.5 bg-[#ff008a] rounded-full"/><div className="w-1.5 h-1.5 bg-[#3b008d] rounded-full"/></div></div>,
+     <div key="1" className="flex items-center gap-1 font-bold text-[#bf0000] text-xl">Rakuten <span className="text-black/80 font-bold">kobo</span></div>,
+     <div key="2" className="flex items-center gap-1 font-bold text-[#0066cc] italic text-2xl">Rainbow</div>,
+     <div key="3" className="flex items-center gap-2 font-bold text-[#1a1c21] text-2xl">ROCKET <span className="text-gray-400 font-bold italic">Loans</span></div>,
+     <div key="4" className="flex items-center gap-1 font-bold text-[#00bcd4] text-2xl">SoFi <div className="flex gap-1"><div className="w-1.5 h-1.5 bg-[#00bcd4] rounded-full"/><div className="w-1.5 h-1.5 bg-[#ff008a] rounded-full"/><div className="w-1.5 h-1.5 bg-[#3b008d] rounded-full"/></div></div>,
      <div key="5" className="flex items-center gap-1 font-bold text-[#1a73e8] italic text-xl">Garden Goods</div>,
-     <div key="6" className="flex items-center gap-1 font-black text-[#1a1c21] text-2xl uppercase tracking-tighter">KAPLAN</div>,
-     <div key="7" className="flex items-center gap-1 font-black text-[#3d2a71] text-2xl tracking-tighter">Experian.</div>
+     <div key="6" className="flex items-center gap-1 font-bold text-[#1a1c21] text-2xl uppercase tracking-tighter">KAPLAN</div>,
+     <div key="7" className="flex items-center gap-1 font-bold text-[#3d2a71] text-2xl tracking-tighter">Experian.</div>
   ];
 
   const plans = [
@@ -155,7 +155,7 @@ const PricingContent = () => {
       desc: 'Drive growth with actionable analytics and showcasing assets proven to convert customers',
       cta: 'Buy Premium',
       features: [
-        'Forecast your future TrustScore with a predictive 12-month look ahead',
+        'Forecast your future TruthScore with a predictive 12-month look ahead',
         'Design high-performing social assets in minutes',
         'Benchmark your business against five others to outpace competitors',
         'Explore all your data in one place to easily surface trends and opportunities',
@@ -194,9 +194,9 @@ const PricingContent = () => {
   const comparisonData = {
     "Manage your reputation": [
        { title: "Performance overview", plans: [true, true, true, true, true] },
-       { title: "TrustScore insights", plans: [false, true, true, true, true] },
+       { title: "TruthScore insights", plans: [false, true, true, true, true] },
        { title: "TruthBoard Profile Page customizations", plans: [false, true, true, true, true] },
-       { title: "TrustScore forecast", plans: [false, false, true, "Customizable", "Customizable"] },
+       { title: "TruthScore forecast", plans: [false, false, true, "Customizable", "Customizable"] },
        { title: "Promotions for your TruthBoard profile page", plans: [false, false, true, true, true] },
     ],
     "Invite reviews": [
@@ -334,13 +334,16 @@ const PricingContent = () => {
       <section className="pt-40 pb-16 text-center px-6">
         <motion.h1 
           initial={{opacity:0, y:-20}} animate={{opacity:1, y:0}}
-          className="text-[32px] md:text-[44px] font-black tracking-tight mb-6 leading-[1.1]"
+          className="text-[32px] md:text-[44px] font-bold tracking-tight mb-6 leading-[1.1]"
         >
           Turn trust into action with TruthBoard
         </motion.h1>
         <p className="max-w-3xl mx-auto text-[#1a1c21]/70 font-medium text-[15px] md:text-[17px] leading-relaxed mb-6">
           Choose the right plan to help you reach more customers, earn their trust and keep them loyal for life.<br/>
-          All contracts are a 12-month commitment, starting at the prices below.
+          <p className="text-[14px] leading-relaxed font-medium mb-6 text-gray-700">
+            Every two seconds, a new review is written on TruthBoard's consumer-facing site. Collecting reviews on TruthBoard gives your current and future customers a place to learn...
+          </p>
+All contracts are a 12-month commitment, starting at the prices below.
         </p>
       </section>
 
@@ -357,10 +360,10 @@ const PricingContent = () => {
               className={`rounded-[32px] overflow-hidden border border-gray-100 shadow-[0_12px_44px_rgba(0,0,0,0.04)] flex flex-col ${p.isBlue ? 'bg-[#e5f1ff] border-[#c0deff]' : 'bg-[#f9fafb]'}`}
             >
               <div className="p-10 pb-4">
-                 <h3 className="text-[26px] font-black mb-6 leading-none tracking-tight">{p.name}</h3>
+                 <h3 className="text-[26px] font-bold mb-6 leading-none tracking-tight">{p.name}</h3>
                  <div className="flex items-baseline gap-1 mb-2">
                     {p.price !== 'Request' && <span className="text-[13px] font-bold text-gray-500 mb-4">from</span>}
-                    <span className="text-[34px] font-black leading-none">{p.price === 'Request' ? '' : '$'}{p.price}</span>
+                    <span className="text-[34px] font-bold leading-none">{p.price === 'Request' ? '' : '$'}{p.price}</span>
                  </div>
                  {p.price === 'Request' ? (
                    <p className="text-[14px] font-bold text-gray-500 mb-6">Pricing upon request</p>
@@ -411,7 +414,7 @@ const PricingContent = () => {
 
       {/* How it works */}
       <section className="py-24 text-center px-6">
-        <h2 className="text-[36px] font-black mb-16 tracking-tight">How our pricing works</h2>
+        <h2 className="text-[36px] font-bold mb-16 tracking-tight">How our pricing works</h2>
         <div className="max-w-[1240px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
            {[
              { icon: Briefcase, t: "Review our plans", d: "Determine the best plan to help you achieve your business goals. Our team is here to help you find the right fit." },
@@ -433,7 +436,7 @@ const PricingContent = () => {
       {/* Comparison Table */}
       <section id="compare" className="py-24 bg-white" ref={tableRef}>
         <div className="max-w-[1140px] mx-auto px-6">
-          <h2 className="text-[32px] font-black text-center mb-16 tracking-tight">Compare all plans</h2>
+          <h2 className="text-[32px] font-bold text-center mb-16 tracking-tight">Compare all plans</h2>
           
           <div className="relative border border-gray-100 rounded-[32px] overflow-hidden bg-white shadow-sm">
             {/* Sticky Header Row */}
@@ -441,8 +444,8 @@ const PricingContent = () => {
               <div className="px-8 font-bold text-gray-400 invisible lg:visible">Feature Comparison</div>
               {planTitles.map((t, i) => (
                 <div key={i} className="text-center space-y-3 px-2">
-                   <h4 className={`text-[15px] font-black ${i===planTitles.length-1 ? 'text-[#4162ff]' : 'text-gray-900'}`}>{t}</h4>
-                   <Link to={i === 0 ? "/business/signup" : "/request-demo"} className={`block text-[11px] font-black py-2 rounded-full border transition-all ${i===0 ? 'border-gray-900 hover:bg-black hover:text-white' : 'bg-black text-white hover:bg-gray-800'}`}>
+                   <h4 className={`text-[15px] font-bold ${i===planTitles.length-1 ? 'text-[#4162ff]' : 'text-gray-900'}`}>{t}</h4>
+                   <Link to={i === 0 ? "/business/signup" : "/request-demo"} className={`block text-[11px] font-bold py-2 rounded-full border transition-all ${i===0 ? 'border-gray-900 hover:bg-black hover:text-white' : 'bg-black text-white hover:bg-gray-800'}`}>
                       {i === 0 ? "Start for free" : "Book a demo"}
                    </Link>
                 </div>
@@ -454,13 +457,13 @@ const PricingContent = () => {
                {Object.entries(comparisonData).map(([category, features], catIdx) => (
                  <div key={catIdx} className="bg-white">
                    <div className="px-8 py-8 bg-[#fbfbfb] border-y border-gray-100">
-                      <h3 className="text-[16px] font-black text-gray-900">{category}</h3>
+                      <h3 className="text-[16px] font-bold text-gray-900">{category}</h3>
                    </div>
                    {features.map((f, fIdx) => (
                      <div key={fIdx} className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] divide-x divide-gray-50/50 hover:bg-gray-50/30 transition-colors">
                         <div className="px-8 py-6 flex items-center gap-2 group">
                            <span className="text-[13px] font-bold text-gray-600 group-hover:text-gray-900">{f.title}</span>
-                           {f.status && <span className="bg-[#4162ff] text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase leading-none">{f.status}</span>}
+                           {f.status && <span className="bg-[#4162ff] text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase leading-none">{f.status}</span>}
                            <Info className="w-3.5 h-3.5 text-gray-200 group-hover:text-gray-400 transition-colors cursor-help" />
                         </div>
                         {f.plans.map((val, pIdx) => (
@@ -486,7 +489,7 @@ const PricingContent = () => {
       {/* FAQ */}
       <section className="py-24 bg-white border-t border-gray-50">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-[32px] font-black text-center mb-16 tracking-tight">Frequently asked questions</h2>
+          <h2 className="text-[32px] font-bold text-center mb-16 tracking-tight">Frequently asked questions</h2>
           <div className="divide-y divide-gray-200">
             {faqs.map((faq, i) => (
               <div key={i} className="py-4">

@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, 'Please add an email'],
     unique: true,
+    sparse: true,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
       'Please add a valid email'
@@ -16,7 +16,14 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please add a password']
+    required: function() {
+      return !this.phoneNumber; // Password only required if no phone number
+    }
+  },
+  phoneNumber: {
+    type: String,
+    unique: true,
+    sparse: true
   },
   avatar: {
     type: String,
@@ -43,6 +50,20 @@ const userSchema = new mongoose.Schema({
   reviewCount: {
     type: Number,
     default: 0
+  },
+  language: {
+    type: String,
+    default: 'English (United States)'
+  },
+  notificationPreferences: {
+    marketing: { type: Boolean, default: true },
+    personalizedRecs: { type: Boolean, default: true },
+    latestInsights: { type: Boolean, default: true },
+    newsletter: { type: Boolean, default: true },
+    featureUpdates: { type: Boolean, default: true },
+    aboutTruthBoard: { type: Boolean, default: true },
+    reviewMilestones: { type: Boolean, default: true },
+    reviewInvitations: { type: Boolean, default: true }
   }
 }, {
   timestamps: true

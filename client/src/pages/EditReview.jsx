@@ -94,7 +94,7 @@ const EditReview = () => {
           <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
           </div>
-          <h2 className="text-3xl font-black text-gray-900 mb-4">Review Updated!</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Review Updated!</h2>
           <p className="text-gray-500 font-medium">Your changes have been saved successfully. Redirecting you back to your reviews...</p>
         </div>
       </div>
@@ -114,11 +114,11 @@ const EditReview = () => {
 
         {/* Company Header */}
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5 mb-8">
-          <div className="w-16 h-16 bg-gray-900 text-white rounded-xl flex items-center justify-center text-2xl font-black shadow-lg">
+          <div className="w-16 h-16 bg-gray-900 text-white rounded-xl flex items-center justify-center text-2xl font-bold shadow-lg">
             {review?.companyId?.name?.[0] || 'C'}
           </div>
           <div>
-            <h2 className="text-xl font-black text-[#1a1c21] tracking-tight">{review?.companyId?.name}</h2>
+            <h2 className="text-xl font-bold text-[#1a1c21] tracking-tight">{review?.companyId?.name}</h2>
             <p className="text-blue-600 font-bold text-sm hover:underline cursor-pointer">{review?.companyId?.website}</p>
           </div>
         </div>
@@ -174,6 +174,7 @@ const EditReview = () => {
                     id="date" 
                     className="w-full px-5 py-4 border-2 border-gray-100 rounded-xl outline-none focus:border-blue-600 transition-all text-lg shadow-inner bg-white appearance-none" 
                     value={dateOfExperience} 
+                    max={new Date().toISOString().split('T')[0]} 
                     onChange={(e) => setDateOfExperience(e.target.value)} 
                   />
                   <Calendar className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 pointer-events-none" />
@@ -203,7 +204,7 @@ const EditReview = () => {
                 <button 
                   type="submit" 
                   disabled={submitLoading} 
-                  className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-xl hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-blue-500/20"
+                  className="w-full bg-blue-600 text-white py-5 rounded-2xl font-bold text-xl hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-blue-500/20"
                 >
                   {submitLoading ? 'Updating...' : 'Submit updated review'}
                 </button>

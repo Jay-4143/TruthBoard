@@ -259,7 +259,7 @@ const Categories = () => {
       {/* Search Header Section */}
       <div className="bg-[#fcfbf3] pt-12 pb-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-black text-[#1c1c1c] tracking-tight mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#1c1c1c] tracking-tight mb-8">
             What are you looking for?
           </h1>
           

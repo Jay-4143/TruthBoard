@@ -11,7 +11,7 @@ const HeroSection = () => (
   <section className="bg-[#00b67a] pt-32 pb-24 px-6 md:px-12 relative overflow-hidden text-[#1c1c1c]">
     <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-10">
       <div className="lg:w-1/2">
-        <h3 className="text-[14px] font-bold mb-4 tracking-wide text-[#1c1c1c]">Truthboard widgets</h3>
+        <h3 className="text-[14px] font-bold mb-4 tracking-wide text-[#1c1c1c]">TruthBoard widgets</h3>
         <h1 className="text-4xl md:text-5xl md:leading-[1.1] font-[900] mb-6 tracking-tight">
           Reviews in the right place at the right time
         </h1>
@@ -71,17 +71,17 @@ const HeroSection = () => (
              <div className="w-full h-8 bg-gray-100 rounded-md mt-auto mb-2 flex items-center justify-center">
                  <span className="text-[8px] font-bold mr-1">See our <strong className="text-black text-[9px]">437</strong> reviews on</span>
                  <Star className="w-2.5 h-2.5 text-[#00b67a] fill-current" />
-                 <span className="text-[8px] font-bold text-black ml-0.5">Truthboard</span>
+                 <span className="text-[8px] font-bold text-black ml-0.5">TruthBoard</span>
              </div>
           </div>
         </motion.div>
 
         {/* Floating Pills w/ Arrows */}
         <motion.div animate={{ y: [-3, 3, -3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute z-30 top-[20%] left-0 xl:-left-[5%] bg-white px-4 py-2 rounded-xl shadow-lg font-[900] text-[15px] flex items-center gap-2 border border-gray-100">
-          Truthboard review <ArrowUpRight className="w-5 h-5" />
+          TruthBoard review <ArrowUpRight className="w-5 h-5" />
         </motion.div>
         <motion.div animate={{ y: [4, -4, 4] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute z-30 top-[50%] right-[0%] bg-white px-4 py-2 rounded-xl shadow-lg font-[900] text-[15px] flex items-center gap-2 border border-gray-100">
-          <ArrowUpRight className="w-5 h-5 transform -rotate-90" /> Truthboard widgets
+          <ArrowUpRight className="w-5 h-5 transform -rotate-90" /> TruthBoard widgets
         </motion.div>
         <motion.div animate={{ y: [-4, 4, -4] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute z-30 bottom-[10%] left-[5%] bg-white px-4 py-2 rounded-xl shadow-lg font-[900] text-[15px] flex items-center gap-2 border border-gray-100">
           Micro Review count <ArrowUpRight className="w-5 h-5" />
@@ -99,10 +99,10 @@ const DidYouKnow = () => (
     <div className="max-w-[1200px] mx-auto">
       <h4 className="text-[13px] font-bold mb-6 tracking-wide">Did you know?</h4>
       <h2 className="text-[32px] md:text-[44px] font-[900] leading-[1.1] max-w-4xl tracking-tight mb-8">
-        73.6% of Truthboard visitors say they are more likely to make a purchase from a website that's displaying Truthboard reviews on-site.
+        73.6% of TruthBoard visitors say they are more likely to make a purchase from a website that's displaying TruthBoard reviews on-site.
       </h2>
       <p className="text-[14px] font-bold">
-        * Based on internal survey to 4,027 Truthboard visitors in May 2018
+        * Based on internal survey to 4,027 TruthBoard visitors in May 2018
       </p>
     </div>
   </section>
@@ -120,7 +120,7 @@ const FlexWidgetSection = () => (
           Bring trust to any corner of your website
         </h2>
         <p className="text-[18px] text-[#1c1c1c] leading-relaxed font-medium max-w-[420px]">
-          Easily customize widgets by size, color and trust signals to fit any page on your website and align to your brand. Choose to highlight your TrustScore, review volume, or word rating, and even display recent or favorite reviews.
+          Easily customize widgets by size, color and trust signals to fit any page on your website and align to your brand. Choose to highlight your TruthScore, review volume, or word rating, and even display recent or favorite reviews.
         </p>
       </div>
 
@@ -132,7 +132,7 @@ const FlexWidgetSection = () => (
            <motion.div animate={{ y: [-3, 3, -3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-full bg-[#1c1c1c] text-white rounded-[16px] overflow-hidden shadow-2xl flex border border-[#333]">
               <div className="flex-1 p-5">
                  <p className="font-[900] text-lg mb-4">Rated <span className="font-bold">4.1</span> out of 5 stars</p>
-                 <p className="text-[12px] font-bold mb-1">Rated <span className="font-black">Great</span></p>
+                 <p className="text-[12px] font-bold mb-1">Rated <span className="font-bold">Great</span></p>
                  <div className="flex gap-[1.5px] mb-2">
                    {[1,2,3,4,5].map(i => <div key={i} className={`w-5 h-5 flex items-center justify-center rounded-[1.5px] ${i===5?'bg-gray-400':'bg-[#00b67a]'}`}><Star className="w-3.5 h-3.5 text-white fill-current"/></div>)}
                  </div>
@@ -141,7 +141,7 @@ const FlexWidgetSection = () => (
               <div className="w-[120px] bg-[#ff4e4e] relative flex flex-col items-center justify-center shrink-0">
                  <div className="absolute -left-6 bottom-0 w-12 h-12 bg-[#ff4e4e] rounded-tr-[50px] z-0" />
                  <Star className="w-5 h-5 text-[#00b67a] fill-current absolute bottom-4 left-6 z-10" />
-                 <span className="font-black text-white text-[15px] absolute bottom-4 left-12 z-10 tracking-tight">Truthboard</span>
+                 <span className="font-bold text-white text-[15px] absolute bottom-4 left-12 z-10 tracking-tight">TruthBoard</span>
                  <div className="absolute top-6 right-6 z-10">
                    <div className="w-8 h-8 rounded-full border border-white flex items-center justify-center"><CheckCircle2 className="w-4 h-4 text-white"/></div>
                  </div>
@@ -163,7 +163,7 @@ const FlexWidgetSection = () => (
                  </div>
                  <div className="flex items-center gap-1">
                    <Star className="w-3 h-3 text-[#00b67a] fill-current" />
-                   <span className="font-bold text-[11px] tracking-tight">Truthboard</span>
+                   <span className="font-bold text-[11px] tracking-tight">TruthBoard</span>
                  </div>
               </div>
            </motion.div>
@@ -172,7 +172,7 @@ const FlexWidgetSection = () => (
            <motion.div animate={{ y: [-4, 4, -4] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="w-full bg-[#1c1c1c] text-white rounded-[16px] overflow-hidden shadow-2xl flex border border-[#333]">
               <div className="flex-1 p-5 pb-8 relative z-10 bg-[#1c1c1c]">
                  <p className="text-xl font-[900] leading-tight mb-8">Rated <span className="font-bold">4.1</span><br/>out of 5 stars</p>
-                 <p className="text-[10px] font-bold mb-1"><span className="font-black text-[12px]">32,554</span> reviews</p>
+                 <p className="text-[10px] font-bold mb-1"><span className="font-bold text-[12px]">32,554</span> reviews</p>
                  <div className="flex gap-[1.5px]">
                    {[1,2,3,4,5].map(i => <div key={i} className={`w-5 h-5 flex items-center justify-center rounded-[1.5px] ${i===5?'bg-gray-400':'bg-[#00b67a]'}`}><Star className="w-3.5 h-3.5 text-white fill-current"/></div>)}
                  </div>
@@ -184,7 +184,7 @@ const FlexWidgetSection = () => (
                  </div>
                  <div className="absolute bottom-6 left-6 flex items-center gap-1 w-full z-10">
                    <Star className="w-5 h-5 text-[#00b67a] fill-current" />
-                   <span className="font-black text-white text-[15px] tracking-tight">Truthboard</span>
+                    <span className="font-bold text-white text-[15px] tracking-tight">TruthBoard</span>
                  </div>
               </div>
            </motion.div>
@@ -205,7 +205,7 @@ const ReviewHighlightsSection = () => (
         {/* Abstract typography background */}
         <div className="absolute inset-0 flex flex-col justify-center gap-2 select-none pointer-events-none z-0">
           {[...Array(5)].map((_, i) => (
-             <div key={i} className="text-[#00b67a] text-opacity-10 text-[100px] font-black leading-[0.8] tracking-tighter ml-[-20%] w-[150%] whitespace-nowrap">
+             <div key={i} className="text-[#00b67a] text-opacity-10 text-[100px] font-bold leading-[0.8] tracking-tighter ml-[-20%] w-[150%] whitespace-nowrap">
                Highlight Highlight Highlight
              </div>
           ))}
@@ -286,7 +286,7 @@ const IncreaseConversionsSection = () => (
                 <p className="text-[8px] text-gray-400 font-bold mb-1">Based on <strong className="text-black">34,275</strong> reviews</p>
                 <div className="flex items-center gap-1 mt-1">
                    <Star className="w-3.5 h-3.5 text-[#00b67a] fill-current" />
-                   <span className="text-[11px] font-bold tracking-tight text-black">Truthboard</span>
+                   <span className="text-[11px] font-bold tracking-tight text-black">TruthBoard</span>
                 </div>
              </div>
              <div className="flex gap-2">
@@ -316,12 +316,12 @@ const IncreaseConversionsSection = () => (
         <motion.div initial={{y:50, opacity:0}} whileInView={{y:0, opacity:1}} transition={{duration:0.6, delay:0.4}} viewport={{once:true}} className="absolute bottom-[0%] left-[10%] w-[260px] bg-white border border-[#1c1c1c] rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.1)] p-4 py-5 z-40 text-center flex flex-col items-center rotate-[-4deg]">
             <div className="flex items-center gap-1.5 mb-3">
                <Star className="w-7 h-7 text-[#00b67a] fill-current" />
-               <span className="text-[28px] font-black tracking-tight text-black leading-none">Truthboard</span>
+               <span className="text-[28px] font-bold tracking-tight text-black leading-none">TruthBoard</span>
             </div>
             <div className="flex gap-[3px] mb-3">
                {[1,2,3,4,5].map(i=><div key={i} className={`w-8 h-8 flex items-center justify-center rounded-[3px] ${i===5?'bg-gray-200':'bg-[#00b67a]'}`}><Star className="w-5 h-5 text-white fill-current"/></div>)}
             </div>
-            <p className="text-[11px] font-bold text-gray-600">TrustScore <strong className="text-black">4.9</strong> | <strong className="text-black">34,275</strong> reviews</p>
+            <p className="text-[11px] font-bold text-gray-600">TruthScore <strong className="text-black">4.9</strong> | <strong className="text-black">34,275</strong> reviews</p>
         </motion.div>
       </div>
     </div>
@@ -347,10 +347,10 @@ const EmailMarketingSection = () => (
            <div className="w-[85%] mt-6 flex-1 bg-white rounded-t-xl shadow p-4 flex flex-col gap-4">
               <div className="flex flex-col gap-2 border-b border-gray-100 pb-3">
                  <div className="flex items-center gap-2">
-                    <span className="text-[12px] font-black">To:</span><div className="h-3 w-16 bg-gray-200 rounded" />
+                    <span className="text-[12px] font-bold">To:</span><div className="h-3 w-16 bg-gray-200 rounded" />
                  </div>
                  <div className="flex items-center gap-2">
-                    <span className="text-[12px] font-black">From:</span><div className="h-3 w-24 bg-gray-200 rounded" />
+                    <span className="text-[12px] font-bold">From:</span><div className="h-3 w-24 bg-gray-200 rounded" />
                  </div>
               </div>
               
@@ -437,7 +437,7 @@ const DisplayAPISection = () => (
                     <span className="text-[10px] font-bold">Joe Ford</span>
                  </div>
                  <div className="flex gap-[1px] mb-2">{[1,2,3,4,5].map(i=><div key={i} className="w-3.5 h-3.5 bg-[#00b67a] flex items-center justify-center rounded-[1px]"><Star className="w-2.5 h-2.5 text-white fill-current"/></div>)}</div>
-                 <p className="text-[14px] font-black leading-tight text-black">My desserts have become marvelous.</p>
+                 <p className="text-[14px] font-bold leading-tight text-black">My desserts have become marvelous.</p>
               </div>
 
               <div className="absolute top-[30%] right-6 w-[180px] bg-white rounded-xl shadow-2xl p-4 border border-gray-100">
@@ -546,7 +546,7 @@ const InterestCards = () => (
                    <Instagram className="text-[#1c1c1c] w-6 h-6"/>
                 </div>
                 <div className="w-32 h-32 bg-[#ff5eaf] rounded-full flex flex-col items-center justify-center shadow-lg relative z-20 shrink-0 border border-[#1c1c1c]">
-                   <span className="text-[20px] font-black leading-tight text-[#1c1c1c] tracking-tight">People<br/>love us</span>
+                   <span className="text-[20px] font-bold leading-tight text-[#1c1c1c] tracking-tight">People<br/>love us</span>
                    <div className="flex items-center gap-0.5 mt-2"><Star className="w-3.5 h-3.5 text-black fill-current"/><span className="text-[11px] font-bold">Truthboard</span></div>
                 </div>
                 {/* Polaroid in bg */}
@@ -581,7 +581,7 @@ const InterestCards = () => (
                 </div>
                 <div className="w-1/3 p-2 flex flex-col items-center justify-center relative translate-y-[-5px] transform shrink-0">
                    <div className="absolute -bottom-10 -right-8 w-20 h-20 bg-white border-[3px] border-[#1c1c1c] rounded-full flex flex-col items-center justify-center shadow-lg z-20">
-                      <div className="flex items-center gap-0.5 justify-center mt-1 w-full"><Star className="w-4 h-4 text-[#00b67a] fill-current"/><span className="text-[11px] font-black">Truthboard</span></div>
+                      <div className="flex items-center gap-0.5 justify-center mt-1 w-full"><Star className="w-4 h-4 text-[#00b67a] fill-current"/><span className="text-[11px] font-bold">Truthboard</span></div>
                       <div className="flex gap-[1px] mt-1">{[1,2,3,4,5].map(i=><div key={i} className="w-2.5 h-2.5 bg-[#00b67a] flex items-center justify-center rounded-[1px]"/>)}</div>
                    </div>
                 </div>

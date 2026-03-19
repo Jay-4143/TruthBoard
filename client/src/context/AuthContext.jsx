@@ -31,13 +31,34 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const loginWithPhone = async (idToken) => {
+    setLoading(true);
+    try {
+      const { data } = await api.post('/auth/phone-login', { idToken });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      setUser(data);
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      throw error;
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('userInfo');
     setUser(null);
   };
 
+  const updateUser = (data) => {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const updatedInfo = { ...userInfo, ...data };
+    localStorage.setItem('userInfo', JSON.stringify(updatedInfo));
+    setUser(updatedInfo);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, loginWithPhone, logout, updateUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

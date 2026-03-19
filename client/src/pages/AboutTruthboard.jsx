@@ -147,7 +147,7 @@ export const CorporateNav = () => {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center text-white">
         <Link to="/" className="flex items-center gap-2 group">
           <Star className="w-10 h-10 text-[#00b67a] fill-current group-hover:scale-110 transition-transform" />
-          <span className={`text-[26px] font-black tracking-tighter ${isScrolled ? 'text-black' : 'text-white'}`}>Truthboard</span>
+          <span className={`text-[26px] font-bold tracking-tighter ${isScrolled ? 'text-black' : 'text-white'}`}>TruthBoard</span>
         </Link>
         <div className="hidden lg:flex items-center gap-6">
           {menuItems.map(item => (
@@ -177,7 +177,7 @@ export const CorporateNav = () => {
                   >
                     {item.sections.map((section, idx) => (
                       <div key={idx} className="flex-1 min-w-0">
-                        <h4 className="text-[15px] font-black mb-6 text-[#1c1c1c] pb-2 border-b border-gray-100 whitespace-nowrap">
+                        <h4 className="text-[15px] font-bold mb-6 text-[#1c1c1c] pb-2 border-b border-gray-100 whitespace-nowrap">
                           {section.title}
                         </h4>
                         <ul className="space-y-4">
@@ -227,7 +227,7 @@ export const CorporateFooter = () => (
         <div className="lg:w-1/4">
           <Link to="/" className="flex items-center gap-2 mb-16">
             <Star className="w-8 h-8 text-[#00b67a] fill-current" />
-            <span className="text-2xl font-bold tracking-tight">Truthboard</span>
+            <span className="text-2xl font-bold tracking-tight">TruthBoard</span>
           </Link>
         </div>
 
@@ -257,9 +257,9 @@ export const CorporateFooter = () => (
             </ul>
           </div>
           <div>
-            <h4 className="font-[900] text-[15px] mb-8">Truthboard for Business</h4>
+            <h4 className="font-[900] text-[15px] mb-8">TruthBoard for Business</h4>
             <ul className="space-y-4 text-[13px] font-bold text-gray-400">
-              <li><Link to="/business" className="hover:text-white transition-colors">Truthboard for business</Link></li>
+              <li><Link to="/business" className="hover:text-white transition-colors">TruthBoard for business</Link></li>
               <li><Link to="/login" className="hover:text-white transition-colors">Log in</Link></li>
               <li><Link to="/request-demo" className="hover:text-white transition-colors">Book a demo</Link></li>
               <li><Link to="#" className="hover:text-white transition-colors">Help center</Link></li>
@@ -276,7 +276,7 @@ export const CorporateFooter = () => (
         <div className="space-y-6">
           <h4 className="font-[900] text-[15px]">Country</h4>
           <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-lg min-w-[240px] cursor-pointer">
-            <div className="w-6 h-4 bg-blue-600 relative overflow-hidden flex items-center justify-center text-[4px] font-black leading-[1]">USA</div>
+            <div className="w-6 h-4 bg-blue-600 relative overflow-hidden flex items-center justify-center text-[4px] font-bold leading-[1]">USA</div>
             <span className="text-[13px] font-bold">United States</span>
             <ChevronDown className="w-4 h-4 ml-auto opacity-40" />
           </div>
@@ -298,7 +298,7 @@ export const CorporateFooter = () => (
           <Link key={link} to="#" className="hover:text-white transition-colors">{link}</Link>
         ))}
       </div>
-      <p className="mt-12 text-[11px] font-bold text-gray-600">© 2026 Truthboard Inc. All rights reserved.</p>
+      <p className="mt-12 text-[11px] font-bold text-gray-600">© 2026 TruthBoard Inc. All rights reserved.</p>
     </div>
   </footer>
 );
@@ -311,14 +311,14 @@ const HeroSection = () => (
     <div className="max-w-[1240px] mx-auto flex flex-col lg:flex-row items-center gap-16">
       <div className="lg:w-[45%]">
         <h1 className="text-4xl md:text-[64px] leading-[1] font-[900] mb-8 tracking-tighter text-[#1c1c1c]">
-          Truthboard gives everybody a voice
+          TruthBoard gives everybody a voice
         </h1>
         <p className="text-[15px] font-bold mb-10 text-gray-800">
           The world’s largest independent customer feedback platform
         </p>
         <div className="flex flex-wrap gap-4 mb-8">
           <button className="bg-[#1c1c1c] text-white px-8 py-3.5 rounded-full font-bold text-[14px] hover:bg-black transition-all shadow-xl">
-            How Truthboard works
+            How TruthBoard works
           </button>
           <button className="bg-[#4162ff] text-white px-8 py-3.5 rounded-full font-bold text-[14px] hover:bg-[#3453e0] transition-all shadow-xl">
             See Trust in Action
@@ -377,7 +377,7 @@ const VisionSection = () => (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 text-left text-[14px] leading-relaxed text-gray-700 font-medium">
         <div className="space-y-6">
           <p>
-            Founded in 2007, Truthboard began with a simple yet powerful vision: to become the universal symbol of trust, connecting consumers and businesses through reviews.
+            Founded in 2007, TruthBoard began with a simple yet powerful vision: to become the universal symbol of trust, connecting consumers and businesses through reviews.
           </p>
           <p>
             As an open, independent, and impartial service, our platform helps people make confident choices and businesses earn loyalty at every step.
@@ -385,7 +385,7 @@ const VisionSection = () => (
         </div>
         <div className="space-y-6">
           <p>
-            Today, we have 350 million active reviews and over 60 million monthly active users worldwide. We’ve generated 149 billion annual Truthboard brand impressions, and the numbers keep growing.
+            Today, we have 350 million active reviews and over 60 million monthly active users worldwide. We’ve generated 149 billion annual TruthBoard brand impressions, and the numbers keep growing.
           </p>
           <p>
             With a team of more than 1,000 employees, we’re headquartered in Copenhagen, with offices in Amsterdam, Denver, Edinburgh, Hamburg, London, Melbourne, Milan, and New York.
@@ -410,9 +410,9 @@ const StatsGrid = () => (
   <section className="bg-[#f2f2f2] py-24 px-6 overflow-hidden">
     <div className="max-w-[1240px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
       {[
-        { icon: Award, title: "100+", desc: "Truthboard is in more than 100 countries" },
+        { icon: Award, title: "100+", desc: "TruthBoard is in more than 100 countries" },
         { icon: MessageSquare, title: "350+ million", desc: "reviews on truthboard.com" },
-        { icon: Globe, title: "1.3 million", desc: "businesses globally with Truthboard reviews" },
+        { icon: Globe, title: "1.3 million", desc: "businesses globally with TruthBoard reviews" },
         { icon: Users, title: "190,000+", desc: "new reviews every day" }
       ].map((item, i) => (
         <div key={i} className="bg-white p-10 rounded-3xl text-center flex flex-col items-center">
@@ -479,7 +479,7 @@ const WhatWeDo = () => (
             The reviews also help <a href="#" className="underline">businesses</a> earn trust by helping them interact with consumers, understand customer feedback, and take proactive measures to improve their business.
           </p>
           <p>
-            Our mission is to build trust between consumers and businesses by making Truthboard visible wherever people go - Truthboard everywhere.
+            Our mission is to build trust between consumers and businesses by making TruthBoard visible wherever people go - TruthBoard everywhere.
           </p>
           <p>
             We take a unique approach to safeguarding the integrity of the platform, using sophisticated fake review detection technology and taking action against those who breach our guidelines. Find out how we use a three-pronged approach - powered by technology, community, and people - by visiting <a href="#" className="underline">our Trust Centre</a>.
@@ -535,18 +535,18 @@ const Testimonials = () => (
         <div className="bg-white/10 p-12 rounded-[24px] backdrop-blur-sm border border-white/10">
           <h3 className="text-2xl font-[900] mb-6 text-[#0d0d0d]">Great Platform for Customer Reviews</h3>
           <p className="text-[15px] font-medium text-[#0d0d0d] leading-relaxed mb-10">
-            “We recently started using Truthboard to manage our company’s online reputation, and overall, the experience has been positive. The platform provides a great way to collect and showcase customer feedback, which helps build credibility and trust with potential clients. The dashboard is intuitive, making it easy to manage reviews and respond to customer feedback efficiently.”
+            “We recently started using TruthBoard to manage our company’s online reputation, and overall, the experience has been positive. The platform provides a great way to collect and showcase customer feedback, which helps build credibility and trust with potential clients. The dashboard is intuitive, making it easy to manage reviews and respond to customer feedback efficiently.”
           </p>
-          <p className="text-[13px] font-black text-[#0d0d0d]/80 uppercase tracking-widest">
+          <p className="text-[13px] font-bold text-[#0d0d0d]/80 uppercase tracking-widest">
             Vivasoft Ltd | Date of experience: <span className="underline">February 14, 2025</span>
           </p>
         </div>
         <div className="bg-white/10 p-12 rounded-[24px] backdrop-blur-sm border border-white/10">
           <h3 className="text-2xl font-[900] mb-6 text-[#0d0d0d]">A Trusted Platform for Honest Reviews</h3>
           <p className="text-[15px] font-medium text-[#0d0d0d] leading-relaxed mb-10">
-            “Truthboard is an excellent platform that helps customers share genuine feedback and experiences. I always check reviews on Truthboard before using a new service, and it’s saved me from many bad choices!”
+            “TruthBoard is an excellent platform that helps customers share genuine feedback and experiences. I always check reviews on TruthBoard before using a new service, and it’s saved me from many bad choices!”
           </p>
-          <p className="text-[13px] font-black text-[#0d0d0d]/80 uppercase tracking-widest mt-16">
+          <p className="text-[13px] font-bold text-[#0d0d0d]/80 uppercase tracking-widest mt-16">
             Travel Minibus | Date of experience: <span className="underline">May 08, 2025</span>
           </p>
         </div>
@@ -565,7 +565,7 @@ const CTASection = () => {
       <div className="max-w-[1240px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-20">
         <div className="text-center md:text-left">
           <h2 className="text-[28px] md:text-3xl font-[900] mb-8 text-[#1c1c1c] tracking-tight">
-            Learn more about how Truthboard works and how reviews are collected.
+            Learn more about how TruthBoard works and how reviews are collected.
           </h2>
           <button className="bg-[#1c1c1c] text-white px-10 py-3.5 rounded-full font-bold text-[14px] hover:bg-black transition-all shadow-xl">
             Take me there
@@ -587,10 +587,10 @@ const CTASection = () => {
   );
 };
 
-const AboutTruthboard = () => {
+const AboutTruthBoard = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "About Truthboard - Truthboard Corporate";
+    document.title = "About TruthBoard - TruthBoard Corporate";
   }, []);
 
   return (
@@ -608,4 +608,4 @@ const AboutTruthboard = () => {
   );
 };
 
-export default AboutTruthboard;
+export default AboutTruthBoard;

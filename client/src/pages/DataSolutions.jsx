@@ -74,7 +74,7 @@ const HeroSection = ({ scrollToForm }) => (
                  {/* Floating Labels */}
                  <div className="absolute top-0 right-0 p-2 bg-white shadow-lg rounded-lg border border-gray-50 flex items-center gap-2">
                     <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center"><Star className="w-3 h-3 text-yellow-400 fill-current"/></div>
-                    <div className="text-[9px] font-black">2 hours ago</div>
+                    <div className="text-[9px] font-bold">2 hours ago</div>
                  </div>
               </div>
            </motion.div>
@@ -100,7 +100,7 @@ const HeroSection = ({ scrollToForm }) => (
 
            {/* Badge Below Graphic */}
            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-2">
-              <span className="text-[12px] font-black">Excellent</span>
+              <span className="text-[12px] font-bold">Excellent</span>
               <div className="flex gap-0.5">{[1,2,3,4,5].map(i=><div key={i} className="w-5 h-5 bg-[#00b67a] rounded-[1px] flex items-center justify-center"><Star className="w-3 h-3 text-white fill-current"/></div>)}</div>
               <Star className="w-4 h-4 text-[#00b67a] fill-current ml-1"/>
               <span className="text-[12px] font-bold">Truthboard</span>
@@ -256,8 +256,8 @@ const ProductSuite = ({ scrollToForm }) => (
               </div>
               <div className="p-8 space-y-8">
                  <div className="flex justify-between items-center">
-                    <div className="space-y-1"><h4 className="text-[14px] font-black">Sentiment themes</h4><p className="text-[9px] text-gray-400 font-bold">Discover the most mentioned topics over time</p></div>
-                    <div className="px-3 py-1 bg-gray-50 text-[10px] font-black rounded border border-gray-100">Verify &rarr;</div>
+                    <div className="space-y-1"><h4 className="text-[14px] font-bold">Sentiment themes</h4><p className="text-[9px] text-gray-400 font-bold">Discover the most mentioned topics over time</p></div>
+                    <div className="px-3 py-1 bg-gray-50 text-[10px] font-bold rounded border border-gray-100">Verify &rarr;</div>
                  </div>
                  
                  <div className="h-48 bg-gray-50 rounded-xl relative overflow-hidden p-6 border border-gray-100">
@@ -349,7 +349,7 @@ const AIPressSection = () => (
             <div className="h-16 flex items-center justify-center mb-8">
                <item.icon />
             </div>
-            <h4 className="text-[18px] font-black mb-4 leading-tight">{item.title}</h4>
+            <h4 className="text-[18px] font-bold mb-4 leading-tight">{item.title}</h4>
             <p className="text-[13px] text-gray-500 leading-relaxed mb-6 flex-grow">{item.desc}</p>
             <a href="#" className="text-[13px] font-bold underline underline-offset-4 decoration-1 hover:decoration-2 text-blue-600">{item.action}</a>
           </div>
@@ -360,10 +360,10 @@ const AIPressSection = () => (
 );
 
 // Small Logo Components for Press Section
-const TechRadarLogo = () => <span className="text-2xl font-black italic">techradar</span>;
-const WebSummitLogo = () => <div className="flex items-center gap-1 font-black text-2xl">web<span className="bg-[#ff4e8a] px-1 text-white">summit</span></div>;
+const TechRadarLogo = () => <span className="text-2xl font-bold italic">techradar</span>;
+const WebSummitLogo = () => <div className="flex items-center gap-1 font-bold text-2xl">web<span className="bg-[#ff4e8a] px-1 text-white">summit</span></div>;
 const SalesforceLogo = () => <div className="bg-[#00A1E0] text-white px-3 py-1 rounded-full text-lg font-bold">salesforce</div>;
-const LondonTechWeekLogo = () => <div className="border-4 border-[#1c1c1c] p-2 text-[10px] font-black leading-none">LONDON<br/>TECH<br/>WEEK</div>;
+const LondonTechWeekLogo = () => <div className="border-4 border-[#1c1c1c] p-2 text-[10px] font-bold leading-none">LONDON<br/>TECH<br/>WEEK</div>;
 
 /* ═══════════════════════════════════════════════════════
    CONTACT FORM SECTION
@@ -376,35 +376,35 @@ const ContactSection = React.forwardRef((props, ref) => (
 
       <form className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
         <div className="space-y-2">
-          <label className="text-[13px] font-black">First name*</label>
+          <label className="text-[13px] font-bold">First name*</label>
           <input type="text" placeholder="First name" className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all placeholder:text-gray-300 shadow-sm" />
         </div>
         <div className="space-y-2">
-          <label className="text-[13px] font-black">Last name*</label>
+          <label className="text-[13px] font-bold">Last name*</label>
           <input type="text" placeholder="Last name" className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all placeholder:text-gray-300 shadow-sm" />
         </div>
         <div className="space-y-2">
-          <label className="text-[13px] font-black">Job title*</label>
+          <label className="text-[13px] font-bold">Job title*</label>
           <input type="text" placeholder="Job title" className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all placeholder:text-gray-300 shadow-sm" />
         </div>
         <div className="space-y-2">
-          <label className="text-[13px] font-black">Company name*</label>
+          <label className="text-[13px] font-bold">Company name*</label>
           <input type="text" placeholder="Company name" className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all placeholder:text-gray-300 shadow-sm" />
         </div>
         <div className="space-y-2">
-          <label className="text-[13px] font-black">Business email*</label>
+          <label className="text-[13px] font-bold">Business email*</label>
           <input type="email" placeholder="Business email" className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all placeholder:text-gray-300 shadow-sm" />
         </div>
         <div className="space-y-2">
-          <label className="text-[13px] font-black">Phone number</label>
+          <label className="text-[13px] font-bold">Phone number</label>
           <input type="tel" placeholder="Phone number" className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all placeholder:text-gray-300 shadow-sm" />
         </div>
         <div className="md:col-span-2 space-y-2">
-          <label className="text-[13px] font-black">Website URL*</label>
+          <label className="text-[13px] font-bold">Website URL*</label>
           <input type="url" placeholder="Website URL" className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all placeholder:text-gray-300 shadow-sm" />
         </div>
         <div className="md:col-span-2 space-y-2">
-          <label className="text-[13px] font-black">Which Data Solutions product are you interested in?*</label>
+          <label className="text-[13px] font-bold">Which Data Solutions product are you interested in?*</label>
           <select className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all text-gray-500 shadow-sm appearance-none">
             <option>Please select one</option>
             <option>TrustLens</option>
@@ -413,7 +413,7 @@ const ContactSection = React.forwardRef((props, ref) => (
           </select>
         </div>
         <div className="md:col-span-2 space-y-2">
-          <label className="text-[13px] font-black">What industry are you in?*</label>
+          <label className="text-[13px] font-bold">What industry are you in?*</label>
           <select className="w-full px-5 py-4 rounded bg-white border border-gray-200 focus:border-[#4162ff] outline-none transition-all text-gray-500 shadow-sm appearance-none">
             <option>Please select one</option>
             <option>Investments</option>
@@ -424,7 +424,7 @@ const ContactSection = React.forwardRef((props, ref) => (
         </div>
         
         <div className="md:col-span-2 mt-4 text-center">
-            <button className="bg-[#1c1c1c] text-white w-full py-5 rounded-xl font-black text-[16px] hover:bg-black transition-all shadow-xl hover:scale-[1.01]">
+            <button className="bg-[#1c1c1c] text-white w-full py-5 rounded-xl font-bold text-[16px] hover:bg-black transition-all shadow-xl hover:scale-[1.01]">
                Get in touch
             </button>
             <p className="mt-8 text-[11px] text-gray-400 font-medium leading-[1.6] max-w-2xl mx-auto">
@@ -448,7 +448,7 @@ const RecommendationSection = () => (
         Discover more business solutions from Truthboard, the world's largest independent customer feedback platform
       </h2>
       <p className="text-[18px] font-medium text-gray-500 mb-12">Attract and keep customers with Truthboard's review platform and powerful analytics tools.</p>
-      <Link to="/business" className="bg-[#4162ff] text-white px-12 py-5 rounded-full font-black text-[16px] hover:bg-[#3453e0] transition-all shadow-2xl inline-block hover:scale-105">
+      <Link to="/business" className="bg-[#4162ff] text-white px-12 py-5 rounded-full font-bold text-[16px] hover:bg-[#3453e0] transition-all shadow-2xl inline-block hover:scale-105">
         Learn more
       </Link>
     </div>

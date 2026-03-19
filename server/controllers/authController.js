@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const admin = require('../config/firebase-admin.config');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -103,6 +104,10 @@ const updateProfile = async (req, res) => {
     user.bio = req.body.bio !== undefined ? req.body.bio : user.bio;
     user.location = req.body.location || user.location;
     user.name = req.body.name || user.name;
+    user.language = req.body.language || user.language;
+    if (req.body.notificationPreferences) {
+      user.notificationPreferences = { ...user.notificationPreferences, ...req.body.notificationPreferences };
+    }
 
     const updatedUser = await user.save();
     updatedUser.password = undefined;
@@ -140,10 +145,76 @@ const changePassword = async (req, res) => {
   }
 };
 
+const phoneLogin = async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!admin.app()) {
+      return res.status(500).json({ message: 'Firebase Admin not initialized' });
+    }
+
+    // Verify Firebase ID Token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const phoneNumber = decodedToken.phone_number;
+
+    if (!phoneNumber) {
+      return res.status(400).json({ message: 'Invalid phone number in token' });
+    }
+
+    // Find or create user
+    let user = await User.findOne({ phoneNumber });
+
+    if (!user) {
+      user = await User.create({
+        name: `User ${phoneNumber.slice(-4)}`,
+        phoneNumber,
+        isVerified: true,
+        role: 'user'
+      });
+    }
+
+    res.json({
+      _id: user.id,
+      name: user.name,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      token: generateToken(user._id)
+    });
+  } catch (error) {
+    console.error('Phone login error:', error.message);
+    res.status(500).json({ message: 'Authentication failed' });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete all reviews of this user
+    const Review = require('../models/Review');
+    await Review.deleteMany({ userId: req.user._id });
+
+    // Delete user
+    await User.findByIdAndDelete(req.user._id);
+
+    res.json({ message: 'User and all associated reviews deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
   updateProfile,
-  changePassword
+  changePassword,
+  phoneLogin,
+  deleteUser
 };

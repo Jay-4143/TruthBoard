@@ -90,7 +90,7 @@ const DidYouKnow = () => (
     <div className="max-w-[1200px] mx-auto text-center md:text-left">
       <h4 className="text-[13px] font-bold mb-6 tracking-wide">Did you know?</h4>
       <h2 className="text-[32px] md:text-[40px] font-[900] leading-[1.2] max-w-4xl tracking-tight">
-        Review Insight's machine learning model gets more intelligent with each review. After analyzing more than 100 million, it delivers some pretty smart insights.
+        Review Insights' machine learning model gets more intelligent with each review. After analyzing more than 100 million, it delivers some pretty smart insights.
       </h2>
     </div>
   </section>
@@ -127,7 +127,7 @@ const ReviewFollowUpSection = () => (
               <div className="w-2/3 border-r border-gray-200 p-4 bg-gray-50 flex flex-col gap-4">
                  <div className="bg-yellow-50 border border-yellow-200 p-2 rounded flex items-start gap-2">
                    <span className="text-yellow-600 text-sm">⚠️</span>
-                   <p className="text-[8px] font-medium text-gray-700">Questions and their responses won't appear publicly, or impact your TrustScore.<a className="text-blue-500 hover:underline cursor-pointer"> Learn more</a></p>
+                   <p className="text-[8px] font-medium text-gray-700">Questions and their responses won't appear publicly, or impact your TruthScore.<a className="text-blue-500 hover:underline cursor-pointer"> Learn more</a></p>
                  </div>
                  
                  <div className="bg-white border text-left border-gray-200 rounded shadow-sm p-4">
@@ -175,10 +175,10 @@ const ReviewFollowUpSection = () => (
                  <div className="absolute top-0 right-0 w-32 h-32 bg-gray-100 rounded-full translate-x-1/2 -translate-y-1/2" />
                  <div className="w-[140px] h-[280px] bg-white border-[6px] border-[#1c1c1c] rounded-[24px] shadow-lg relative flex flex-col z-10 overflow-hidden">
                      {/* Phone Header */}
-                     <div className="bg-[#1c1c1c] text-white p-2 flex justify-between items-center text-[8px]">
-                        <div className="flex items-center gap-1"><Star className="w-3 h-3 text-[#00b67a] fill-current"/><span className="font-bold">Truthboard</span></div>
-                        <Search className="w-3 h-3" />
-                     </div>
+                      <div className="bg-[#1c1c1c] text-white p-2 flex justify-between items-center text-[8px]">
+                         <div className="flex items-center gap-1"><Star className="w-3 h-3 text-[#00b67a] fill-current"/><span className="font-bold">TruthBoard</span></div>
+                         <Search className="w-3 h-3" />
+                      </div>
                      <div className="p-3 flex-1 flex flex-col relative text-left">
                         <p className="text-[8px] text-gray-400 font-bold mb-1">Question 1 of 1</p>
                         <p className="text-[12px] font-bold mb-3 leading-tight text-black">Question</p>
@@ -244,17 +244,17 @@ const SentimentAnalysisSection = () => (
               
               {/* Highlight sentences */}
               <div className="mb-2">
-                 <span className="bg-[#00f898] text-[#1c1c1c] font-black leading-loose px-2 mr-2 text-[14px]">The prices were very fair.</span>
+                 <span className="bg-[#00f898] text-[#1c1c1c] font-bold leading-loose px-2 mr-2 text-[14px]">The prices were very fair.</span>
                  <span className="bg-gray-200 inline-block w-16 h-4 rounded align-middle" />
               </div>
               <div className="text-right">
                  <span className="bg-gray-200 inline-block w-16 h-4 rounded align-middle mr-2 mt-4" />
-                 <span className="bg-[#ff4e8a] text-white font-black leading-loose px-2 text-[14px]">the shipping took too long!</span>
+                 <span className="bg-[#ff4e8a] text-white font-bold leading-loose px-2 text-[14px]">the shipping took too long!</span>
               </div>
            </div>
 
            {/* Sentiment Tags */}
-           <div className="flex justify-between w-[90%] font-black text-[18px]">
+           <div className="flex justify-between w-[90%] font-bold text-[18px]">
               <motion.div animate={{y:[-3,3,-3]}} transition={{duration:4, repeat:Infinity, ease:"easeInOut"}} className="bg-[#f0f0f0] text-[#1c1c1c] px-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-200">
                  Product <X className="w-5 h-5 stroke-[2.5]" />
               </motion.div>
@@ -357,19 +357,19 @@ const CategorizedFeedbackSection = () => (
 );
 
 /* ═══════════════════════════════════════════════════════
-   TRUSTSCORE FORECAST
+   TRUTHSCORE FORECAST
    ═══════════════════════════════════════════════════════ */
-const TrustScoreForecastSection = () => (
+const TruthScoreForecastSection = () => (
   <section className="bg-white py-28 px-6 md:px-12 relative overflow-hidden text-[#1c1c1c]">
     <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
       
       <div className="md:w-[45%]">
-        <h4 className="text-[13px] font-bold mb-4 tracking-wide text-[#1c1c1c]">TrustScore forecast</h4>
+        <h4 className="text-[13px] font-bold mb-4 tracking-wide text-[#1c1c1c]">TruthScore forecast</h4>
         <h2 className="text-[36px] md:text-[44px] font-[900] leading-[1.1] mb-6 tracking-tight">
           Look ahead to your future success
         </h2>
         <p className="text-[18px] text-[#1c1c1c] leading-relaxed font-medium">
-          Explore how today's review activities could shape your TrustScore and experiment with different scenarios to see how changes in your review volume and ratings could shape your TrustScore in the next year.
+          Explore how today's review activities could shape your TruthScore and experiment with different scenarios to see how changes in your review volume and ratings could shape your TruthScore in the next year.
         </p>
       </div>
 
@@ -382,7 +382,7 @@ const TrustScoreForecastSection = () => (
          <motion.div initial={{scale:0.95, opacity:0}} whileInView={{scale:1, opacity:1}} transition={{duration:0.6}} viewport={{once:true}} className="w-[480px] bg-[#f8e7ed] border-[12px] border-[#a01640] rounded-[36px] shadow-2xl relative z-20 flex p-6 px-8 gap-4 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
              <div className="w-[70%] bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-[28px] font-black leading-none mb-2 text-[#a01640] tracking-tight">TrustScore<br/>forecast</h3>
+                  <h3 className="text-[28px] font-bold leading-none mb-2 text-[#a01640] tracking-tight">TruthScore<br/>forecast</h3>
                   <p className="text-[12px] font-bold text-gray-500 mb-6 leading-tight max-w-[150px]">Based on your performance<br/>in the last <strong className="text-black">28 days</strong></p>
                 </div>
 
@@ -404,7 +404,7 @@ const TrustScoreForecastSection = () => (
                        </div>
                        
                        {/* Current Score Projection line/dot */}
-                       <div className="absolute top-[20%] right-8 text-[20px] font-black text-[#1c1c1c]">4.7</div>
+                       <div className="absolute top-[20%] right-8 text-[20px] font-bold text-[#1c1c1c]">4.7</div>
                        <div className="absolute bottom-[2px] top-6 border-l border-dashed border-gray-300 right-10" />
                        <div className="absolute right-[36px] top-[40px] w-2.5 h-2.5 bg-[#00b67a] rounded-full" />
                    </div>
@@ -469,7 +469,7 @@ const InterestCards = () => (
         <div className="flex flex-col group cursor-pointer">
           <div className="bg-[#fff100] h-[220px] rounded-[32px] mb-6 relative overflow-hidden flex items-end justify-start p-0 pl-10 pr-0 border-2 border-transparent group-hover:border-black/5 transition-all">
              <div className="bg-white w-[90%] h-[180px] rounded-tl-2xl border-l-[6px] border-t-[6px] border-[#1c1c1c] shadow-lg flex flex-col p-4 px-6 translate-y-2 group-hover:-translate-y-2 transition-transform">
-                <h3 className="text-[26px] font-black leading-none mb-2 text-left tracking-tight">TrustScore forecast</h3>
+                <h3 className="text-[26px] font-bold leading-none mb-2 text-left tracking-tight">TruthScore forecast</h3>
                 <p className="text-[11px] font-bold text-gray-500 mb-6 leading-tight max-w-[150px] text-left">Based on your performance<br/>in the last <strong className="text-black">28 days</strong></p>
                 <div className="w-full flex-1 relative border-l border-b border-gray-200">
                     <svg width="100%" height="100%" viewBox="0 0 100 40" preserveAspectRatio="none">
@@ -496,12 +496,12 @@ const InterestCards = () => (
                    </div>
                    <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500"><div className="w-4 h-4 rounded-full bg-gray-200"/>Bjorn Baumann</div>
                 </div>
-                <p className="text-left w-full font-black text-[16px] mb-4">Exciting service</p>
+                <p className="text-left w-full font-bold text-[16px] mb-4">Exciting service</p>
                 <div className="w-full h-1.5 bg-gray-200 rounded mb-2"/><div className="w-2/3 h-1.5 bg-gray-200 rounded mb-4 shadow" />
                 <div className="w-full flex gap-1 justify-start">
-                   <span className="bg-[#fbbf24] text-[9px] font-black px-2 py-1 flex items-center rounded border border-yellow-500 shadow-sm"><PlusCircle className="w-2.5 h-2.5 mr-0.5 inline"/>Add tag</span>
-                   <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-black px-2 py-1 rounded border border-green-300 shadow-sm">Content: Delivery</span>
-                   <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-black px-2 py-1 rounded border border-green-300 shadow-sm">Content: Service</span>
+                   <span className="bg-[#fbbf24] text-[9px] font-bold px-2 py-1 flex items-center rounded border border-yellow-500 shadow-sm"><PlusCircle className="w-2.5 h-2.5 mr-0.5 inline"/>Add tag</span>
+                   <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-bold px-2 py-1 rounded border border-green-300 shadow-sm">Content: Delivery</span>
+                   <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-bold px-2 py-1 rounded border border-green-300 shadow-sm">Content: Service</span>
                 </div>
              </div>
           </div>
@@ -557,7 +557,7 @@ const InterestCards = () => (
           </div>
           <h3 className="text-[24px] font-[900] mb-4">Service Reviews</h3>
           <p className="text-[14px] leading-relaxed font-medium mb-6 text-gray-700">
-            Every two seconds, a new review is written on Truthboard's consumer-facing site. Collecting reviews on Truthboard gives your current and future customers a place to learn...
+            Every two seconds, a new review is written on TruthBoard's consumer-facing site. Collecting reviews on TruthBoard gives your current and future customers a place to learn...
           </p>
           <a href="#" className="text-[14px] font-bold underline underline-offset-4 decoration-1 hover:decoration-2 mt-auto">Read more</a>
         </div>
@@ -602,7 +602,7 @@ const ReviewInsights = () => {
       <ReviewFollowUpSection />
       <SentimentAnalysisSection />
       <CategorizedFeedbackSection />
-      <TrustScoreForecastSection />
+      <TruthScoreForecastSection />
       <StepsSection />
       <InterestCards />
       <BottomCTA />

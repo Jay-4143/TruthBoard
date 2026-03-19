@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom'
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import StarRating from '../components/StarRating';
+import PhoneLogin from '../components/auth/PhoneLogin';
 
 const WriteReview = () => {
   const { companyId: initialCompanyId } = useParams();
@@ -19,7 +20,7 @@ const WriteReview = () => {
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
-  const [dateOfExperience, setDateOfExperience] = useState('');
+  const [dateOfExperience, setDateOfExperience] = useState(new Date().toISOString().split('T')[0]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -32,11 +33,12 @@ const WriteReview = () => {
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [emailUpdates, setEmailUpdates] = useState(true);
+  const [showPhoneAuth, setShowPhoneAuth] = useState(false);
 
   // Submitted review data for confirmation page
   const [submittedReview, setSubmittedReview] = useState(null);
   
-  const { user, login, register } = useContext(AuthContext);
+  const { user, login, register, loginWithPhone } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Load Recent Companies
@@ -54,6 +56,16 @@ const WriteReview = () => {
   // Fetch company from URL params
   useEffect(() => {
     const fetchSelectedCompany = async () => {
+      // Mock Support
+      if (initialCompanyId === "apple_mock_id") {
+        setSelectedCompany({ _id: "apple_mock_id", name: "Apple", website: "www.apple.com" });
+        return;
+      }
+      if (initialCompanyId === "amazon_mock_id") {
+        setSelectedCompany({ _id: "amazon_mock_id", name: "Amazon", website: "www.amazon.com" });
+        return;
+      }
+
       if (initialCompanyId) {
         try {
           const { data } = await api.get('/companies');
@@ -124,9 +136,33 @@ const WriteReview = () => {
     }
   };
 
+  const handlePhoneLoginSuccess = async (idToken) => {
+    try {
+      await loginWithPhone(idToken);
+      handleAutoSubmit();
+    } catch (err) {
+      setAuthError('Authentication failed on our server. Please try again.');
+    }
+  };
+
   // Auto-submit after auth
   const handleAutoSubmit = async () => {
     if (rating === 0 || title.length < 3 || reviewText.length < 8 || !dateOfExperience) return;
+    
+    // Mock simulation
+    if (selectedCompany?._id?.includes('mock_id')) {
+      setSubmittedReview({
+        _id: 'mock_' + Date.now(),
+        rating,
+        title,
+        reviewText,
+        dateOfExperience,
+        companyName: selectedCompany?.name
+      });
+      setStep(3);
+      return;
+    }
+
     try {
       const { data } = await api.post('/reviews', {
         companyId: selectedCompany._id,
@@ -160,6 +196,24 @@ const WriteReview = () => {
 
     setLoading(true);
     setError('');
+
+    // Mock simulation
+    if (selectedCompany?._id?.includes('mock_id')) {
+      setTimeout(() => {
+        setSubmittedReview({
+          _id: 'mock_' + Date.now(),
+          rating,
+          title,
+          reviewText,
+          dateOfExperience,
+          companyName: selectedCompany?.name
+        });
+        setStep(3);
+        setLoading(false);
+      }, 800);
+      return;
+    }
+
     try {
       const { data } = await api.post('/reviews', {
         companyId: selectedCompany._id,
@@ -205,13 +259,13 @@ const WriteReview = () => {
         </div>
 
         <div className="max-w-2xl mx-auto px-4 py-8">
-          <h1 className="text-2xl md:text-3xl font-black text-center text-[#1a1c21] mb-8">Thanks for your review!</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-center text-[#1a1c21] mb-8">Thanks for your review!</h1>
 
           {/* Review Card */}
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-8">
             {/* Company header */}
             <div className="p-5 border-b border-gray-100 flex items-center gap-3">
-              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-lg font-black text-gray-600">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-lg font-bold text-gray-600">
                 {selectedCompany?.name?.[0] || 'C'}
               </div>
               <span className="text-base font-bold text-[#1a1c21]">{selectedCompany?.name || submittedReview?.companyName}</span>
@@ -275,14 +329,14 @@ const WriteReview = () => {
           </div>
 
           {/* What's next? */}
-          <h2 className="text-xl md:text-2xl font-black text-[#1a1c21] text-center mb-6">What&apos;s next?</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-[#1a1c21] text-center mb-6">What&apos;s next?</h2>
 
           {/* Become verified */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8">
             <div className="w-10 h-10 bg-[#00b67a] rounded-full flex items-center justify-center mb-4">
               <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
-            <h3 className="text-lg font-black text-[#1a1c21] mb-2">Become a verified reviewer</h3>
+            <h3 className="text-lg font-bold text-[#1a1c21] mb-2">Become a verified reviewer</h3>
             <p className="text-sm text-gray-600 leading-relaxed mb-2">All you need is a photo ID. Verifying helps ensure real people are writing the reviews you read, builds trust online, and lets everyone shop with confidence.</p>
             <p className="text-sm text-gray-600 mb-5">Your ID will never be shown on TruthBoard—we&apos;ll only display a verification badge. <button className="font-bold text-[#4162ff] hover:underline">Learn more</button></p>
             <button className="text-[#00b67a] font-bold text-sm border border-[#00b67a] px-5 py-2.5 rounded-full hover:bg-[#00b67a] hover:text-white transition-all">Get started</button>
@@ -290,7 +344,7 @@ const WriteReview = () => {
 
           {/* Keep 'em coming */}
           <div className="text-center py-8">
-            <h3 className="text-lg font-black text-[#1a1c21] mb-4">Keep &apos;em coming...</h3>
+            <h3 className="text-lg font-bold text-[#1a1c21] mb-4">Keep &apos;em coming...</h3>
             <Link to="/write-review" onClick={() => { setStep(1); setSelectedCompany(null); setRating(0); setTitle(''); setReviewText(''); setDateOfExperience(''); setSubmittedReview(null); }} className="inline-block bg-[#00b67a] text-white px-8 py-3 rounded-full font-bold text-sm hover:bg-[#009966] transition-all shadow-lg">
               Review more companies
             </Link>
@@ -345,7 +399,7 @@ const WriteReview = () => {
               {recentCompanies.length > 0 ? (
                 recentCompanies.map(company => (
                   <button key={company._id} onClick={() => handleSelectCompany(company)} className="group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-green-200 transition-all duration-300 text-left flex flex-col items-start">
-                    <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl font-black mb-6 group-hover:bg-green-50 transition-colors">{company.name[0]}</div>
+                    <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl font-bold mb-6 group-hover:bg-green-50 transition-colors">{company.name[0]}</div>
                     <div>
                       <h3 className="font-bold text-lg text-gray-900 mb-1 group-hover:text-[#00b67a] transition-colors">{company.name}</h3>
                       <p className="text-gray-400 text-xs font-medium mb-4">{company.website}</p>
@@ -374,7 +428,7 @@ const WriteReview = () => {
           <div className="max-w-xl mx-auto">
             {/* Selected Company Header */}
             <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 mb-8">
-              <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center text-xl font-black shadow-inner">{selectedCompany?.name[0]}</div>
+              <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center text-xl font-bold shadow-inner">{selectedCompany?.name[0]}</div>
               <div className="flex-1">
                 <h2 className="text-lg font-bold text-[#1a1c21] tracking-tight">{selectedCompany?.name}</h2>
                 <p className="text-gray-400 font-medium text-sm">{selectedCompany?.website}</p>
@@ -425,7 +479,7 @@ const WriteReview = () => {
                       Date of experience
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </label>
-                    <input type="date" id="date" className="w-full px-4 py-3 border border-gray-200 rounded-lg outline-none focus:border-[#4162ff] focus:ring-1 focus:ring-[#4162ff] transition-all text-base shadow-sm bg-white" value={dateOfExperience} onChange={(e) => setDateOfExperience(e.target.value)} />
+                    <input type="date" id="date" className="w-full px-4 py-3 border border-gray-200 rounded-lg outline-none focus:border-[#4162ff] focus:ring-1 focus:ring-[#4162ff] transition-all text-base shadow-sm bg-white" value={dateOfExperience} max={new Date().toISOString().split('T')[0]} onChange={(e) => setDateOfExperience(e.target.value)} />
                   </div>
 
                   {/* Disclaimer */}
@@ -468,6 +522,29 @@ const WriteReview = () => {
                         <button type="button" onClick={() => setShowEmailForm(!showEmailForm)} className="w-full text-center text-[#4162ff] font-bold text-sm hover:underline mt-4 block">
                           Continue with email
                         </button>
+
+                        <div className="relative my-6">
+                          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-100"></div></div>
+                          <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-gray-400">Or</span></div>
+                        </div>
+
+                        {!showPhoneAuth ? (
+                          <button 
+                            type="button" 
+                            onClick={() => setShowPhoneAuth(true)}
+                            className="w-full flex items-center justify-center gap-3 py-3 border-2 border-gray-100 rounded-full font-bold text-gray-700 hover:bg-gray-50 transition-all text-sm"
+                          >
+                            <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            Continue with Phone
+                          </button>
+                        ) : (
+                          <PhoneLogin 
+                            onLoginSuccess={handlePhoneLoginSuccess}
+                            onCancel={() => setShowPhoneAuth(false)}
+                          />
+                        )}
 
                         {/* ─── INLINE EMAIL FORM ─── */}
                         {showEmailForm && (

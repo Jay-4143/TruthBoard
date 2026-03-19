@@ -16,63 +16,66 @@
 - [x] Add `roleMiddleware.js` for role-based access control
 
 ### Task 1.2: Security Hardening
-- [ ] Install and configure `helmet`, `express-rate-limit`, `express-mongo-sanitize`
-- [ ] Add rate limiting to auth routes (5 req/min for login)
-- [ ] Add global error handler middleware
-- [ ] Add request logger middleware (morgan)
-- [ ] Configure CORS properly for frontend origin
+- [x] Install and configure `helmet`, `express-rate-limit`, `express-mongo-sanitize`
+- [x] Add rate limiting to auth routes (5 req/min for login)
+- [x] Add global error handler middleware
+- [x] Add request logger middleware (morgan)
+- [x] Configure CORS properly for frontend origin
 
 ---
 
 ## Phase 2 — Company System
 
 ### Task 2.1: Category System
-- [ ] Create `Category.js` model
-- [ ] Create `categoryController.js` & `categoryRoutes.js`
-- [ ] Seed initial categories (Technology, Finance, Food, Health, Education, etc.)
+- [x] Create `Category.js` model
+- [x] Create `categoryController.js` & `categoryRoutes.js`
+- [x] Seed initial categories (Technology, Finance, Food, Health, Education, etc.)
 
 ### Task 2.2: Refactor Company Model
-- [ ] Upgrade `Company.js` with new fields: `logo`, `category` (ref), `claimedBy`, `isClaimed`, `contactEmail`, `averageRating`, `totalReviews`, `ratingDistribution`, `trustScore`
-- [ ] Add text index on `name` for search
-- [ ] Add compound indexes for sorting/filtering
+- [x] Upgrade `Company.js` with new fields: `logo`, `category` (ref), `claimedBy`, `isClaimed`, `contactEmail`, `averageRating`, `totalReviews`, `ratingDistribution`, `trustScore`
+- [x] Add text index on `name` for search
+- [x] Add compound indexes for sorting/filtering
 
 ### Task 2.3: Company Controller Expansion
 - [x] Add company search endpoint with text search
-- [ ] Add category filtering endpoint
-- [ ] Add trending companies endpoint (sorted by review count + rating)
-- [ ] Add company claim endpoint
-- [ ] Add pagination to company listing (cursor-based)
-- [ ] Update seed script with new company fields
+- [x] Add get company by slug endpoint
+- [x] Add get company by domain (includes real-time stat calculation)
+- [x] Add category filtering endpoint
+- [x] Add trending companies endpoint (sorted by review count + rating)
+- [x] Add company claim endpoint
+- [x] Add pagination to company listing (cursor-based)
+- [x] Update seed script with new company fields
 
 ---
 
 ## Phase 3 — Review System
 
 ### Task 3.1: Refactor Review Model
-- [ ] Upgrade `Review.js` with new fields: `status`, `isEdited`, `editHistory`, `sentimentScore`, `isNegativeFlagged`, `isVerified`, `flagCount`
-- [ ] Add unique compound index `{ userId, companyId }` — one review per user per company
-- [ ] Add compound indexes for common query patterns
+- [x] Upgrade `Review.js` with new fields: `status`, `isEdited`, `editHistory`, `sentimentScore`, `isNegativeFlagged`, `isVerified`, `flagCount`
+- [x] Add unique compound index `{ userId, companyId }` — one review per user per company
+- [x] Add compound indexes for common query patterns
 
 ### Task 3.2: Review CRUD Enhancements
-- [ ] Update `reviewController.js` — add edit review (with edit history)
-- [ ] Add delete review endpoint (soft delete via status)
-- [ ] Add single review GET endpoint
-- [ ] Add user reviews endpoint (GET reviews by userId)
-- [ ] Add review sorting (newest, highest, lowest)
-- [ ] Add review filtering by rating
-- [ ] Add pagination
+- [x] Update `reviewController.js` — add create review
+- [x] Add edit review endpoint
+- [x] Add delete review endpoint (hard delete for now)
+- [x] Add single company reviews GET endpoint
+- [x] Add user reviews endpoint (GET reviews by userId)
+- [x] Add review sorting (newest, highest, lowest)
+- [x] Add review filtering by rating
+- [x] Add pagination
 
 ### Task 3.3: Rating Aggregation Logic
-- [ ] Create `ratingService.js` utility
-- [ ] Implement `recalculateCompanyRating()` — runs on review create/edit/delete
-- [ ] Updates: `averageRating`, `totalReviews`, `ratingDistribution`, `trustScore`
-- [ ] Trust score formula: weighted average favoring recent + verified reviews
+- [x] Create `ratingService.js` utility
+- [x] Implement `recalculateCompanyRating()` — runs on review create/edit/delete
+- [x] Updates: `averageRating`, `totalReviews`, `ratingDistribution`, `trustScore`
+- [x] Trust score formula: Bayesian-weighted average favoring volume
 
 ### Task 3.4: Review Flagging System
-- [ ] Create `ReviewFlag.js` model
-- [ ] Create flag review endpoint (POST /api/reviews/:id/flag)
-- [ ] Increment `flagCount` on review
-- [ ] Validate one flag per user per review
+- [x] Create `ReviewFlag.js` model
+- [x] Create flag review endpoint (POST /api/reviews/:id/flag)
+- [x] Increment `flagCount` on review
+- [x] Validate one flag per user per review
 
 ---
 
@@ -128,15 +131,15 @@
 ## Phase 7 — Frontend: Core Pages Redesign
 
 ### Task 7.1: Design System & Layout
-- [ ] Create shared layout component with Navbar + Footer
-- [ ] Create reusable components: StarRating, ReviewCard, CompanyCard, SearchBar, Pagination, Toast/Alert
-- [ ] Setup global styles, color palette, typography in Tailwind config
+- [x] Create shared layout component with Navbar + Footer
+- [x] Create reusable components: StarRating, ReviewCard, CompanyCard, SearchBar, Pagination, Toast/Alert
+- [x] Setup global styles, color palette, typography in Tailwind config
 
 ### Task 7.2: Home Page
 - [x] Hero section with search bar
-- [ ] Trending companies section
-- [ ] Category browsing tiles
-- [ ] Recent reviews feed
+- [x] Trending companies section
+- [x] Category browsing tiles
+- [x] Recent reviews feed
 - [x] Responsive design
 
 ### Task 7.3: Company Search & Category Pages
@@ -145,20 +148,21 @@
 - [ ] Sort by: rating, review count, newest
 
 ### Task 7.4: Company Detail Page
-- [ ] Company header: logo, name, rating, trust score, rating distribution bar
-- [ ] Reviews list with sorting/filtering
+- [x] Company header: logo, name, rating, trust score (real-time)
+- [x] Reviews list with sorting/filtering
 - [ ] Company response displayed under review
-- [ ] "Write a Review" CTA
-- [ ] Pagination for reviews
+- [x] "Write a Review" CTA
+- [x] Pagination for reviews
 
 ### Task 7.5: Review Pages
-- [ ] Write Review page with star selector, title, text
-- [ ] Edit Review page (pre-filled)
+- [x] Write Review page with star selector, title, text
+- [x] Edit Review page (pre-filled)
 - [ ] Review detail page (single review + company response)
 
 ### Task 7.6: Auth Pages Redesign
-- [ ] Login page with modern UI
-- [ ] Register page with validation feedback
+- [x] Login page with modern UI
+- [x] Register page with validation feedback
+- [x] Phone OTP Login UI
 - [ ] Forgot password page (placeholder)
 
 ---
@@ -166,9 +170,9 @@
 ## Phase 8 — Frontend: Dashboards
 
 ### Task 8.1: User Dashboard
-- [ ] User profile page — edit name, bio, location, avatar
-- [ ] User reviews list — all reviews by the logged-in user
-- [ ] Review edit/delete actions from dashboard
+- [x] User profile page — edit name, bio, location, avatar
+- [x] User reviews list — all reviews by the logged-in user
+- [x] Review edit/delete actions from dashboard
 
 ### Task 8.2: Company Owner Dashboard
 - [ ] Company overview — stats: total reviews, avg rating, trust score

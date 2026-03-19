@@ -26,7 +26,7 @@ const HeroSection = () => (
       <div className="lg:w-1/2 flex justify-center lg:justify-end relative h-[500px] w-full items-center">
         {/* Visitors Text Overlapping Graphics */}
         <div className="relative w-full h-full flex items-center justify-center">
-          <h2 className="absolute text-[120px] font-black leading-none text-[#1c1c1c] opacity-10 select-none z-0">
+          <h2 className="absolute text-[120px] font-bold leading-none text-[#1c1c1c] opacity-10 select-none z-0">
             Visitor<br />Insights
           </h2>
 
@@ -156,7 +156,7 @@ const DemographicsSection = () => (
               <h4 className="text-[14px] font-[900]">Demography index</h4>
               <p className="text-[9px] text-gray-500 font-bold">Get a snapshot of who your visitors are</p>
             </div>
-            <button className="text-[10px] font-black text-blue-600">Download CSV</button>
+            <button className="text-[10px] font-bold text-blue-600">Download CSV</button>
           </div>
 
           <div className="p-8 flex gap-8">
@@ -219,9 +219,9 @@ const EngagementSection = () => (
             whileInView={{ opacity: 1, x: 0 }}
             className="absolute top-0 left-0 bg-white p-6 rounded-2xl shadow-xl w-[220px]"
           >
-            <h4 className="text-[13px] font-black mb-2">United Kingdom</h4>
+            <h4 className="text-[13px] font-bold mb-2">United Kingdom</h4>
             <p className="text-[10px] text-gray-500 font-bold mb-4">The majority of your visitors are from the UK.</p>
-            <button className="text-[10px] font-black text-blue-600">Explore more</button>
+            <button className="text-[10px] font-bold text-blue-600">Explore more</button>
           </motion.div>
 
           <motion.div
@@ -230,9 +230,9 @@ const EngagementSection = () => (
             transition={{ delay: 0.2 }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-2xl shadow-xl w-[220px] z-10"
           >
-            <h4 className="text-[13px] font-black mb-2">1m 33s</h4>
+            <h4 className="text-[13px] font-bold mb-2">1m 33s</h4>
             <p className="text-[10px] text-gray-500 font-bold mb-4">On average people spend 1 minute and 33 seconds reading your reviews.</p>
-            <button className="text-[10px] font-black text-blue-600">Explore more</button>
+            <button className="text-[10px] font-bold text-blue-600">Explore more</button>
           </motion.div>
 
           <motion.div
@@ -241,9 +241,9 @@ const EngagementSection = () => (
             transition={{ delay: 0.4 }}
             className="absolute bottom-0 right-0 bg-white p-6 rounded-2xl shadow-xl w-[220px]"
           >
-            <h4 className="text-[13px] font-black mb-2">Google search</h4>
+            <h4 className="text-[13px] font-bold mb-2">Google search</h4>
             <p className="text-[10px] text-gray-500 font-bold mb-4">The most used search engine to find your reviews is Google search.</p>
-            <button className="text-[10px] font-black text-blue-600">Explore more</button>
+            <button className="text-[10px] font-bold text-blue-600">Explore more</button>
           </motion.div>
         </div>
       </div>
@@ -278,7 +278,7 @@ const OpportunitiesSection = () => (
       <div className="md:w-[55%] relative h-[500px] flex justify-center items-center">
         {/* Dark background graphic with text overflow */}
         <div className="absolute w-full h-[400px] bg-[#1c1c1c] rounded-[48px] overflow-hidden flex items-center justify-center p-12">
-          <h2 className="absolute text-[120px] font-black leading-tight text-white/5 whitespace-nowrap -rotate-12">
+          <h2 className="absolute text-[120px] font-bold leading-tight text-white/5 whitespace-nowrap -rotate-12">
             Visitor Insights Visitor Insights
           </h2>
 
@@ -288,7 +288,7 @@ const OpportunitiesSection = () => (
             className="relative z-10 bg-white rounded-3xl p-8 w-full max-w-[380px] shadow-2xl"
           >
             <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4">
-              <h4 className="text-[16px] font-black">Interests diversity</h4>
+              <h4 className="text-[16px] font-bold">Interests diversity</h4>
               <div className="flex gap-2">
                 <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer">
                   <MapPin className="w-4 h-4 text-gray-400" />
@@ -302,9 +302,9 @@ const OpportunitiesSection = () => (
             <div className="space-y-6">
               {['Shopping and fashion', 'Business services', 'Home and garden'].map((cat, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <span className="text-[20px] font-black text-gray-200">#{i + 1}</span>
+                  <span className="text-[20px] font-bold text-gray-200">#{i + 1}</span>
                   <div className="flex-1">
-                    <p className="text-[12px] font-black">{cat}</p>
+                    <p className="text-[12px] font-bold">{cat}</p>
                     <div className="w-full h-1.5 bg-gray-100 rounded-full mt-1">
                       <div
                         className="h-full bg-[#00b67a] rounded-full"
@@ -392,7 +392,7 @@ const InterestCards = () => (
         <div className="flex flex-col group cursor-pointer">
           <div className="bg-[#fff100] h-[220px] rounded-[32px] mb-6 relative overflow-hidden flex items-end justify-start p-0 pl-10 pr-0 border-2 border-transparent group-hover:border-black/5 transition-all">
             <div className="bg-white w-[90%] h-[180px] rounded-tl-2xl border-l-[6px] border-t-[6px] border-[#1c1c1c] shadow-lg flex flex-col p-4 px-6 translate-y-2 group-hover:-translate-y-2 transition-transform">
-              <h3 className="text-[26px] font-black leading-none mb-2 text-left tracking-tight">TrustScore forecast</h3>
+              <h3 className="text-[26px] font-bold leading-none mb-2 text-left tracking-tight">TruthScore forecast</h3>
               <p className="text-[11px] font-bold text-gray-500 mb-6 leading-tight max-w-[150px] text-left">Based on your performance<br />in the last <strong className="text-black">28 days</strong></p>
               <div className="w-full flex-1 relative border-l border-b border-gray-200">
                 <svg width="100%" height="100%" viewBox="0 0 100 40" preserveAspectRatio="none">
@@ -419,12 +419,12 @@ const InterestCards = () => (
                 </div>
                 <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500"><div className="w-4 h-4 rounded-full bg-gray-200" />Bjorn Baumann</div>
               </div>
-              <p className="text-left w-full font-black text-[16px] mb-4">Exciting service</p>
+              <p className="text-left w-full font-bold text-[16px] mb-4">Exciting service</p>
               <div className="w-full h-1.5 bg-gray-200 rounded mb-2" /><div className="w-2/3 h-1.5 bg-gray-200 rounded mb-4 shadow" />
               <div className="w-full flex gap-1 justify-start">
-                <span className="bg-[#fbbf24] text-[9px] font-black px-2 py-1 flex items-center rounded border border-yellow-500 shadow-sm"><PlusCircle className="w-2.5 h-2.5 mr-0.5 inline" />Add tag</span>
-                <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-black px-2 py-1 rounded border border-green-300 shadow-sm">Content: Delivery</span>
-                <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-black px-2 py-1 rounded border border-green-300 shadow-sm">Content: Service</span>
+                <span className="bg-[#fbbf24] text-[9px] font-bold px-2 py-1 flex items-center rounded border border-yellow-500 shadow-sm"><PlusCircle className="w-2.5 h-2.5 mr-0.5 inline" />Add tag</span>
+                <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-bold px-2 py-1 rounded border border-green-300 shadow-sm">Content: Delivery</span>
+                <span className="bg-[#a7f3d0] text-[#065f46] text-[9px] font-bold px-2 py-1 rounded border border-green-300 shadow-sm">Content: Service</span>
               </div>
             </div>
           </div>
@@ -480,7 +480,7 @@ const InterestCards = () => (
           </div>
           <h3 className="text-[24px] font-[900] mb-4">Service Reviews</h3>
           <p className="text-[14px] leading-relaxed font-medium mb-6 text-gray-700">
-            Every two seconds, a new review is written on Truthboard's consumer-facing site. Collecting reviews on Truthboard gives your current and future customers a place to learn...
+            Every two seconds, a new review is written on TruthBoard's consumer-facing site. Collecting reviews on TruthBoard gives your current and future customers a place to learn...
           </p>
           <a href="#" className="text-[14px] font-bold underline underline-offset-4 decoration-1 hover:decoration-2 mt-auto">Read more</a>
         </div>

@@ -51,7 +51,7 @@ const HeroSection = () => (
                 <p className="text-[30px] font-[900] text-black mt-1 leading-none">100</p>
               </div>
               <div className="flex-1 text-right border-l border-gray-100 pl-4">
-                <p className="text-[11px] font-bold text-gray-800">Current TrustScore</p>
+                <p className="text-[11px] font-bold text-gray-800">Current TruthScore</p>
                 <p className="text-[30px] font-[900] text-black mt-1 leading-none">4.4</p>
               </div>
             </div>
@@ -101,7 +101,7 @@ const DidYouKnow = () => (
   <section className="bg-[#faebeb] py-24 px-6 md:px-12 text-[#1c1c1c]">
     <div className="max-w-[1200px] mx-auto">
       <h4 className="text-sm font-bold mb-4">Did you know?</h4>
-      <h2 className="text-3xl md:text-4xl lg:text-[42px] font-black leading-tight max-w-4xl">
+      <h2 className="text-3xl md:text-4xl lg:text-[42px] font-bold leading-tight max-w-4xl">
         Truthboard gets over 4 million new reviews every month - that's a lot of content to analyze!
       </h2>
     </div>
@@ -142,7 +142,7 @@ const AnalyticsExplorer = () => (
             </div>
             <div className="flex items-center gap-1 group">
               <Star className="w-3 h-3 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-[10px] font-bold tracking-tight">Truthboard</span>
+              <span className="text-[10px] font-bold tracking-tight">TruthBoard</span>
             </div>
           </div>
         </motion.div>
@@ -165,7 +165,7 @@ const AnalyticsExplorer = () => (
             </div>
             <div className="flex items-center gap-1 group">
               <Star className="w-3 h-3 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-[10px] font-bold tracking-tight">Truthboard</span>
+              <span className="text-[10px] font-bold tracking-tight">TruthBoard</span>
             </div>
           </div>
         </motion.div>
@@ -188,7 +188,7 @@ const AnalyticsExplorer = () => (
             </div>
             <div className="flex items-center gap-1 group">
               <Star className="w-3 h-3 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-[10px] font-bold tracking-tight">Truthboard</span>
+              <span className="text-[10px] font-bold tracking-tight">TruthBoard</span>
             </div>
           </div>
         </motion.div>
@@ -198,11 +198,11 @@ const AnalyticsExplorer = () => (
       {/* Right Text Column */}
       <div className="lg:w-1/2">
         <h4 className="text-sm font-bold mb-4 tracking-wide text-gray-800">Analytics explorer</h4>
-        <h2 className="text-[32px] md:text-[40px] font-black leading-tight mb-6">
+        <h2 className="text-[32px] md:text-[40px] font-bold leading-tight mb-6">
           Easily surface trends and opportunities that matter most
         </h2>
         <p className="text-[17px] text-gray-700 leading-relaxed font-medium">
-          Analyze your widget, search, profile and TrustScore performance in one place. Uncover and share untapped opportunities from the data you already have.
+          Analyze your widget, search, profile and TruthScore performance in one place. Uncover and share untapped opportunities from the data you already have.
         </p>
       </div>
 
@@ -220,7 +220,7 @@ const HQPerformance = () => (
       {/* Left Text */}
       <div className="lg:w-[40%]">
         <h4 className="text-sm font-bold mb-4 tracking-wide text-gray-800">Dashboard</h4>
-        <h2 className="text-[32px] md:text-[40px] font-black leading-tight mb-6">
+        <h2 className="text-[32px] md:text-[40px] font-bold leading-tight mb-6">
           Your HQ for review performance
         </h2>
         <p className="text-[17px] text-gray-700 leading-relaxed font-medium">
@@ -247,7 +247,7 @@ const HQPerformance = () => (
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-10 left-[5%] bg-[#fcfaf5] rounded-[16px] p-4 shadow-xl w-[260px] z-30"
         >
-          <h4 className="text-[16px] font-black mb-3">Source of reviews</h4>
+          <h4 className="text-[16px] font-bold mb-3">Source of reviews</h4>
           <div className="space-y-2">
             {[
               ['Organic', '90%'],
@@ -271,7 +271,7 @@ const HQPerformance = () => (
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-44 left-[10%] bg-[#fcfaf5] rounded-[16px] p-4 shadow-xl w-[300px] z-30"
         >
-          <h4 className="text-[16px] font-black mb-4">Sentiment score over time</h4>
+          <h4 className="text-[16px] font-bold mb-4">Sentiment score over time</h4>
           <div className="flex justify-between items-center mb-4">
             <div className="text-[9px] font-bold space-y-3">
               <p>Positive</p>
@@ -336,7 +336,7 @@ const DigIntoData = () => (
 
         {/* The Phone Phone mock */}
         <div className="relative w-[240px] h-[460px] border-[8px] border-[#6b032d] bg-[#ff4e8a] rounded-[40px] shadow-2xl flex flex-col items-center pt-8 z-20 overflow-hidden">
-          <h2 className="text-5xl font-black text-[#6b032d] mb-1">3.7</h2>
+          <h2 className="text-5xl font-bold text-[#6b032d] mb-1">3.7</h2>
           <p className="text-xl font-bold text-[#6b032d] mb-3">Average</p>
           <div className="flex gap-1 mb-8">
             {[1,2,3,4,5].map((s,i) => (
@@ -354,7 +354,7 @@ const DigIntoData = () => (
             </div>
             
             <div className="flex justify-between items-baseline mb-4 border-b border-gray-200 pb-2">
-              <span className="text-xs font-black">Reviews</span>
+              <span className="text-xs font-bold">Reviews</span>
               <span className="text-[9px] text-gray-500 font-bold">124,656 reviews</span>
             </div>
 
@@ -382,7 +382,7 @@ const DigIntoData = () => (
       {/* Right Text Column */}
       <div className="lg:w-1/2">
         <h4 className="text-sm font-bold mb-4 tracking-wide text-gray-800">Performance Data</h4>
-        <h2 className="text-[32px] md:text-[40px] font-black leading-tight mb-6">
+        <h2 className="text-[32px] md:text-[40px] font-bold leading-tight mb-6">
           Dig into your review data
         </h2>
         <p className="text-[17px] text-gray-700 leading-relaxed font-medium max-w-lg">

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, X } from 'lucide-react';
 
 const Navigation = () => {
   const { user, logout } = useContext(AuthContext);
@@ -10,6 +12,7 @@ const Navigation = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const profileRef = useRef(null);
@@ -116,10 +119,12 @@ const Navigation = () => {
           <Link to="/categories" className="text-sm font-bold hover:text-[#00b67a] transition-colors">Categories</Link>
           <Link to="/blog" className="text-sm font-bold hover:text-[#00b67a] transition-colors">Blog</Link>
           
-          <button className="text-white hover:text-[#00b67a] transition-colors ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
+          <button 
+             onClick={() => setShowNotifications(true)}
+             className="relative text-white hover:text-[#00b67a] transition-colors ml-2 group"
+          >
+             <Bell className="h-5 w-5" />
+             <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-[#191919]"></div>
           </button>
 
           {user ? (
@@ -137,19 +142,29 @@ const Navigation = () => {
               </button>
 
               {profileOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-2xl py-2 text-gray-900 border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <div className="text-sm font-bold truncate">{user.name}</div>
-                    <div className="text-xs text-gray-500 truncate">{user.email}</div>
+                <div className="absolute top-full right-0 mt-3 w-56 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.12)] py-2 text-gray-900 border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200 z-[100]">
+                  <div className="px-5 py-3 border-b border-gray-50 mb-1">
+                    <div className="text-sm font-bold text-[#1a1c21] truncate">{user.name}</div>
+                    <div className="text-xs font-semibold text-gray-400 truncate">{user.email || user.phoneNumber}</div>
                   </div>
-                  <Link to="/profile" className="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors">Profile</Link>
-                  <Link to="/my-reviews" className="block px-4 py-2 text-sm hover:bg-gray-50 transition-colors">My Reviews</Link>
-                  <hr className="my-1 border-gray-100" />
+                  
+                  <Link to="/my-reviews" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#00b67a] transition-all">
+                    My Reviews
+                  </Link>
+                  <Link to="/users/settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#00b67a] transition-all">
+                    My Settings
+                  </Link>
+                  <Link to="/help" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#00b67a] transition-all">
+                    Help
+                  </Link>
+                  
+                  <div className="h-px bg-gray-100 my-1 mx-2"></div>
+                  
                   <button
-                    onClick={() => { logout(); navigate('/'); }}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    onClick={() => { logout(); navigate('/'); setProfileOpen(false); }}
+                    className="w-full text-left px-5 py-2.5 text-sm font-bold text-red-500 hover:bg-red-50 transition-all flex items-center gap-3"
                   >
-                    Logout
+                    Log out
                   </button>
                 </div>
               )}
@@ -205,6 +220,53 @@ const Navigation = () => {
            </div>
         </div>
       )}
+
+      {/* ───── NOTIFICATIONS SIDEBAR ───── */}
+      <AnimatePresence>
+         {showNotifications && (
+            <>
+               {/* Backdrop */}
+               <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setShowNotifications(false)}
+                  className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[1000]"
+               />
+               
+               {/* Sidebar */}
+               <motion.div 
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                  className="fixed top-0 right-0 w-full sm:w-[440px] h-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] z-[1001] flex flex-col"
+               >
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+                     <h2 className="text-[24px] font-bold text-gray-900 tracking-tight">Notifications</h2>
+                     <button 
+                        onClick={() => setShowNotifications(false)}
+                        className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors group"
+                     >
+                        <X className="w-5 h-5 text-gray-400 group-hover:text-gray-900" />
+                     </button>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 flex flex-col items-center justify-center p-12 text-center space-y-6">
+                     <div className="w-20 h-20 rounded-full bg-[#ebfaf5] flex items-center justify-center">
+                        <Bell className="w-9 h-9 text-[#00b67a]" />
+                     </div>
+                     <div className="space-y-1 text-gray-900">
+                        <h3 className="text-[18px] font-bold">You're all caught up!</h3>
+                        <p className="text-[14px] font-medium text-gray-400">When you get notifications, they'll show up here.</p>
+                     </div>
+                  </div>
+               </motion.div>
+            </>
+         )}
+      </AnimatePresence>
     </nav>
   );
 };
@@ -217,7 +279,7 @@ const Footer = () => (
       <div className="mb-12">
         <Link to="/" className="flex items-center gap-2">
           <span className="text-[#00b67a] text-3xl">★</span>
-          <span className="text-2xl font-black tracking-tight">Truthboard</span>
+          <span className="text-2xl font-bold tracking-tight">TruthBoard</span>
         </Link>
       </div>
 
@@ -227,7 +289,7 @@ const Footer = () => (
         <div>
           <h4 className="text-sm font-bold mb-6 text-gray-200">About us</h4>
           <ul className="space-y-4 text-sm text-gray-400">
-            <li className="hover:text-white cursor-pointer transition-colors">How Truthboard works</li>
+            <li className="hover:text-white cursor-pointer transition-colors">How TruthBoard works</li>
             <li className="hover:text-white cursor-pointer transition-colors">Our story</li>
             <li className="hover:text-white cursor-pointer transition-colors">What we believe</li>
             <li className="hover:text-white cursor-pointer transition-colors flex items-center gap-2">
@@ -235,7 +297,7 @@ const Footer = () => (
             </li>
             <li className="hover:text-white cursor-pointer transition-colors">Blog</li>
             <li className="hover:text-white cursor-pointer transition-colors">Press</li>
-            <li className="hover:text-white cursor-pointer transition-colors">Truthboard Legal</li>
+            <li className="hover:text-white cursor-pointer transition-colors">TruthBoard Legal</li>
             <li className="hover:text-white cursor-pointer transition-colors">Investor Relations</li>
           </ul>
         </div>
@@ -329,7 +391,7 @@ const Footer = () => (
           Do not sell or share my personal information
         </p>
         <div className="text-[11px] text-gray-500 font-medium">
-          &copy; {new Date().getFullYear()} Truthboard Inc. All rights reserved.
+          &copy; {new Date().getFullYear()} TruthBoard Inc. All rights reserved.
         </div>
       </div>
     </div>

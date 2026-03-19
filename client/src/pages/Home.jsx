@@ -42,17 +42,17 @@ const AnimatedCounter = ({ target, suffix = '', duration = 2000 }) => {
 
 /* ─── Category Data ─── */
 const categories = [
-  { name: 'Bank', icon: '🏦', slug: 'bank' },
+  { name: 'Bank', icon: '🏦', slug: 'banks' },
   { name: 'Insurance', icon: '🛡️', slug: 'insurance' },
   { name: 'Car Dealer', icon: '🚗', slug: 'car-dealer' },
+  { name: 'Jewelry Store', icon: '💎', slug: 'jewelry-store' },
   { name: 'Electronics', icon: '💻', slug: 'electronics' },
-  { name: 'Clothing Store', icon: '👗', slug: 'clothing' },
-  { name: 'Fitness', icon: '💪', slug: 'fitness' },
-  { name: 'Travel Agency', icon: '✈️', slug: 'travel' },
+  { name: 'Fitness', icon: '💪', slug: 'fitness-nutrition' },
   { name: 'Real Estate', icon: '🏠', slug: 'real-estate' },
-  { name: 'Energy Supplier', icon: '⚡', slug: 'energy' },
+  { name: 'Energy Supplier', icon: '⚡', slug: 'energy-supplier' },
   { name: 'Pet Store', icon: '🐾', slug: 'pet-store' },
   { name: 'Furniture', icon: '🛋️', slug: 'furniture' },
+  { name: 'Travel Agency', icon: '✈️', slug: 'travel-agency' },
   { name: 'Food & Beverage', icon: '🍽️', slug: 'food-beverage' },
 ];
 
@@ -71,6 +71,7 @@ const mockRecentReviews = [
    ════════════════════════════════════════════════════════════════ */
 const Home = () => {
   const [companies, setCompanies] = useState([]);
+  const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -84,13 +85,36 @@ const Home = () => {
   const [statsRef, statsInView] = useInView();
   const [ctaRef, ctaInView] = useInView();
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const { data } = await api.get('/companies');
-        setCompanies(data);
-      } catch (error) {
-        console.error('Failed to fetch companies', error);
+        console.log('Fetched companies:', data);
+        
+        if (Array.isArray(data)) {
+          setCompanies(data);
+        } else if (data && data.companies) {
+          setCompanies(data.companies);
+          setPagination({
+            page: data.page,
+            pages: data.pages,
+            total: data.total
+          });
+        } else {
+          setError('Invalid data format received from server');
+          setCompanies([]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch companies', err);
+        setError(err.response?.data?.message || err.message || 'Failed to connect to server');
+        setCompanies([]);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCompanies();
@@ -121,7 +145,7 @@ const Home = () => {
     <div className="bg-white overflow-hidden">
 
       {/* ═══════════════════════════════════════════════════════════
-          SECTION 1 — HERO  (Truthboard-style dark + organic shapes)
+          SECTION 1 — HERO  (TruthBoard-style dark + organic shapes)
          ═══════════════════════════════════════════════════════════ */}
       <section className="relative bg-[#1a1a2e]">
         {/* Animated organic background shapes — wrapped in overflow-hidden to prevent scrollbars */}
@@ -134,7 +158,7 @@ const Home = () => {
 
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           {/* Fade-in Title */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 animate-[fadeInUp_0.8s_ease-out_both]">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 animate-[fadeInUp_0.8s_ease-out_both]">
             Find a company you can trust
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-10 animate-[fadeInUp_0.8s_ease-out_0.2s_both]">
@@ -211,7 +235,9 @@ const Home = () => {
                           </div>
                           <div className="flex-1">
                             <div className="font-semibold text-gray-900">{company.name}</div>
-                            <div className="text-sm text-gray-500">{company.category || 'General'}</div>
+                            <div className="text-sm text-gray-500">
+                              {(typeof company.category === 'object' && company.category?.name) || (company.category || 'General')}
+                            </div>
                           </div>
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -246,18 +272,21 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between mb-10 transition-all duration-700 ${catInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <h2 className="text-xl md:text-2xl font-bold text-gray-900">What are you looking for?</h2>
-            <span className="text-[#00b67a] font-semibold cursor-pointer hover:underline text-xs">See more →</span>
+            <Link to="/categories" className="text-[#00b67a] font-semibold cursor-pointer hover:underline text-xs">See more →</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {categories.map((cat, i) => (
-              <div key={cat.slug}
+              <Link 
+                key={cat.slug}
+                to={`/categories/${cat.slug}`}
                 className={`group bg-white rounded-xl p-5 flex flex-col items-center text-center border border-gray-200 cursor-pointer
                   hover:shadow-lg hover:border-green-300 hover:-translate-y-1 transition-all duration-300
                   ${catInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                style={{ transitionDelay: `${i * 60}ms` }}>
+                style={{ transitionDelay: `${i * 60}ms` }}
+              >
                 <span className="text-3xl mb-3 group-hover:scale-125 transition-transform duration-300">{cat.icon}</span>
                 <span className="text-sm font-medium text-gray-700 group-hover:text-green-600 transition-colors">{cat.name}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -273,42 +302,57 @@ const Home = () => {
             <p className="text-sm text-gray-500 mt-2">Businesses that earned trust from their customers</p>
           </div>
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {companies.map((company, i) => (
-              <Link key={company._id} to={`/company/${company.slug}`}
-                className={`group bg-white rounded-2xl border border-gray-200 overflow-hidden
-                  hover:shadow-xl hover:border-green-200 transition-all duration-500 transform hover:-translate-y-1
-                  ${compInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                style={{ transitionDelay: `${i * 120}ms` }}>
-                <div className="p-6">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
-                      {company.name.charAt(0)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#00b67a] transition-colors truncate">{company.name}</h3>
-                      <p className="text-sm text-gray-500">{company.website}</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 text-sm line-clamp-2 mb-5">{company.description}</p>
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <div className="flex">
-                        {[1,2,3,4,5].map(s => (
-                          <span key={s} className="w-6 h-6 bg-[#00b67a] text-white text-xs flex items-center justify-center first:rounded-l last:rounded-r font-bold">★</span>
-                        ))}
-                      </div>
-                      <span className="text-xs text-gray-500 font-medium">TrustScore <strong>5.0</strong></span>
-                    </div>
-                    <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">{company.category || 'General'}</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-            {companies.length === 0 && (
+            {loading ? (
+              <div className="col-span-3 text-center py-20">
+                <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-gray-500 font-medium">Loading companies...</p>
+              </div>
+            ) : error ? (
+              <div className="col-span-3 text-center py-16 bg-red-50 rounded-2xl border border-red-100">
+                <div className="text-4xl mb-4">⚠️</div>
+                <h3 className="text-red-900 font-bold mb-2">Failed to load companies</h3>
+                <p className="text-red-600 text-sm mb-6">{error}</p>
+                <button onClick={() => window.location.reload()} className="bg-red-600 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-red-700 transition-all">Try again</button>
+              </div>
+            ) : companies.length === 0 ? (
               <div className="col-span-3 text-center py-16 text-gray-400 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
                 <div className="text-4xl mb-3">🔍</div>
                 No companies found. Add some via the seed script!
               </div>
+            ) : (
+              companies.map((company, i) => (
+                <Link key={company._id} to={`/company/${company.slug}`}
+                  className={`group bg-white rounded-2xl border border-gray-200 overflow-hidden
+                    hover:shadow-xl hover:border-green-200 transition-all duration-500 transform hover:-translate-y-1
+                    ${compInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                  style={{ transitionDelay: `${i * 120}ms` }}>
+                  <div className="p-6">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-14 h-14 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
+                        {company.name.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#00b67a] transition-colors truncate">{company.name}</h3>
+                        <p className="text-sm text-gray-500">{company.website}</p>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 text-sm line-clamp-2 mb-5">{company.description}</p>
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {[1,2,3,4,5].map(s => (
+                            <span key={s} className="w-6 h-6 bg-[#00b67a] text-white text-xs flex items-center justify-center first:rounded-l last:rounded-r font-bold">★</span>
+                          ))}
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">TruthScore <strong>{company.trustScore?.toFixed(1) || '0.0'}</strong></span>
+                      </div>
+                      <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">
+                        {(typeof company.category === 'object' && company.category?.name) || 'General'}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))
             )}
           </div>
         </div>
@@ -321,7 +365,7 @@ const Home = () => {
         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12
           transition-all duration-700 ${aboutInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="md:w-1/2">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
               We&apos;re <span className="text-[#00b67a]">TruthBoard</span>
             </h2>
             <p className="text-gray-600 text-base leading-relaxed mb-6">
@@ -343,7 +387,7 @@ const Home = () => {
               <div className="w-72 h-72 md:w-80 md:h-80 bg-gradient-to-br from-[#00b67a] to-teal-400 rounded-3xl flex items-center justify-center shadow-2xl animate-[float_6s_ease-in-out_infinite]">
                 <div className="text-center text-white p-8">
                   <div className="text-6xl mb-4">⭐</div>
-                  <div className="text-4xl font-extrabold">1M+</div>
+                  <div className="text-4xl font-bold">1M+</div>
                   <div className="text-sm opacity-90 mt-1">Reviews & counting</div>
                 </div>
               </div>
@@ -402,25 +446,25 @@ const Home = () => {
         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ${statsInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-2xl md:text-3xl font-extrabold text-green-400">
+              <div className="text-2xl md:text-3xl font-bold text-green-400">
                 <AnimatedCounter target={300} suffix="M+" />
               </div>
               <div className="text-xs text-gray-400 mt-2">Reviews worldwide</div>
             </div>
             <div>
-              <div className="text-2xl md:text-3xl font-extrabold text-orange-400">
+              <div className="text-2xl md:text-3xl font-bold text-orange-400">
                 <AnimatedCounter target={800} suffix="K+" />
               </div>
               <div className="text-xs text-gray-400 mt-2">Businesses listed</div>
             </div>
             <div>
-              <div className="text-2xl md:text-3xl font-extrabold text-teal-400">
+              <div className="text-2xl md:text-3xl font-bold text-teal-400">
                 <AnimatedCounter target={50} suffix="M+" />
               </div>
               <div className="text-xs text-gray-400 mt-2">Monthly visitors</div>
             </div>
             <div>
-              <div className="text-2xl md:text-3xl font-extrabold text-purple-400">
+              <div className="text-2xl md:text-3xl font-bold text-purple-400">
                 <AnimatedCounter target={100} suffix="+" />
               </div>
               <div className="text-xs text-gray-400 mt-2">Countries</div>
@@ -434,7 +478,7 @@ const Home = () => {
          ═══════════════════════════════════════════════════════════ */}
       <section ref={ctaRef} className="py-16 md:py-20 bg-gray-50">
         <div className={`max-w-4xl mx-auto px-4 text-center transition-all duration-700 ${ctaInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             Looking to grow your business?
           </h2>
           <p className="text-base text-gray-500 mb-8 max-w-2xl mx-auto">

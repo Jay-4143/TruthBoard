@@ -41,7 +41,7 @@ const Login = () => {
           <Link to="/" className="text-2xl font-bold text-[#1a1a2e] flex items-center justify-center gap-2">
             <span className="text-[#00b67a]">★</span> TruthBoard
           </Link>
-          <h2 className="mt-6 text-2xl font-extrabold text-gray-900">Log in to your account</h2>
+          <h2 className="mt-6 text-2xl font-bold text-gray-900">Log in to your account</h2>
         </div>
 
         <div className="bg-white py-8 px-4 shadow-xl rounded-2xl sm:px-10 border border-gray-100">

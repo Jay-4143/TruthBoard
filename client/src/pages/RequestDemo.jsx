@@ -55,7 +55,7 @@ const RequestDemo = () => {
           
           {/* Left Column: Copy & Badges */}
           <div className="lg:w-1/2 text-white">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-8">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-8">
               Discover Truthboard's incredible suite of tools
             </h1>
             <p className="text-xl md:text-2xl font-medium mb-12 opacity-95 max-w-lg">
@@ -66,11 +66,11 @@ const RequestDemo = () => {
             <div className="flex gap-4">
               <div className="bg-[#1c1c1c] p-4 rounded flex flex-col items-center justify-center w-24 h-24 border border-gray-700 shadow-lg">
                 <div className="text-[#00b67a] text-xs font-bold mb-1">GetApp</div>
-                <div className="text-[10px] text-center leading-none uppercase font-black">Category Leaders 2022</div>
+                <div className="text-[10px] text-center leading-none uppercase font-bold">Category Leaders 2022</div>
               </div>
               <div className="bg-[#1c1c1c] p-4 rounded flex flex-col items-center justify-center w-24 h-24 border border-gray-700 shadow-lg">
                 <div className="text-[#00b67a] text-xs font-bold mb-1 italic">Software Advice</div>
-                <div className="text-[10px] text-center leading-none uppercase font-black">Front Runners 2022</div>
+                <div className="text-[10px] text-center leading-none uppercase font-bold">Front Runners 2022</div>
               </div>
             </div>
           </div>
@@ -258,15 +258,15 @@ const RequestDemo = () => {
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-16">Trusted by 25,000 business customers</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-12 gap-y-16 items-center place-items-center opacity-70">
-            <span className="text-2xl font-black italic tracking-tighter">AVANT</span>
-            <span className="text-2xl font-black tracking-tighter text-blue-600 italic">experian</span>
-            <span className="text-2xl font-black tracking-tighter text-red-600">MAPFRE</span>
+            <span className="text-2xl font-bold italic tracking-tighter">AVANT</span>
+            <span className="text-2xl font-bold tracking-tighter text-blue-600 italic">experian</span>
+            <span className="text-2xl font-bold tracking-tighter text-red-600">MAPFRE</span>
             <div className="flex flex-col">
-               <span className="text-xl font-black bg-blue-800 text-white px-2 py-0.5 leading-none">AMSCOT</span>
+               <span className="text-xl font-bold bg-blue-800 text-white px-2 py-0.5 leading-none">AMSCOT</span>
                <span className="text-[10px] font-bold uppercase text-gray-600 mt-1">The Money Superstore</span>
             </div>
-            <span className="text-2xl font-black text-green-700">StockX</span>
-            <span className="text-2xl font-black text-teal-600 italic">Amica</span>
+            <span className="text-2xl font-bold text-green-700">StockX</span>
+            <span className="text-2xl font-bold text-teal-600 italic">Amica</span>
           </div>
           <div className="mt-20">
             <button className="bg-[#4b66f2] text-white font-bold px-10 py-4 rounded-full hover:bg-blue-700 transition-all shadow-md">

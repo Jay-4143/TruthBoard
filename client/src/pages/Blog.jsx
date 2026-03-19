@@ -18,7 +18,7 @@ class LocalErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div className="min-h-[400px] flex flex-col items-center justify-center p-10 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 m-10">
-          <h2 className="text-2xl font-black text-gray-800 mb-4">Something went wrong</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Something went wrong</h2>
           <button onClick={() => window.location.reload()} className="bg-[#00b67a] text-white px-8 py-3 rounded-full font-bold">Refresh Page</button>
         </div>
       );
@@ -41,12 +41,12 @@ const Blog = () => {
 
   const categories = [
     'Featured', 'Trends in Trust', 'Reviews Matter', 
-    'Buy With Confidence', 'Trustpilot Stories'
+    'Buy With Confidence', 'TruthBoard Stories'
   ];
 
   const featuredPost = {
     date: 'November 18, 2025',
-    title: 'Trustpilot Sees 76% Surge in Reviews Ahead of Black Friday as Shoppers Turn to Each Other for Guidance',
+    title: 'TruthBoard Sees 76% Surge in Reviews Ahead of Black Friday as Shoppers Turn to Each Other for Guidance',
     desc: 'Make your voice heard. October 20-24th',
     image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2070&auto=format&fit=crop',
     cta: 'Read now'
@@ -67,7 +67,7 @@ const Blog = () => {
       id: 'Reviews Matter',
       title: 'Reviews Matter',
       posts: [
-        { title: 'Trustpilot Sees 76% Surge in Reviews Ahead of Black Friday', date: 'November 18, 2025', img: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=2070&auto=format&fit=crop' },
+        { title: 'TruthBoard Sees 76% Surge in Reviews Ahead of Black Friday', date: 'November 18, 2025', img: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=2070&auto=format&fit=crop' },
         { title: 'Your voice changes the game during Write a Review Week', date: 'October 15, 2025', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop' },
         { title: '4 tips for sharing perfect product review photos', date: 'March 4, 2024', img: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2070&auto=format&fit=crop' },
         { title: 'A critical analysis of the five-star experience', date: 'September 12, 2023', img: 'https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=2070&auto=format&fit=crop' }
@@ -84,13 +84,13 @@ const Blog = () => {
       ]
     },
     {
-      id: 'Trustpilot Stories',
-      title: 'Trustpilot Stories',
+      id: 'TruthBoard Stories',
+      title: 'TruthBoard Stories',
       posts: [
-        { title: 'Trustpilot Pride & Allies: Our recommended resources', date: 'August 12, 2022', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop' },
-        { title: 'Trustpilot is sponsoring Pride Copenhagen 2022 🏳️‍🌈', date: 'July 15, 2022', img: 'https://images.unsplash.com/photo-1563291074-2bf8677ac0e5?q=80&w=2070&auto=format&fit=crop' },
-        { title: 'Meet the pets of Trustpilot: 2021 Edition', date: 'November 8, 2021', img: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?q=80&w=1972&auto=format&fit=crop' },
-        { title: 'Introducing Trustpilot Pride & Allies', date: 'August 20, 2021', img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=2070&auto=format&fit=crop' }
+        { title: 'TruthBoard Pride & Allies: Our recommended resources', date: 'August 12, 2022', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop' },
+        { title: 'TruthBoard is sponsoring Pride Copenhagen 2022 🏳️‍🌈', date: 'July 15, 2022', img: 'https://images.unsplash.com/photo-1563291074-2bf8677ac0e5?q=80&w=2070&auto=format&fit=crop' },
+        { title: 'Meet the pets of TruthBoard: 2021 Edition', date: 'November 8, 2021', img: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?q=80&w=1972&auto=format&fit=crop' },
+        { title: 'Introducing TruthBoard Pride & Allies', date: 'August 20, 2021', img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=2070&auto=format&fit=crop' }
       ]
     }
   ];
@@ -104,7 +104,7 @@ const Blog = () => {
           <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 group">
               <Star className="w-8 h-8 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-xl font-black text-white tracking-tighter">Trustpilot</span>
+              <span className="text-xl font-bold text-white tracking-tighter">TruthBoard</span>
             </Link>
             
             <div className="flex items-center gap-8 text-[14px] font-bold text-white/90">
@@ -126,7 +126,7 @@ const Blog = () => {
         <div className="pt-16 bg-[#fffcf8]">
           <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between border-b border-gray-100">
             <div className="flex items-center gap-12">
-              <h1 className="text-xl font-black text-gray-900">The Trustpilot Blog</h1>
+              <h1 className="text-xl font-bold text-gray-900">The TruthBoard Blog</h1>
               <div className="hidden lg:flex items-center gap-6">
                 {categories.map(cat => (
                   <button 
@@ -160,15 +160,15 @@ const Blog = () => {
               initial={{opacity:0, y:20}} animate={{opacity:1, y:0}}
               className="mb-24"
             >
-              <h2 className="text-[28px] font-black text-gray-900 mb-8">Featured</h2>
+              <h2 className="text-[28px] font-bold text-gray-900 mb-8">Featured</h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center border-b border-gray-100 pb-20">
                 <div className="space-y-6 lg:pr-12">
                   <p className="text-[14px] font-bold text-gray-400">{featuredPost.date}</p>
-                  <h3 className="text-[34px] md:text-[44px] font-black text-gray-900 leading-[1.1] tracking-tight">
+                  <h3 className="text-[34px] md:text-[44px] font-bold text-gray-900 leading-[1.1] tracking-tight">
                     {featuredPost.title}
                   </h3>
                   <div className="pt-4">
-                    <Link to="#" className="bg-[#4162ff] text-white px-8 py-3.5 rounded font-black text-[15px] hover:bg-blue-600 transition-all shadow-lg inline-block">
+                    <Link to="#" className="bg-[#4162ff] text-white px-8 py-3.5 rounded font-bold text-[15px] hover:bg-blue-600 transition-all shadow-lg inline-block">
                       Read now
                     </Link>
                   </div>
@@ -181,12 +181,12 @@ const Blog = () => {
                      <div className="w-full h-full bg-white/95 border-[6px] border-[#00b67a] flex flex-col items-center justify-center text-center p-8 shadow-2xl">
                         <div className="flex items-center gap-2 mb-4">
                            <Star className="w-8 h-8 text-[#00b67a] fill-current" />
-                           <span className="text-2xl font-black">Trustpilot</span>
+                           <span className="text-2xl font-bold">TruthBoard</span>
                         </div>
-                        <h4 className="text-[42px] font-black text-gray-900 mb-2 leading-none">Write a<br/>Review<br/>Week 🖊️</h4>
+                        <h4 className="text-[42px] font-bold text-gray-900 mb-2 leading-none">Write a<br/>Review<br/>Week 🖊️</h4>
                         <div className="mt-8 flex flex-col items-center gap-4">
                            <p className="font-bold text-gray-600">Make your voice heard.</p>
-                           <div className="bg-[#00b67a] text-white px-6 py-2 rounded-full font-black text-[14px]">
+                           <div className="bg-[#00b67a] text-white px-6 py-2 rounded-full font-bold text-[14px]">
                               October 20-24th
                            </div>
                         </div>
@@ -208,7 +208,7 @@ const Blog = () => {
                 className="mb-24 last:mb-0"
               >
                 <div className="flex items-center justify-between mb-10 pb-4 border-b border-gray-100/50">
-                  <h2 className="text-[28px] font-black text-gray-900">{section.title}</h2>
+                  <h2 className="text-[28px] font-bold text-gray-900">{section.title}</h2>
                   <Link to="#" className="text-[13px] font-bold text-[#4162ff] hover:underline flex items-center gap-1">
                     See more articles
                   </Link>
@@ -224,7 +224,7 @@ const Blog = () => {
                         <p className={`text-[12px] font-bold uppercase tracking-wider ${idx % 2 === 0 ? 'text-[#e67e22]' : 'text-[#4162ff]'}`}>
                           {section.title}
                         </p>
-                        <h4 className="text-[18px] font-black text-gray-900 leading-snug group-hover:text-[#4162ff] transition-colors line-clamp-3">
+                        <h4 className="text-[18px] font-bold text-gray-900 leading-snug group-hover:text-[#4162ff] transition-colors line-clamp-3">
                           {post.title}
                         </h4>
                         <p className="text-[12px] font-bold text-gray-400 mt-2">{post.date}</p>
@@ -242,14 +242,14 @@ const Blog = () => {
           <div className="max-w-[1400px] mx-auto px-6">
             <div className="flex items-center gap-2 mb-20 group cursor-pointer">
               <Star className="w-8 h-8 text-[#00b67a] fill-current group-hover:rotate-12 transition-transform" />
-              <span className="text-2xl font-black tracking-tighter">Trustpilot</span>
+              <span className="text-2xl font-bold tracking-tighter">TruthBoard</span>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-24">
               <div>
-                <h5 className="text-[14px] font-black mb-8 text-white/50 uppercase tracking-widest">About</h5>
+                <h5 className="text-[14px] font-bold mb-8 text-white/50 uppercase tracking-widest">About</h5>
                 <ul className="space-y-5 text-[14px] font-bold">
-                  {['About us','Jobs','Contact','Blog','How Trustpilot works','Press','Investor Relations'].map(link => (
+                  {['About us','Jobs','Contact','Blog','How TruthBoard works','Press','Investor Relations'].map(link => (
                     <li key={link}><Link to="#" className="text-white/80 hover:text-[#00b67a] transition-colors">{link}</Link></li>
                   ))}
                   <li className="pt-4"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" className="w-28 opacity-80 hover:opacity-100 cursor-pointer" alt="App Store"/></li>
@@ -257,7 +257,7 @@ const Blog = () => {
               </div>
               
               <div>
-                <h5 className="text-[14px] font-black mb-8 text-white/50 uppercase tracking-widest">Community</h5>
+                <h5 className="text-[14px] font-bold mb-8 text-white/50 uppercase tracking-widest">Community</h5>
                 <ul className="space-y-5 text-[14px] font-bold">
                   {['Trust in reviews','Help Center','Log in','Sign up'].map(link => (
                     <li key={link}><Link to="#" className="text-white/80 hover:text-[#00b67a] transition-colors">{link}</Link></li>
@@ -266,16 +266,16 @@ const Blog = () => {
               </div>
 
               <div>
-                <h5 className="text-[14px] font-black mb-8 text-white/50 uppercase tracking-widest">Businesses</h5>
+                <h5 className="text-[14px] font-bold mb-8 text-white/50 uppercase tracking-widest">Businesses</h5>
                 <ul className="space-y-5 text-[14px] font-bold">
-                  {['Trustpilot Business','Products','Plans & Pricing','Business Login','Blog for Business'].map(link => (
+                  {['TruthBoard Business','Products','Plans & Pricing','Business Login','Blog for Business'].map(link => (
                     <li key={link}><Link to="#" className="text-white/80 hover:text-[#00b67a] transition-colors">{link}</Link></li>
                   ))}
                 </ul>
               </div>
 
               <div>
-                <h5 className="text-[14px] font-black mb-8 text-white/50 uppercase tracking-widest">Follow us on</h5>
+                <h5 className="text-[14px] font-bold mb-8 text-white/50 uppercase tracking-widest">Follow us on</h5>
                 <div className="flex gap-6">
                   {[Facebook, Twitter, Linkedin, Youtube].map((Icon, i) => (
                     <Icon key={i} className="w-5 h-5 text-white/60 hover:text-white cursor-pointer transition-colors" />
@@ -284,7 +284,7 @@ const Blog = () => {
               </div>
 
               <div>
-                <h5 className="text-[14px] font-black mb-8 text-white/50 uppercase tracking-widest">Choose country</h5>
+                <h5 className="text-[14px] font-bold mb-8 text-white/50 uppercase tracking-widest">Choose country</h5>
                 <div className="relative group">
                   <div className="bg-white text-gray-900 px-4 py-3 rounded flex items-center justify-between cursor-pointer border border-transparent group-hover:border-[#00b67a] transition-all">
                     <div className="flex items-center gap-3">
@@ -303,7 +303,7 @@ const Blog = () => {
                     <span key={t} className="hover:text-white cursor-pointer transition-colors">{t}</span>
                   ))}
                </div>
-               <p>© 2026 Trustpilot, Inc. All rights reserved.</p>
+               <p>© 2026 TruthBoard Inc. All rights reserved.</p>
             </div>
           </div>
         </footer>
