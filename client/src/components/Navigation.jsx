@@ -154,9 +154,15 @@ const Navigation = () => {
                   <Link to="/users/settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#00b67a] transition-all">
                     My Settings
                   </Link>
-                  <Link to="/help" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#00b67a] transition-all">
-                    Help
-                  </Link>
+                   <Link to="/help" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#00b67a] transition-all">
+                     Help
+                   </Link>
+                   
+                   {(user.role === 'companyOwner' || user.role === 'admin') && (
+                     <Link to="/business/dashboard" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-blue-600 hover:bg-blue-50 transition-all border-t border-gray-50">
+                       Business Dashboard
+                     </Link>
+                   )}
                   
                   <div className="h-px bg-gray-100 my-1 mx-2"></div>
                   
@@ -173,12 +179,23 @@ const Navigation = () => {
             <Link to="/login" className="text-sm font-bold hover:text-white transition-colors ml-2 whitespace-nowrap">Log in</Link>
           )}
 
-          <Link
-            to="/business"
-            className="bg-[#2563eb] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-blue-700 transition-all ml-2 whitespace-nowrap"
-          >
-            For businesses
-          </Link>
+          {user && (user.role === 'companyOwner' || user.role === 'admin') ? (
+            <Link
+              to="/business/dashboard"
+              className="bg-[#00b67a] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-[#009966] transition-all ml-2 whitespace-nowrap"
+            >
+              Business Dashboard
+            </Link>
+          ) : (
+            <Link
+              to="/business"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#2563eb] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-blue-700 transition-all ml-2 whitespace-nowrap"
+            >
+              For businesses
+            </Link>
+          )}
         </div>
           
         {/* Mobile Overlay Toggle */}
@@ -200,8 +217,11 @@ const Navigation = () => {
            
            {user ? (
              <div className="pt-2">
-                <Link to="/my-reviews" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800 text-gray-300">My reviews</Link>
-                <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800 text-gray-300">Profile</Link>
+                 <Link to="/my-reviews" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800 text-gray-300">My reviews</Link>
+                 <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium py-2 border-b border-gray-800 text-gray-300">Profile</Link>
+                 {(user.role === 'companyOwner' || user.role === 'admin') && (
+                   <Link to="/business/dashboard" onClick={() => setMobileMenuOpen(false)} className="block text-base font-bold py-2 border-b border-gray-800 text-blue-400">Business Dashboard</Link>
+                 )}
              </div>
            ) : (
              <div className="pt-2">
@@ -210,13 +230,23 @@ const Navigation = () => {
            )}
            
            <div className="pt-4">
-             <Link
-               to="/business"
-               onClick={() => setMobileMenuOpen(false)}
-               className="w-full block text-center bg-[#2563eb] text-white px-5 py-3 rounded-full text-base font-bold hover:bg-blue-700 transition-colors"
-             >
-               For businesses
-             </Link>
+             {user && (user.role === 'companyOwner' || user.role === 'admin') ? (
+               <Link
+                 to="/business/dashboard"
+                 onClick={() => setMobileMenuOpen(false)}
+                 className="w-full block text-center bg-[#00b67a] text-white px-5 py-3 rounded-full text-base font-bold hover:bg-[#009966] transition-colors"
+               >
+                 Business Dashboard
+               </Link>
+             ) : (
+               <Link
+                 to="/business"
+                 onClick={() => setMobileMenuOpen(false)}
+                 className="w-full block text-center bg-[#2563eb] text-white px-5 py-3 rounded-full text-base font-bold hover:bg-blue-700 transition-colors"
+               >
+                 For businesses
+               </Link>
+             )}
            </div>
         </div>
       )}
@@ -330,7 +360,7 @@ const Footer = () => (
         <div>
           <h4 className="text-sm font-bold mb-6 text-gray-200">Resources</h4>
           <ul className="space-y-4 text-sm text-gray-400">
-            <li className="hover:text-white cursor-pointer transition-colors">Business Blog</li>
+            <li><Link to="/business" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">For businesses</Link></li>
             <li className="hover:text-white cursor-pointer transition-colors">Webinars and Videos</li>
             <li className="hover:text-white cursor-pointer transition-colors">Guides and Reports</li>
             <li className="hover:text-white cursor-pointer transition-colors">Customer Stories</li>

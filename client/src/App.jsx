@@ -9,6 +9,7 @@ import Categories from './pages/Categories';
 import CategoryDetail from './pages/CategoryDetail';
 import RequestDemo from './pages/RequestDemo';
 import BusinessSignup from './pages/BusinessSignup';
+import BusinessLogin from './pages/BusinessLogin';
 import DashboardAnalytics from './pages/DashboardAnalytics';
 import SocialMediaTools from './pages/SocialMediaTools';
 import TrustBoxWidgets from './pages/TrustBoxWidgets';
@@ -27,7 +28,17 @@ import Settings from './pages/Settings';
 import { AuthProvider } from './context/AuthContext';
 import { Navigation, Footer } from './components/Navigation';
 import ProtectedRoute from './components/ProtectedRoute';
+import BusinessRoute from './components/auth/BusinessRoute';
 import ScrollToTop from './components/ScrollToTop';
+
+import BusinessLayout from './components/layout/BusinessLayout';
+import BusinessDashboard from './pages/business/BusinessDashboard';
+import BusinessReviews from './pages/business/BusinessReviews';
+import BusinessAnalytics from './pages/business/BusinessAnalytics';
+import BusinessCollectReviews from './pages/business/BusinessCollectReviews';
+import BusinessProfile from './pages/business/BusinessProfile';
+import BusinessSettings from './pages/business/BusinessSettings';
+import BusinessOnboarding from './pages/business/BusinessOnboarding';
 
 import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 
@@ -58,6 +69,7 @@ function AppContent() {
           <Route path="/request-demo" element={<RequestDemo />} />
           <Route path="/request demo" element={<RequestDemo />} />
           <Route path="/business/signup" element={<BusinessSignup />} />
+          <Route path="/business/login" element={<BusinessLogin />} />
           <Route path="/features/dashboard-analytics" element={<DashboardAnalytics />} />
           <Route path="/features/social-media-tools" element={<SocialMediaTools />} />
           <Route path="/features/trustbox-widgets" element={<TrustBoxWidgets />} />
@@ -82,6 +94,19 @@ function AppContent() {
             <Route path="/edit-review/:reviewId" element={<EditReview />} />
             <Route path="/edit review/:reviewId" element={<EditReview />} />
             <Route path="/users/settings" element={<Settings />} />
+          </Route>
+
+          {/* Business Dashboard Routes */}
+          <Route element={<BusinessRoute />}>
+            <Route path="/business/onboarding" element={<BusinessOnboarding />} />
+            <Route element={<BusinessLayout />}>
+              <Route path="/business/dashboard" element={<BusinessDashboard />} />
+              <Route path="/business/reviews" element={<BusinessReviews />} />
+              <Route path="/business/analytics" element={<BusinessAnalytics />} />
+              <Route path="/business/collect-reviews" element={<BusinessCollectReviews />} />
+              <Route path="/business/profile" element={<BusinessProfile />} />
+              <Route path="/business/settings" element={<BusinessSettings />} />
+            </Route>
           </Route>
         </Routes>
       </main>

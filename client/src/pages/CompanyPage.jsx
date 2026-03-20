@@ -372,10 +372,10 @@ const CompanyPage = () => {
                        </div>
                        <h1 className="text-[40px] lg:text-[48px] font-bold leading-tight tracking-tight text-[#111]">{company?.name}</h1>
                        <div className="flex items-center gap-2.5">
-                          <span className="text-[14px] font-bold text-[#111]">Reviews {company?.reviewCount?.toLocaleString()}</span>
+                          <span className="text-[14px] font-bold text-[#111]">Reviews {(company?.totalReviews || company?.reviewCount || 0).toLocaleString()}</span>
                           <span className="text-gray-300">·</span>
-                          <StarRating rating={company?.rating || 0} size="h-5 w-5" />
-                          <span className="text-[15px] font-bold text-[#111]">{company?.rating || '0.0'}</span>
+                          <StarRating rating={company?.averageRating || company?.rating || 0} size="h-5 w-5" />
+                          <span className="text-[15px] font-bold text-[#111]">{company?.averageRating?.toFixed(1) || company?.rating || '0.0'}</span>
                           <Info className="w-3.5 h-3.5 text-gray-300 cursor-pointer" />
                        </div>
                        <div className="text-[14px] font-bold text-[#3d68ff] hover:underline cursor-pointer">
@@ -404,23 +404,30 @@ const CompanyPage = () => {
               <div className="bg-white rounded-xl border border-gray-200 shadow-xl p-8 space-y-6">
                  <div className="flex items-start justify-between">
                     <div className="space-y-1">
-                       <h2 className="text-[44px] font-bold leading-none text-[#111]">{company?.rating || '0.0'}</h2>
+                       <h2 className="text-[44px] font-bold leading-none text-[#111]">{company?.averageRating?.toFixed(1) || company?.rating || '0.0'}</h2>
                        <p className="text-[18px] font-bold text-[#111] uppercase tracking-wide">
-                          {company?.rating < 2 ? 'Poor' : company?.rating < 3 ? 'Fair' : company?.rating < 4 ? 'Great' : 'Excellent'}
+                          {(company?.averageRating || company?.rating) < 2 ? 'Poor' : (company?.averageRating || company?.rating) < 3 ? 'Fair' : (company?.averageRating || company?.rating) < 4 ? 'Great' : 'Excellent'}
                        </p>
                        <div className="pt-1.5">
-                          <StarRating rating={company?.rating || 0} size="h-6 w-6" />
+                          <StarRating rating={company?.averageRating || company?.rating || 0} size="h-6 w-6" />
                        </div>
-                       <p className="text-[13px] font-bold text-gray-400 pt-3">{company?.reviewCount?.toLocaleString()} reviews</p>
+                       <p className="text-[13px] font-bold text-gray-400 pt-3">{(company?.totalReviews || company?.reviewCount || 0).toLocaleString()} reviews</p>
                     </div>
 
                     <div className="flex-1 max-w-[150px] space-y-2.5">
-                       {(company?.stars || []).map((s, i) => (
+                       {/* Map real ratingDistribution if available, otherwise fallback to mock stars */}
+                       {(company?.ratingDistribution ? [
+                          { label: '5-star', percent: company.totalReviews > 0 ? (company.ratingDistribution[5] / company.totalReviews) * 100 : 0, color: 'bg-[#00b67a]' },
+                          { label: '4-star', percent: company.totalReviews > 0 ? (company.ratingDistribution[4] / company.totalReviews) * 100 : 0, color: 'bg-[#73cf11]' },
+                          { label: '3-star', percent: company.totalReviews > 0 ? (company.ratingDistribution[3] / company.totalReviews) * 100 : 0, color: 'bg-[#ffce00]' },
+                          { label: '2-star', percent: company.totalReviews > 0 ? (company.ratingDistribution[2] / company.totalReviews) * 100 : 0, color: 'bg-[#ff8622]' },
+                          { label: '1-star', percent: company.totalReviews > 0 ? (company.ratingDistribution[1] / company.totalReviews) * 100 : 0, color: 'bg-[#ff3722]' },
+                       ] : (company?.stars || [])).map((s, i) => (
                           <div key={i} className="flex items-center gap-3 w-full">
                              <span className="text-[11px] font-bold text-gray-400 w-10 shrink-0">{s.label}</span>
                              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                                 <motion.div 
-                                   initial={{width:0}} whileInView={{width:`${s.percent}%`}} viewport={{once:true}}
+                                   initial={{width:0}} animate={{width:`${s.percent}%`}} viewport={{once:true}}
                                    className={`h-full ${s.color}`} 
                                 />
                              </div>
@@ -493,7 +500,7 @@ const CompanyPage = () => {
                           <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-none">Based on reviews, created with AI</p>
                        </div>
                        <p className="text-[16px] leading-relaxed text-gray-600 font-medium">
-                          {company?.rating < 3 
+                          {(company?.averageRating || company?.rating) < 3 
                              ? "Most reviewers were unhappy with their experience overall. Many customers expressed dissatisfaction with the company's customer service and the functionality of their applications. People frequently encountered issues with product updates, which some felt negatively impacted older devices and overall user experience." 
                              : "The company has received highly positive feedback overall. Many people found the service to be reliable, with quick responses and high quality results..."}
                           <br /><br />

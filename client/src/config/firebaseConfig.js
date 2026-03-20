@@ -1,19 +1,19 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// These values should be provided in your .env file
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: "AIzaSyC79BUCL8YUDRoHAJV1Y-zIvRpAPdWS5Js",
+  authDomain: "truthboard-cb4ae.firebaseapp.com",
+  projectId: "truthboard-cb4ae",
+  storageBucket: "truthboard-cb4ae.firebasestorage.app",
+  messagingSenderId: "1053819888305",
+  appId: "1:1053819888305:web:0e2fb6067402694b403890"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// 🔥 THIS IS IMPORTANT
 export const auth = getAuth(app);
 
 export default app;

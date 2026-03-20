@@ -32,6 +32,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/companies', require('./routes/companyRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
+app.use('/api/business', require('./routes/businessRoutes'));
 
 app.get('/', (req, res) => {
   res.send('API is running...');

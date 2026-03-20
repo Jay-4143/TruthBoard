@@ -7,14 +7,14 @@ const { validate } = require('../middleware/validate');
 const rateLimit = require('express-rate-limit');
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // Limit each IP to 20 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 20,
   message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10, // Limit each IP to 10 login attempts per 15 mins
+  max: 10,
   message: 'Too many login attempts, please try again after 15 minutes',
 });
 
@@ -40,9 +40,13 @@ router.put('/change-password', protect, [
   check('newPassword', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
 ], validate, changePassword);
 
+// 🔥 EXISTING ROUTE
 router.post('/phone-login', loginLimiter, [
   check('idToken', 'ID Token is required').not().isEmpty()
 ], validate, phoneLogin);
+
+// 🔥 ADD THIS (IMPORTANT)
+router.post('/verify', phoneLogin);
 
 router.delete('/delete-account', protect, deleteUser);
 

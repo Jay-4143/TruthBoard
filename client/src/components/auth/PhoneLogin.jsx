@@ -17,6 +17,7 @@ const PhoneLogin = ({ onLoginSuccess, onCancel }) => {
     
     return () => {
       if (resendInterval.current) clearInterval(resendInterval.current);
+      PhoneAuthService.clearRecaptcha();
     };
   }, []);
 

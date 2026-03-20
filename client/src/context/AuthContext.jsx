@@ -21,14 +21,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('userInfo', JSON.stringify(data));
     setUser(data);
     setLoading(false);
+    return data;
   };
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, idToken, extraFields = {}) => {
     setLoading(true);
-    const { data } = await api.post('/auth/register', { name, email, password });
+    const { data } = await api.post('/auth/register', { name, email, password, idToken, ...extraFields });
     localStorage.setItem('userInfo', JSON.stringify(data));
     setUser(data);
     setLoading(false);
+    return data;
   };
 
   const loginWithPhone = async (idToken) => {

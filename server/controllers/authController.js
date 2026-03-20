@@ -11,11 +11,27 @@ const generateToken = (id) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, idToken, role, companyName, website, jobTitle } = req.body;
 
-    const userExists = await User.findOne({ email });
+    if (!idToken) {
+      return res.status(400).json({ message: 'Phone verification token is required' });
+    }
+
+    // Verify Firebase ID Token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const phoneNumber = decodedToken.phone_number;
+
+    if (!phoneNumber) {
+      return res.status(400).json({ message: 'Invalid phone number in token' });
+    }
+
+    const userExists = await User.findOne({ $or: [{ email }, { phoneNumber }] });
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ 
+        message: userExists.email === email 
+          ? 'User with this email already exists' 
+          : 'User with this phone number already exists' 
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -24,7 +40,13 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      phoneNumber,
+      isVerified: true,
+      role: role || 'user',
+      companyName: companyName || '',
+      website: website || '',
+      jobTitle: jobTitle || ''
     });
 
     if (user) {
@@ -48,7 +70,7 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log('Login attempt for email:', email);
-    
+
     const user = await User.findOne({ email });
     if (!user) {
       console.log('Login failed: User not found with email:', email);
@@ -60,6 +82,18 @@ const loginUser = async (req, res) => {
 
     if (isMatch) {
       console.log('Login successful for:', user.email);
+      
+      // Role recovery: If user is 'user' but has a company, upgrade to 'companyOwner'
+      if (user.role === 'user') {
+        const Company = require('../models/Company');
+        const company = await Company.findOne({ claimedBy: user._id });
+        if (company) {
+          user.role = 'companyOwner';
+          await user.save();
+          console.log('User role recovered to companyOwner for:', user.email);
+        }
+      }
+
       res.json({
         _id: user.id,
         name: user.name,
@@ -121,7 +155,7 @@ const updateProfile = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
-    
+
     if (!req.user || !req.user._id) {
       return res.status(401).json({ message: 'Not authorized' });
     }
@@ -137,7 +171,7 @@ const changePassword = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
-    
+
     await user.save();
     res.json({ message: 'Password changed successfully' });
   } catch (error) {
@@ -147,10 +181,11 @@ const changePassword = async (req, res) => {
 
 const phoneLogin = async (req, res) => {
   try {
-    const { idToken } = req.body;
+    // 🔥 FIX: support both token & idToken
+    const idToken = req.body.idToken || req.body.token;
 
-    if (!admin.app()) {
-      return res.status(500).json({ message: 'Firebase Admin not initialized' });
+    if (!idToken) {
+      return res.status(400).json({ message: 'Token missing' });
     }
 
     // Verify Firebase ID Token
@@ -171,6 +206,17 @@ const phoneLogin = async (req, res) => {
         isVerified: true,
         role: 'user'
       });
+    }
+
+    // Role recovery: If user is 'user' but has a company, upgrade to 'companyOwner'
+    if (user.role === 'user') {
+      const Company = require('../models/Company');
+      const company = await Company.findOne({ claimedBy: user._id });
+      if (company) {
+        user.role = 'companyOwner';
+        await user.save();
+        console.log('User role recovered to companyOwner (Phone Login) for:', user.phoneNumber);
+      }
     }
 
     res.json({
@@ -196,11 +242,9 @@ const deleteUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Delete all reviews of this user
     const Review = require('../models/Review');
     await Review.deleteMany({ userId: req.user._id });
 
-    // Delete user
     await User.findByIdAndDelete(req.user._id);
 
     res.json({ message: 'User and all associated reviews deleted successfully' });

@@ -25,6 +25,18 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true
   },
+  companyName: {
+    type: String,
+    default: ''
+  },
+  website: {
+    type: String,
+    default: ''
+  },
+  jobTitle: {
+    type: String,
+    default: ''
+  },
   avatar: {
     type: String,
     default: ''

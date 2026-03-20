@@ -9,10 +9,13 @@ import {
   ChevronRight,
   Filter,
   ArrowRight,
-  Info
+  Info,
+  X,
+  Check,
+  ChevronUp
 } from 'lucide-react';
 import api from '../services/api';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const countriesList = [
   "United States", "United Kingdom", "France", "Italy", "Spain", "Germany", "Denmark", "Sweden", "Norway", "Finland",
@@ -29,9 +32,23 @@ const CategoryDetail = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCompanies, setTotalCompanies] = useState(0);
-  const [minRating, setMinRating] = useState(null);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("United States");
+  
+  // New Filter States
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
+  const [isRatingPopoverOpen, setIsRatingPopoverOpen] = useState(false);
+  const [tempFilters, setTempFilters] = useState({
+    minRating: null,
+    country: "United States",
+    cityZip: "",
+    isClaimed: false
+  });
+  const [activeFilters, setActiveFilters] = useState({
+    minRating: null,
+    country: "United States",
+    cityZip: "",
+    isClaimed: false
+  });
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -53,8 +70,10 @@ const CategoryDetail = () => {
           category: slug,
           page,
           limit: 10,
-          minRating: minRating || undefined,
-          location: selectedCountry
+          minRating: activeFilters.minRating || undefined,
+          location: activeFilters.country,
+          cityZip: activeFilters.cityZip || undefined,
+          claimed: activeFilters.isClaimed || undefined
         };
         const { data } = await api.get('/companies', { params });
         setCompanies(data.companies || []);
@@ -69,7 +88,7 @@ const CategoryDetail = () => {
       }
     };
     fetchCompanies();
-  }, [slug, page, minRating, selectedCountry]);
+  }, [slug, page, activeFilters]);
 
   if (loading && page === 1 && !category) {
     return (
@@ -107,7 +126,7 @@ const CategoryDetail = () => {
                   onClick={() => setShowCountryDropdown(!showCountryDropdown)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all group shadow-sm border ${showCountryDropdown ? 'bg-white border-[#00b67a] ring-2 ring-[#00b67a]/10' : 'bg-gray-50 border-gray-200 hover:bg-white'}`}
                 >
-                   <span className="text-[18px] font-bold text-gray-700">{selectedCountry}</span>
+                   <span className="text-[18px] font-bold text-gray-700">{activeFilters.country}</span>
                    <ChevronDown className={`w-5 h-5 text-gray-400 group-hover:text-gray-900 transition-transform duration-300 ${showCountryDropdown ? 'rotate-180 text-[#00b67a]' : ''}`} />
                 </div>
 
@@ -121,10 +140,12 @@ const CategoryDetail = () => {
                              <div 
                                 key={country}
                                 onClick={() => {
-                                   setSelectedCountry(country);
+                                   setActiveFilters(prev => ({ ...prev, country }));
+                                   setTempFilters(prev => ({ ...prev, country }));
+                                   setPage(1);
                                    setShowCountryDropdown(false);
                                 }}
-                                className={`px-4 py-3 rounded-xl text-[15px] font-bold cursor-pointer transition-all ${selectedCountry === country ? 'bg-[#f0f9f6] text-[#00b67a]' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
+                                className={`px-4 py-3 rounded-xl text-[15px] font-bold cursor-pointer transition-all ${activeFilters.country === country ? 'bg-[#f0f9f6] text-[#00b67a]' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
                              >
                                 {country}
                              </div>
@@ -136,7 +157,7 @@ const CategoryDetail = () => {
              </div>
           </div>
 
-          <button className="flex items-center gap-2 text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors group">
+          <button className="flex items-center gap-2 text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors group mt-2">
             How categories work <Info className="w-4 h-4 text-gray-300 group-hover:text-gray-600" />
           </button>
         </div>
@@ -146,16 +167,55 @@ const CategoryDetail = () => {
       <section className="sticky top-[80px] z-[80] bg-white border-b border-gray-100 py-4 shadow-sm">
         <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 border border-gray-300 px-5 py-2.5 rounded-full font-bold text-[14px] hover:bg-gray-50 active:scale-95 transition-all">
+            <button 
+              onClick={() => {
+                setTempFilters(activeFilters);
+                setIsFilterSidebarOpen(true);
+              }}
+              className={`flex items-center gap-2 border px-5 py-2.5 rounded-full font-bold text-[14px] active:scale-95 transition-all ${isFilterSidebarOpen ? 'bg-gray-100 border-gray-400' : 'border-gray-300 hover:bg-gray-50'}`}
+            >
                 <Filter className="w-4 h-4" /> All filters
             </button>
-            <div className="relative group">
+            <div className="relative">
               <button 
-                onClick={() => setMinRating(prev => (prev === 4 ? null : 4))}
-                className={`flex items-center gap-2 border px-5 py-2.5 rounded-full font-bold text-[14px] active:scale-95 transition-all ${minRating ? 'bg-[#002e21] text-white border-[#002e21]' : 'border-gray-300 hover:bg-gray-50'}`}
+                onClick={() => setIsRatingPopoverOpen(!isRatingPopoverOpen)}
+                className={`flex items-center gap-2 border px-5 py-2.5 rounded-full font-bold text-[14px] active:scale-95 transition-all ${activeFilters.minRating || isRatingPopoverOpen ? 'bg-[#002e21] text-white border-[#002e21]' : 'border-gray-300 hover:bg-gray-50'}`}
               >
-                  <Star className={`w-4 h-4 ${minRating ? 'fill-current' : ''}`} /> Rating
+                  <Star className={`w-4 h-4 ${activeFilters.minRating ? 'fill-current' : ''}`} /> Rating
               </button>
+
+              {/* Rating Popover */}
+              <AnimatePresence>
+                {isRatingPopoverOpen && (
+                  <>
+                    <div className="fixed inset-0 z-[90]" onClick={() => setIsRatingPopoverOpen(false)} />
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute top-full left-0 mt-2 w-[320px] bg-white border border-gray-100 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.12)] z-[100] p-4 overflow-hidden"
+                    >
+                       <h3 className="text-[13px] font-bold text-gray-500 mb-3 ml-1 uppercase tracking-wider">Rating</h3>
+                       <div className="grid grid-cols-4 border border-gray-200 rounded-lg overflow-hidden">
+                          {[null, 3, 4, 4.5].map((val) => (
+                             <button
+                                key={val || 'all'}
+                                onClick={() => {
+                                   setActiveFilters(prev => ({ ...prev, minRating: val }));
+                                   setTempFilters(prev => ({ ...prev, minRating: val }));
+                                   setPage(1);
+                                   setIsRatingPopoverOpen(false);
+                                }}
+                                className={`py-4 text-center font-bold text-[13px] transition-all ${activeFilters.minRating === val ? 'bg-[#ebfaf5] text-[#00b67a] border-r border-gray-200' : 'bg-white text-gray-600 hover:bg-gray-50 border-r border-gray-200 last:border-r-0'}`}
+                             >
+                                {val === null ? 'All' : `★ ${val}+`}
+                             </button>
+                          ))}
+                       </div>
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
             </div>
           </div>
           <div className="hidden md:flex items-center gap-3">
@@ -365,6 +425,130 @@ const CategoryDetail = () => {
             </div>
          </section>
       )}
+
+      {/* ─── ALL FILTERS SIDEBAR ─── */}
+      <AnimatePresence>
+         {isFilterSidebarOpen && (
+            <>
+               <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsFilterSidebarOpen(false)}
+                  className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[1000]"
+               />
+               <motion.div 
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                  className="fixed top-0 right-0 w-full sm:w-[480px] h-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.2)] z-[1001] flex flex-col"
+               >
+                  <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100 shrink-0">
+                     <h2 className="text-[24px] font-extrabold text-[#111] tracking-tight">All filters</h2>
+                     <button 
+                        onClick={() => setIsFilterSidebarOpen(false)}
+                        className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors group"
+                     >
+                        <X className="w-5 h-5 text-gray-400 group-hover:text-gray-900" />
+                     </button>
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto px-8 py-8 space-y-10 custom-scrollbar pb-32">
+                     {/* Rating Section */}
+                     <div className="space-y-4">
+                        <h3 className="text-[14px] font-black text-gray-900 uppercase tracking-[2px]">Rating</h3>
+                        <div className="grid grid-cols-4 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                           {[null, 3, 4, 4.5].map((val) => (
+                              <button
+                                 key={val || 'all'}
+                                 onClick={() => setTempFilters(prev => ({ ...prev, minRating: val }))}
+                                 className={`py-5 text-center font-bold text-[13px] transition-all border-r border-gray-200 last:border-r-0 ${tempFilters.minRating === val ? 'bg-[#002e21] text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                              >
+                                 {val === null ? 'All' : `★ ${val}+`}
+                              </button>
+                           ))}
+                        </div>
+                     </div>
+
+                     {/* Location Section */}
+                     <div className="space-y-4">
+                        <h3 className="text-[14px] font-black text-gray-900 uppercase tracking-[2px]">Location</h3>
+                        <div className="space-y-3">
+                           <div className="relative">
+                              <select 
+                                 value={tempFilters.country}
+                                 onChange={(e) => setTempFilters(prev => ({ ...prev, country: e.target.value }))}
+                                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 font-bold text-[15px] appearance-none focus:bg-white focus:border-[#00b67a] focus:ring-4 focus:ring-[#00b67a]/10 transition-all outline-none"
+                              >
+                                 {countriesList.map(c => <option key={c} value={c}>{c}</option>)}
+                              </select>
+                              <ChevronDown className="w-5 h-5 text-gray-400 absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                           </div>
+                           <div className="relative">
+                              <Search className="w-4 h-4 text-gray-400 absolute left-5 top-1/2 -translate-y-1/2" />
+                              <input 
+                                 type="text"
+                                 placeholder="City or ZIP code"
+                                 value={tempFilters.cityZip}
+                                 onChange={(e) => setTempFilters(prev => ({ ...prev, cityZip: e.target.value }))}
+                                 className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-12 pr-5 py-4 font-bold text-[15px] focus:bg-white focus:border-[#00b67a] focus:ring-4 focus:ring-[#00b67a]/10 transition-all outline-none"
+                              />
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* Company Status */}
+                     <div className="space-y-4">
+                        <h3 className="text-[14px] font-black text-gray-900 uppercase tracking-[2px]">Company status</h3>
+                        <label className="flex items-start gap-4 p-5 rounded-2xl border border-gray-100 hover:bg-gray-50 cursor-pointer transition-all group">
+                           <div className="relative mt-1">
+                              <input 
+                                 type="checkbox"
+                                 checked={tempFilters.isClaimed}
+                                 onChange={() => setTempFilters(prev => ({ ...prev, isClaimed: !prev.isClaimed }))}
+                                 className="peer hidden"
+                              />
+                              <div className="w-6 h-6 rounded-md border-2 border-gray-200 flex items-center justify-center transition-all peer-checked:bg-[#002e21] peer-checked:border-[#002e21] group-hover:border-gray-400">
+                                 <Check className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+                              </div>
+                           </div>
+                           <div className="flex-1">
+                              <div className="text-[15px] font-bold text-gray-900 mb-1">Claimed</div>
+                              <p className="text-[13px] font-medium text-gray-400 leading-relaxed">
+                                 Companies that have claimed their TruthBoard profile. <span className="text-[#00b67a] hover:underline">Learn more</span>
+                              </p>
+                           </div>
+                        </label>
+                     </div>
+                  </div>
+
+                  {/* Sidebar Footer */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 pt-6 bg-white border-t border-gray-100 flex items-center justify-between gap-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+                     <button 
+                        onClick={() => {
+                           const reset = { minRating: null, country: "United States", cityZip: "", isClaimed: false };
+                           setTempFilters(reset);
+                        }}
+                        className="text-[15px] font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                     >
+                        Reset
+                     </button>
+                     <button 
+                        onClick={() => {
+                           setActiveFilters(tempFilters);
+                           setPage(1);
+                           setIsFilterSidebarOpen(false);
+                        }}
+                        className="flex-1 bg-[#4b66df] text-white py-4 rounded-full font-black text-[16px] hover:bg-blue-700 active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20"
+                     >
+                        Show Results
+                     </button>
+                  </div>
+               </motion.div>
+            </>
+         )}
+      </AnimatePresence>
 
     </div>
   );

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const getCompanies = async (req, res) => {
   try {
-    const { category, minRating, location, page = 1, limit = 10 } = req.query;
+    const { category, minRating, location, cityZip, claimed, page = 1, limit = 10 } = req.query;
     const query = {};
 
     if (minRating) {
@@ -13,6 +13,14 @@ const getCompanies = async (req, res) => {
 
     if (location) {
       query.location = { $regex: new RegExp(`^${location}$`, 'i') };
+    }
+
+    if (cityZip) {
+      query.location = { $regex: new RegExp(cityZip, 'i') };
+    }
+
+    if (claimed === 'true' || claimed === true) {
+      query.isClaimed = true;
     }
 
     if (category) {

@@ -1,6 +1,6 @@
-import { 
-  RecaptchaVerifier, 
-  signInWithPhoneNumber 
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber
 } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
 
@@ -12,19 +12,37 @@ class PhoneAuthService {
 
   // Initialize invisible reCAPTCHA
   setupRecaptcha(containerId) {
-    if (this.recaptchaVerifier) return;
-    
-    this.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
-      size: 'invisible',
-      callback: (response) => {
-        // reCAPTCHA solved - callback will be triggered when solve is successful
-        console.log("reCAPTCHA solved");
-      },
-      'expired-callback': () => {
-        // Response expired. Ask user to solve reCAPTCHA again.
-        console.warn("reCAPTCHA expired");
+    // If verifier exists, clear it first to avoid stale element references
+    if (this.recaptchaVerifier) {
+      this.clearRecaptcha();
+    }
+
+    try {
+      this.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
+        size: 'invisible',
+        callback: (response) => {
+          console.log("reCAPTCHA solved");
+        },
+        'expired-callback': () => {
+          console.warn("reCAPTCHA expired");
+        }
+      });
+    } catch (error) {
+      console.error("Failed to setup reCAPTCHA:", error);
+    }
+  }
+
+  // Clear reCAPTCHA instance to allow re-initialization
+  clearRecaptcha() {
+    if (this.recaptchaVerifier) {
+      try {
+        // Only clear if the element still exists in DOM to avoid errors
+        this.recaptchaVerifier.clear();
+      } catch (e) {
+        console.warn("Error clearing reCAPTCHA verifier:", e);
       }
-    });
+      this.recaptchaVerifier = null;
+    }
   }
 
   // Send OTP to phone number
@@ -33,10 +51,10 @@ class PhoneAuthService {
       if (!this.recaptchaVerifier) {
         throw new Error("reCAPTCHA not initialized");
       }
-      
+
       this.confirmationResult = await signInWithPhoneNumber(
-        auth, 
-        phoneNumber, 
+        auth,
+        phoneNumber,
         this.recaptchaVerifier
       );
       return true;
@@ -46,16 +64,16 @@ class PhoneAuthService {
     }
   }
 
-  // Verify OTP and return the user's ID token
+  // Verify OTP and return the Firebase ID token
   async verifyOTP(otp) {
     try {
       if (!this.confirmationResult) {
         throw new Error("No pending OTP request");
       }
-      
+
       const result = await this.confirmationResult.confirm(otp);
-      // Get the ID token to send to our backend
       const idToken = await result.user.getIdToken();
+      
       return idToken;
     } catch (error) {
       console.error("Error verifying OTP:", error);

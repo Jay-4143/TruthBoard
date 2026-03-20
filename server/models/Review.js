@@ -67,6 +67,12 @@ const reviewSchema = new mongoose.Schema({
   flagCount: {
     type: Number,
     default: 0
+  },
+  reply: {
+    reviewText: String,
+    createdAt: { type: Date },
+    isEdited: { type: Boolean, default: false },
+    editedAt: Date
   }
 }, {
   timestamps: true

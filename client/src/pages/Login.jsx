@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
@@ -10,8 +10,14 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && (user.role === 'companyOwner' || user.role === 'admin')) {
+      navigate('/business/dashboard');
+    }
+  }, [user, navigate]);
 
   const { email, password } = formData;
 
@@ -25,8 +31,16 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(email, password);
-      navigate('/');
+      const loggedInUser = await login(email, password);
+      console.log('Logged in user role:', loggedInUser.role);
+      
+      if (loggedInUser.role === 'companyOwner' || loggedInUser.role === 'admin') {
+        console.log('Redirecting to business dashboard...');
+        navigate('/business/dashboard');
+      } else {
+        console.log('Not a business user, redirecting to home...');
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
@@ -138,6 +152,12 @@ const Login = () => {
           Don&apos;t have an account?{' '}
           <Link to="/register" className="font-bold text-[#00b67a] hover:text-[#009966]">
             Sign up for free
+          </Link>
+        </p>
+        <p className="mt-4 text-center text-sm text-gray-500">
+          Are you a business?{' '}
+          <Link to="/business/login" className="font-bold text-blue-600 hover:text-blue-700">
+            Log in here
           </Link>
         </p>
       </div>

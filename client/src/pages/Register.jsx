@@ -1,6 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import PhoneAuthService from '../services/PhoneAuthService';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -8,14 +10,35 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    phoneNumber: '',
   });
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState('register'); // 'register' | 'otp'
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(0);
 
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const { name, email, password, confirmPassword } = formData;
+  const { name, email, password, confirmPassword, phoneNumber } = formData;
+
+  useEffect(() => {
+    if (step === 'register') {
+      PhoneAuthService.setupRecaptcha('recaptcha-container');
+    }
+    return () => {
+      PhoneAuthService.clearRecaptcha();
+    };
+  }, [step]);
+
+  useEffect(() => {
+    let interval;
+    if (timer > 0) {
+      interval = setInterval(() => setTimer(t => t - 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,13 +52,59 @@ const Register = () => {
       return setError('Passwords do not match');
     }
 
+    const parsed = parsePhoneNumberFromString(phoneNumber);
+    if (!parsed || !parsed.isValid()) {
+      return setError('Please enter a valid phone number (e.g., +1234567890)');
+    }
+
     setLoading(true);
 
     try {
-      await register(name, email, password);
+      await PhoneAuthService.sendOTP(parsed.number);
+      setStep('otp');
+      setTimer(30);
+    } catch (err) {
+      setError(err.message || 'Failed to send OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onVerifyOTP = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (otp.length !== 6) {
+      return setError('OTP must be 6 digits');
+    }
+
+    setLoading(true);
+
+    try {
+      // 1. Verify OTP with Firebase to get idToken
+      const idToken = await PhoneAuthService.verifyOTP(otp);
+      
+      if (!idToken) throw new Error("Failed to get verification token");
+
+      // 2. Complete registration on our backend
+      await register(name, email, password, idToken);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (timer > 0) return;
+    setLoading(true);
+    try {
+      const parsed = parsePhoneNumberFromString(phoneNumber);
+      await PhoneAuthService.sendOTP(parsed.number);
+      setTimer(30);
+    } catch (err) {
+      setError(err.message || 'Failed to resend OTP.');
     } finally {
       setLoading(false);
     }
@@ -55,13 +124,15 @@ const Register = () => {
         </div>
 
         <div className="bg-white py-8 px-4 shadow-xl rounded-2xl sm:px-10 border border-gray-100">
+          <div id="recaptcha-container"></div>
           {error && (
             <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4 text-red-700 text-sm">
               {error}
             </div>
           )}
 
-          <form className="space-y-4" onSubmit={onSubmit}>
+          {step === 'register' ? (
+            <form className="space-y-4" onSubmit={onSubmit}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Full Name
@@ -134,6 +205,24 @@ const Register = () => {
               </div>
             </div>
 
+            <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <div className="mt-1">
+                <input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="tel"
+                  required
+                  className="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#00b67a] focus:border-[#00b67a] sm:text-sm transition-all"
+                  value={phoneNumber}
+                  onChange={onChange}
+                  placeholder="+1 234 567 8900"
+                />
+              </div>
+            </div>
+
             <div className="flex items-center">
               <input
                 id="terms"
@@ -162,10 +251,65 @@ const Register = () => {
                   loading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
-                {loading ? 'Creating account...' : 'Create free account'}
+                {loading ? 'Sending OTP...' : 'Continue to Verification'}
               </button>
             </div>
           </form>
+          ) : (
+            /* OTP STEP */
+            <form className="space-y-6" onSubmit={onVerifyOTP}>
+              <div className="text-center mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Verify your phone</h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  We've sent a 6-digit code to <span className="font-bold text-gray-950">{phoneNumber}</span>
+                </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-semibold text-gray-700">6-Digit Code</label>
+                <input 
+                  type="text" 
+                  maxLength="6"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl outline-none focus:border-[#00b67a] focus:ring-1 focus:ring-[#00b67a] transition-all text-center text-2xl tracking-[0.5em] font-bold"
+                  placeholder="000000"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                  disabled={loading}
+                  required
+                  autoFocus
+                />
+              </div>
+
+              <div className="space-y-3">
+                <button 
+                  type="submit" 
+                  disabled={loading}
+                  className="w-full bg-[#00b67a] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#009966] transition-all disabled:opacity-50 shadow-md"
+                >
+                  {loading ? 'Creating account...' : 'Verify & Create account'}
+                </button>
+                
+                <div className="text-center">
+                  <button 
+                    type="button" 
+                    onClick={handleResend}
+                    disabled={timer > 0 || loading}
+                    className={`text-sm font-bold ${timer > 0 ? 'text-gray-400' : 'text-[#00b67a] hover:underline'}`}
+                  >
+                    {timer > 0 ? `Resend code in ${timer}s` : 'Resend OTP'}
+                  </button>
+                </div>
+                
+                <button 
+                  type="button" 
+                  onClick={() => setStep('register')} 
+                  className="w-full text-center text-gray-400 text-xs hover:text-gray-600 transition-colors"
+                >
+                  Change details? Go back
+                </button>
+              </div>
+            </form>
+          )}
 
           <div className="mt-8">
             <div className="relative">

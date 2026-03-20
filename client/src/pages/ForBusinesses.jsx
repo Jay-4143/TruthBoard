@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 
 import api from '../services/api';
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 
 /* ───── Crash-Proof CountUp ───── */
 const SafeCountUp = (props) => {
@@ -51,6 +53,7 @@ export const BusinessNav = () => {
   const [open, setOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
 
   useEffect(() => { 
     const h = () => setScrolled(window.scrollY > 20); 
@@ -196,9 +199,23 @@ export const BusinessNav = () => {
         </div>
 
         <div className="hidden lg:flex items-center gap-6">
-          <Link to="/login" className="text-white hover:text-[#00b67a] transition-colors font-bold text-[14px]">Log in</Link>
-          <Link to="/business/signup" className="bg-transparent text-white px-6 py-2.5 rounded-full font-bold text-[14px] border border-white/80 hover:bg-white hover:text-black transition-all">Create free account</Link>
-        </div>
+           {user && (user.role === 'companyOwner' || user.role === 'admin') ? (
+             <>
+               <Link to="/business/dashboard" className="text-white hover:text-[#00b67a] transition-colors font-bold text-[14px]">Dashboard</Link>
+               <div className="flex items-center gap-3 pl-4 border-l border-white/10">
+                 <div className="w-8 h-8 rounded-full bg-[#00b67a] flex items-center justify-center text-white font-bold text-xs shadow-sm shadow-[#00b67a]/20">
+                   {user.name[0]}
+                 </div>
+                 <button onClick={() => { logout(); navigate('/business'); }} className="text-gray-400 hover:text-white transition-colors text-[13px] font-bold">Log out</button>
+               </div>
+             </>
+           ) : (
+             <>
+               <Link to="/business/login" className="text-white hover:text-[#00b67a] transition-colors font-bold text-[14px]">Log in</Link>
+               <Link to="/business/signup" className="bg-transparent text-white px-6 py-2.5 rounded-full font-bold text-[14px] border border-white/80 hover:bg-white hover:text-black transition-all">Create free account</Link>
+             </>
+           )}
+         </div>
 
         <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-white">
           {open ? <X /> : <Menu />}
@@ -216,9 +233,15 @@ export const BusinessNav = () => {
                 </div>
               ))}
               <div className="pt-6 space-y-3">
-                <Link to="/login" className="block text-center text-white py-2.5 font-bold border border-white/20 rounded-full">Log in</Link>
-                <Link to="/business/signup" className="block text-center bg-[#00b67a] text-white py-3 rounded-full font-bold">Create free account</Link>
-              </div>
+                 {user && (user.role === 'companyOwner' || user.role === 'admin') ? (
+                   <Link to="/business/dashboard" className="block text-center bg-[#00b67a] text-white py-3 rounded-full font-bold">Go to Dashboard</Link>
+                 ) : (
+                   <>
+                     <Link to="/business/login" className="block text-center text-white py-2.5 font-bold border border-white/20 rounded-full">Log in</Link>
+                     <Link to="/business/signup" className="block text-center bg-[#00b67a] text-white py-3 rounded-full font-bold">Create free account</Link>
+                   </>
+                 )}
+               </div>
             </div>
           </motion.div>
         )}
@@ -227,9 +250,7 @@ export const BusinessNav = () => {
   );
 };
 
-/* ═══════════════════════════════════════════════════════
-   HERO IMAGE STACK – rich collage with real photos
-   ═══════════════════════════════════════════════════════ */
+/* ───── Hero Image Stack ───── */
 const HeroImageStack = () => (
   <div className="relative w-full h-[520px] max-w-[600px] ml-auto">
     {/* Photo 1: Office meeting – top-left */}
@@ -303,32 +324,41 @@ const HeroImageStack = () => (
           <Star className="absolute inset-0 m-auto w-4 h-4 text-[#00b67a] fill-current"/>
         </div>
         <div className="flex-1 space-y-2">
-          <div className="h-2 w-3/4 bg-gray-100 rounded-full"/>
-          <div className="h-2 w-1/2 bg-gray-50 rounded-full"/>
+          <div className="h-2.5 w-full bg-gray-100 rounded-full"></div>
+          <div className="h-2.5 w-2/3 bg-gray-100 rounded-full"></div>
         </div>
       </div>
     </motion.div>
   </div>
 );
 
-/* ═══════════════════════════════════════════════════════
-   HERO
-   ═══════════════════════════════════════════════════════ */
-const Hero = () => (
+const Hero = () => {
+  const { user } = useContext(AuthContext);
+  return (
   <section className="relative pt-24 lg:pt-40 pb-16 lg:pb-28 bg-[#00b67a] overflow-hidden">
     <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-xl text-[#1a1c21]">
         <motion.h1 variants={fadeInUp} className="text-[30px] md:text-[44px] font-bold leading-[1.1] mb-6 tracking-tight">The world's largest independent customer feedback platform</motion.h1>
         <motion.p variants={fadeInUp} className="text-[15px] md:text-[17px] text-[#1a1c21]/80 font-medium mb-8 leading-relaxed max-w-lg">Attract and keep customers with TruthBoard's review platform and powerful analytics tools.</motion.p>
         <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 mb-12">
-          <Link to="/request-demo" className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-bold text-[15px] hover:bg-black transition-all shadow-lg text-center flex items-center justify-center">Book a demo</Link>
-          <Link to="/business/signup" className="bg-[#4162ff] text-white px-7 py-3.5 rounded-full font-bold text-[15px] hover:bg-[#3453e0] transition-all shadow-lg text-center flex items-center justify-center">Start for free</Link>
-        </motion.div>
+           {user && (user.role === 'companyOwner' || user.role === 'admin') ? (
+             <Link to="/business/dashboard" className="bg-[#1a1c21] text-white px-10 py-4 rounded-full font-bold text-[16px] hover:bg-black transition-all shadow-xl text-center flex items-center justify-center gap-2">
+               Go to your Dashboard
+               <ArrowRight className="w-5 h-5" />
+             </Link>
+           ) : (
+             <>
+               <Link to="/request-demo" className="bg-[#1a1c21] text-white px-7 py-3.5 rounded-full font-bold text-[15px] hover:bg-black transition-all shadow-lg text-center flex items-center justify-center">Book a demo</Link>
+               <Link to="/business/signup" className="bg-[#4162ff] text-white px-7 py-3.5 rounded-full font-bold text-[15px] hover:bg-[#3453e0] transition-all shadow-lg text-center flex items-center justify-center">Start for free</Link>
+             </>
+           )}
+         </motion.div>
       </motion.div>
       <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}} className="hidden lg:block h-[520px]"><HeroImageStack/></motion.div>
     </div>
   </section>
-);
+  );
+};
 
 /* ═══════════════════════════════════════════════════════
    SEARCH + STATS
@@ -598,7 +628,7 @@ const GoFurther = () => (
           </motion.div>
           {/* Floating bar chart – top-left */}
           <motion.div animate={{y:[3,-3,3]}} transition={{duration:4.5,repeat:Infinity}} className="absolute top-4 left-0 bg-[#1a1c21] px-3 py-2 rounded-lg shadow-lg z-10">
-            <div className="flex items-end gap-1 h-5">{[60,100,40,80].map((h,j)=><div key={j} className="w-2 rounded-t-sm bg-[#00b67a]" style={{height:`${h}%`}}/>)}</div>
+            <div className="flex items-end gap-1 h-5">{[60,100,40,80].map((h,j)=><div key={j} className="w-2 rounded-t-sm bg-[#00b67a]" style={{height: h + '%'}}/>)}</div>
           </motion.div>
           {/* Dots – bottom-left */}
           <div className="absolute bottom-8 left-10 flex gap-1.5">{[1,2,3].map(j=><div key={j} className="w-2.5 h-2.5 rounded-full bg-[#00b67a]"/>)}</div>
@@ -833,8 +863,9 @@ export const DetailedFooter = () => (
 /* ═══════════════════════════════════════════════════════
    MAIN PAGE
    ═══════════════════════════════════════════════════════ */
-const ForBusinesses = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+ const ForBusinesses = () => {
+   const { user } = useContext(AuthContext);
+   const [searchTerm, setSearchTerm] = useState('');
   const [searchResult, setSearchResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState('landing'); // 'landing', 'results', 'signup'
@@ -906,7 +937,7 @@ const ForBusinesses = () => {
                 </div>
 
                 <p className="text-[24px] font-bold text-[#1a1c21] mb-1">{isSignup ? '0/5' : `${rating}/5`}</p>
-                <p className="text-gray-500 font-medium text-[16px]">Reviews received <span className="underline cursor-pointer font-bold">{isSignup ? '0' : searchResult?.reviewCount}</span></p>
+                <p className="text-gray-500 font-medium text-[16px]">Reviews received <span className="underline cursor-pointer font-bold">{isSignup ? '0' : searchResult?.totalReviews}</span></p>
               </div>
             </section>
 
