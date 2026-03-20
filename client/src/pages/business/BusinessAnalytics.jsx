@@ -17,7 +17,7 @@ const BusinessAnalytics = () => {
     <div className="max-w-7xl mx-auto space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-black text-gray-900">Analytics</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
           <p className="text-gray-500 font-medium mt-1">Deep dive into your performance and customer sentiment.</p>
         </div>
 
@@ -32,7 +32,7 @@ const BusinessAnalytics = () => {
               <button
                 key={t.value}
                 onClick={() => setTimeRange(t.value)}
-                className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                   timeRange === t.value 
                     ? 'bg-[#1a1c21] text-white shadow-lg' 
                     : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
@@ -61,15 +61,15 @@ const BusinessAnalytics = () => {
               <div className={`p-2 rounded-xl bg-gray-50 ${stat.color}`}>
                 <stat.icon className="w-5 h-5" />
               </div>
-              <div className={`flex items-center gap-1 text-xs font-black ${
+              <div className={`flex items-center gap-1 text-xs font-bold ${
                 stat.isPos === true ? 'text-green-600' : stat.isPos === false ? 'text-red-600' : 'text-gray-400'
               }`}>
                 {stat.trend}
                 {stat.isPos !== null && <ArrowUpRight className="w-3 h-3" />}
               </div>
             </div>
-            <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">{stat.label}</h3>
-            <p className="text-3xl font-black text-gray-900 mt-1">{stat.value}</p>
+            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">{stat.label}</h3>
+            <p className="text-3xl font-bold text-gray-900 mt-1">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -78,7 +78,7 @@ const BusinessAnalytics = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white rounded-[40px] border border-gray-100 shadow-sm p-8 min-h-[400px] flex flex-col">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-xl font-black text-gray-900">Rating Trends</h3>
+            <h3 className="text-xl font-bold text-gray-900">Rating Trends</h3>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-[#00b67a]"></div>
@@ -102,7 +102,7 @@ const BusinessAnalytics = () => {
         </div>
 
         <div className="bg-white rounded-[40px] border border-gray-100 shadow-sm p-8 flex flex-col">
-          <h3 className="text-xl font-black text-gray-900 mb-8">Sentiment Analysis</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-8">Sentiment Analysis</h3>
           <div className="space-y-8 flex-1 flex flex-col justify-center">
             {[
               { label: 'Positive', color: 'bg-[#00b67a]', percent: 85 },
@@ -111,8 +111,8 @@ const BusinessAnalytics = () => {
             ].map((s) => (
               <div key={s.label}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-black uppercase tracking-widest text-gray-500">{s.label}</span>
-                  <span className="text-sm font-black text-gray-900">{s.percent}%</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-500">{s.label}</span>
+                  <span className="text-sm font-bold text-gray-900">{s.percent}%</span>
                 </div>
                 <div className="h-4 bg-gray-50 rounded-full overflow-hidden">
                   <div 

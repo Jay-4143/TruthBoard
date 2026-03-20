@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X } from 'lucide-react';
 
 const Navigation = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, businessUser, logout } = useContext(AuthContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -158,7 +158,7 @@ const Navigation = () => {
                      Help
                    </Link>
                    
-                   {(user.role === 'companyOwner' || user.role === 'admin') && (
+                   {(businessUser || (user && (user.role === 'companyOwner' || user.role === 'admin'))) && (
                      <Link to="/business/dashboard" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-blue-600 hover:bg-blue-50 transition-all border-t border-gray-50">
                        Business Dashboard
                      </Link>
@@ -179,7 +179,7 @@ const Navigation = () => {
             <Link to="/login" className="text-sm font-bold hover:text-white transition-colors ml-2 whitespace-nowrap">Log in</Link>
           )}
 
-          {user && (user.role === 'companyOwner' || user.role === 'admin') ? (
+          {(businessUser || (user && (user.role === 'companyOwner' || user.role === 'admin'))) && location.pathname.startsWith('/business') ? (
             <Link
               to="/business/dashboard"
               className="bg-[#00b67a] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-[#009966] transition-all ml-2 whitespace-nowrap"
@@ -230,7 +230,7 @@ const Navigation = () => {
            )}
            
            <div className="pt-4">
-             {user && (user.role === 'companyOwner' || user.role === 'admin') ? (
+             {(businessUser || (user && (user.role === 'companyOwner' || user.role === 'admin'))) && location.pathname.startsWith('/business') ? (
                <Link
                  to="/business/dashboard"
                  onClick={() => setMobileMenuOpen(false)}
@@ -241,6 +241,8 @@ const Navigation = () => {
              ) : (
                <Link
                  to="/business"
+                 target="_blank"
+                 rel="noopener noreferrer"
                  onClick={() => setMobileMenuOpen(false)}
                  className="w-full block text-center bg-[#2563eb] text-white px-5 py-3 rounded-full text-base font-bold hover:bg-blue-700 transition-colors"
                >

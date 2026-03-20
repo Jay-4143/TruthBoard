@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/authMiddleware');
+const { protectBusiness } = require('../middleware/authMiddleware');
 const Company = require('../models/Company');
 const Review = require('../models/Review');
 
 // @desc    Get company associated with the logged in user
 // @route   GET /api/business/profile
 // @access  Private/Business
-router.get('/profile', protect, async (req, res) => {
+router.get('/profile', protectBusiness, async (req, res) => {
   try {
     const company = await Company.findOne({ claimedBy: req.user._id }).populate('category');
     
@@ -24,7 +24,7 @@ router.get('/profile', protect, async (req, res) => {
 // @desc    Get dashboard stats
 // @route   GET /api/business/stats
 // @access  Private/Business
-router.get('/stats', protect, async (req, res) => {
+router.get('/stats', protectBusiness, async (req, res) => {
   try {
     const company = await Company.findOne({ claimedBy: req.user._id });
     if (!company) {
@@ -66,9 +66,13 @@ router.get('/stats', protect, async (req, res) => {
 // @desc    Create company profile (Onboarding)
 // @route   POST /api/business/create-profile
 // @access  Private/Business
-router.post('/create-profile', protect, async (req, res) => {
+router.post('/create-profile', protectBusiness, async (req, res) => {
   try {
-    const { name, website, category, description, logo, location, contactEmail } = req.body;
+    let { name, website, category, description, logo, location, contactEmail } = req.body;
+
+    if (category === '') {
+      category = undefined;
+    }
 
     // Check if company with same name or website exists
     const existingCompany = await Company.findOne({ 
@@ -76,6 +80,21 @@ router.post('/create-profile', protect, async (req, res) => {
     });
 
     if (existingCompany) {
+      // If it exists and is ALREADY claimed by the current BusinessAccount, just return it
+      if (existingCompany.claimedBy && existingCompany.claimedBy.toString() === req.user._id.toString()) {
+        return res.status(200).json(existingCompany);
+      }
+
+      // If it exists but was claimed by a regular User account (legacy), 
+      // check if that User has the same email as the current BusinessAccount
+      if (existingCompany.isClaimed && existingCompany.contactEmail === req.user.email) {
+        // Migrate the claim to the new BusinessAccount ID
+        existingCompany.claimedBy = req.user._id;
+        existingCompany.isClaimed = true;
+        await existingCompany.save();
+        return res.status(200).json(existingCompany);
+      }
+
       return res.status(400).json({ message: 'A company with this name or website already exists.' });
     }
 
@@ -95,13 +114,10 @@ router.post('/create-profile', protect, async (req, res) => {
       claimedBy: req.user._id
     });
 
-    // Update user record with company information
-    const User = require('../models/User');
-    await User.findByIdAndUpdate(req.user._id, {
-      companyName: name,
-      website: website.toLowerCase(),
-      role: 'companyOwner'
-    });
+    // Update business account record with company information if needed
+    req.user.companyName = name;
+    req.user.website = website.toLowerCase();
+    await req.user.save();
 
     res.status(201).json(company);
   } catch (error) {
@@ -112,7 +128,7 @@ router.post('/create-profile', protect, async (req, res) => {
 // @desc    Get all reviews for the company
 // @route   GET /api/business/reviews
 // @access  Private/Business
-router.get('/reviews', protect, async (req, res) => {
+router.get('/reviews', protectBusiness, async (req, res) => {
   try {
     const company = await Company.findOne({ claimedBy: req.user._id });
     if (!company) {
@@ -156,7 +172,7 @@ router.get('/reviews', protect, async (req, res) => {
 // @desc    Reply to a review
 // @route   POST /api/business/reviews/:id/reply
 // @access  Private/Business
-router.post('/reviews/:id/reply', protect, async (req, res) => {
+router.post('/reviews/:id/reply', protectBusiness, async (req, res) => {
   try {
     const { reviewText } = req.body;
     const review = await Review.findById(req.params.id);
@@ -179,6 +195,65 @@ router.post('/reviews/:id/reply', protect, async (req, res) => {
 
     await review.save();
     res.json(review);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// @desc    Update company profile
+// @route   PUT /api/business/profile
+// @access  Private/Business
+router.put('/profile', protectBusiness, async (req, res) => {
+  try {
+    const company = await Company.findOne({ claimedBy: req.user._id });
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+
+    const { name, website, category, description, logo, location, contactEmail } = req.body;
+
+    if (name) company.name = name;
+    if (website) company.website = website.toLowerCase();
+    if (category) company.category = category;
+    if (description) company.description = description;
+    if (logo !== undefined) company.logo = logo;
+    if (location) company.location = location;
+    if (contactEmail) company.contactEmail = contactEmail;
+
+    // Update slug if name changed
+    if (name) {
+      company.slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
+
+    const updatedCompany = await company.save();
+    res.json(updatedCompany);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// @desc    Delete company profile
+// @route   DELETE /api/business/profile
+// @access  Private/Business
+router.delete('/profile', protectBusiness, async (req, res) => {
+  try {
+    const company = await Company.findOne({ claimedBy: req.user._id });
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+
+    // Delete all reviews for this company
+    await Review.deleteMany({ companyId: company._id });
+
+    // Delete the company
+    await Company.findByIdAndDelete(company._id);
+
+    // Update business account
+    req.user.companyName = '';
+    req.user.website = '';
+    await req.user.save();
+
+    res.json({ message: 'Company profile and all associated reviews deleted successfully.' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

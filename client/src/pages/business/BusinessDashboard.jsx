@@ -54,7 +54,7 @@ const BusinessDashboard = () => {
         <p>{error}</p>
         <button 
           onClick={() => window.location.reload()}
-          className="mt-4 bg-red-600 text-white px-6 py-2 rounded-full font-bold text-sm"
+          className="mt-4 bg-red-600 text-white px-6 py-2 rounded-full font-semibold text-sm"
         >
           Try Again
         </button>
@@ -91,12 +91,12 @@ const BusinessDashboard = () => {
       {/* Welcome Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-gray-900">Good morning, {stats.company.name}!</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">Good morning, {stats.company.name}!</h1>
           <p className="text-gray-500 font-medium mt-1">Here's what's happening with your reputation today.</p>
         </div>
         <Link 
           to="/business/collect-reviews"
-          className="inline-flex items-center gap-2 bg-[#00b67a] text-white px-6 py-3 rounded-full font-bold hover:bg-[#009966] transition-all shadow-lg shadow-[#00b67a]/20"
+          className="inline-flex items-center gap-2 bg-[#00b67a] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#009966] transition-all shadow-lg shadow-[#00b67a]/20"
         >
           Collect more reviews
           <ArrowRight className="w-4 h-4" />
@@ -115,11 +115,11 @@ const BusinessDashboard = () => {
                 <MoreHorizontal className="w-5 h-5" />
               </button>
             </div>
-            <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest">{card.label}</h3>
+            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest">{card.label}</h3>
             <div className="flex items-baseline gap-2 mt-1">
-              <p className="text-4xl font-black text-gray-900">{card.value}</p>
+              <p className="text-4xl font-semibold text-gray-900">{card.value}</p>
             </div>
-            <p className="text-xs font-bold text-gray-500 mt-4 flex items-center gap-1.5 uppercase tracking-tight">
+            <p className="text-xs font-semibold text-gray-500 mt-4 flex items-center gap-1.5 uppercase tracking-tight">
               <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
               {card.trend}
             </p>
@@ -131,8 +131,8 @@ const BusinessDashboard = () => {
         {/* Recent Reviews */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
           <div className="p-6 border-b border-gray-50 flex items-center justify-between">
-            <h3 className="text-xl font-black text-gray-900">Recent Reviews</h3>
-            <Link to="/business/reviews" className="text-sm font-bold text-[#00b67a] hover:underline flex items-center gap-1">
+            <h3 className="text-xl font-semibold text-gray-900">Recent Reviews</h3>
+            <Link to="/business/reviews" className="text-sm font-semibold text-[#00b67a] hover:underline flex items-center gap-1">
               View all
               <ChevronRight className="w-4 h-4" />
             </Link>
@@ -149,12 +149,12 @@ const BusinessDashboard = () => {
                           {review.userId.avatar ? (
                             <img src={review.userId.avatar} alt={review.userId.name} className="w-full h-full object-cover" />
                           ) : (
-                            <span className="font-bold text-gray-500">{review.userId.name.charAt(0)}</span>
+                            <span className="font-semibold text-gray-500">{review.userId.name.charAt(0)}</span>
                           )}
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-bold text-gray-900">{review.userId.name}</h4>
+                            <h4 className="font-semibold text-gray-900">{review.userId.name}</h4>
                             <span className="text-xs text-gray-400 font-medium">• {new Date(review.createdAt).toLocaleDateString()}</span>
                           </div>
                           <div className="flex gap-0.5 mb-2">
@@ -183,7 +183,7 @@ const BusinessDashboard = () => {
                 <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <MessageSquare className="w-8 h-8 text-gray-300" />
                 </div>
-                <p className="text-gray-500 font-bold">No reviews yet.</p>
+                <p className="text-gray-500 font-semibold">No reviews yet.</p>
                 <p className="text-xs text-gray-400 font-medium mt-1 uppercase tracking-widest">Share your profile to get started!</p>
               </div>
             )}
@@ -192,7 +192,7 @@ const BusinessDashboard = () => {
 
         {/* Rating Overview */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 flex flex-col">
-          <h3 className="text-xl font-black text-gray-900 mb-8">Rating Distribution</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-8">Rating Distribution</h3>
           <div className="space-y-4 flex-1 flex flex-col justify-center">
             {[5, 4, 3, 2, 1].map((star) => {
               const count = stats.ratingDistribution?.[star] || 0;
@@ -200,7 +200,7 @@ const BusinessDashboard = () => {
               return (
                 <div key={star} className="flex items-center gap-4">
                   <div className="flex items-center gap-1 w-12 shrink-0">
-                    <span className="text-sm font-black text-gray-600">{star}</span>
+                    <span className="text-sm font-semibold text-gray-600">{star}</span>
                     <Star className="w-3 h-3 text-gray-400 fill-current" />
                   </div>
                   <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -209,7 +209,7 @@ const BusinessDashboard = () => {
                       style={{ width: `${percentage}%` }}
                     ></div>
                   </div>
-                  <span className="text-xs font-black text-gray-400 w-10 text-right uppercase tracking-tighter">
+                  <span className="text-xs font-semibold text-gray-400 w-10 text-right uppercase tracking-tighter">
                     {Math.round(percentage)}%
                   </span>
                 </div>
@@ -218,12 +218,12 @@ const BusinessDashboard = () => {
           </div>
           <div className="mt-8 pt-8 border-t border-gray-50 grid grid-cols-2 gap-4">
             <div className="text-center p-4 bg-gray-50 rounded-2xl">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Response Rate</span>
-              <span className="text-lg font-black text-gray-900">0%</span>
+              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest block mb-1">Response Rate</span>
+              <span className="text-lg font-semibold text-gray-900">0%</span>
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-2xl">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Avg Response Time</span>
-              <span className="text-lg font-black text-gray-900">N/A</span>
+              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest block mb-1">Avg Response Time</span>
+              <span className="text-lg font-semibold text-gray-900">N/A</span>
             </div>
           </div>
         </div>

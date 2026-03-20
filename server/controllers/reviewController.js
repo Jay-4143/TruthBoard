@@ -1,5 +1,6 @@
 const Review = require('../models/Review');
 const Company = require('../models/Company');
+const Notification = require('../models/Notification');
 const { updateCompanyStats } = require('../utils/ratingService');
 
 const createReview = async (req, res) => {
@@ -44,7 +45,24 @@ const createReview = async (req, res) => {
 
     // Update company stats
     await updateCompanyStats(companyId);
-
+    
+    // Create notification for company owner
+    if (company.isClaimed && company.claimedBy) {
+      try {
+        await Notification.create({
+          recipient: company.claimedBy,
+          type: 'NEW_REVIEW',
+          title: 'New Review Received',
+          message: `You received a ${rating}-star review from ${req.user.name}`,
+          reviewId: review._id,
+          link: '/business/reviews'
+        });
+      } catch (notifyError) {
+        console.error('Failed to create notification:', notifyError);
+        // Don't fail the review creation if notification fails
+      }
+    }
+    
     res.status(201).json(review);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -193,15 +211,25 @@ const deleteReview = async (req, res) => {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    if (review.userId.toString() !== req.user._id.toString()) {
+    const isAuthor = req.user.type === 'user' && review.userId.toString() === req.user._id.toString();
+    
+    let isCompanyOwner = false;
+    if (req.user.type === 'business') {
+      const company = await Company.findById(review.companyId);
+      if (company && company.claimedBy.toString() === req.user._id.toString()) {
+        isCompanyOwner = true;
+      }
+    }
+
+    if (!isAuthor && !isCompanyOwner) {
       return res.status(401).json({ message: 'User not authorized to delete this review' });
     }
 
     await Review.findByIdAndDelete(req.params.id);
 
-    // Decrement review count for user
+    // Decrement review count for author
     const User = require('../models/User');
-    await User.findByIdAndUpdate(req.user._id, { $inc: { reviewCount: -1 } });
+    await User.findByIdAndUpdate(review.userId, { $inc: { reviewCount: -1 } });
 
     // Update company stats
     await updateCompanyStats(review.companyId);

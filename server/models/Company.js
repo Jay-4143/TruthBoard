@@ -40,7 +40,7 @@ const companySchema = new mongoose.Schema({
   },
   claimedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'BusinessAccount',
     default: null
   },
   contactEmail: {

@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 const BusinessRoute = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { businessUser, loading } = useContext(AuthContext);
 
   if (loading) {
     return (
@@ -13,9 +13,9 @@ const BusinessRoute = () => {
     );
   }
 
-  // Check if user is logged in and has companyOwner or admin role
-  if (!user || (user.role !== 'companyOwner' && user.role !== 'admin')) {
-    return <Navigate to="/business" />;
+  // Check if business user is logged in
+  if (!businessUser) {
+    return <Navigate to="/business/login" />;
   }
 
   return <Outlet />;

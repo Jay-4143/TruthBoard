@@ -6,19 +6,19 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const deleteAccount = async (email) => {
+const deleteAccount = async (emailPattern) => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('Connected to MongoDB');
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: { $regex: emailPattern, $options: 'i' } });
     if (!user) {
-      console.log(`User ${email} not found`);
+      console.log(`User matching ${emailPattern} not found`);
       process.exit(0);
     }
 
     const userId = user._id;
-    console.log(`Found user ${user.name} (${userId})`);
+    console.log(`Found user ${user.email} (${userId})`);
 
     // 1. Delete reviews by this user
     const deletedReviews = await Review.deleteMany({ userId });
@@ -30,7 +30,7 @@ const deleteAccount = async (email) => {
 
     // 3. Delete the user
     await User.findByIdAndDelete(userId);
-    console.log(`Deleted user ${email}`);
+    console.log(`Deleted user ${user.email}`);
 
     console.log('Account removal complete');
     process.exit(0);

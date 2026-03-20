@@ -22,6 +22,7 @@ const WriteReview = () => {
   const [reviewText, setReviewText] = useState('');
   const [dateOfExperience, setDateOfExperience] = useState(new Date().toISOString().split('T')[0]);
   const [loading, setLoading] = useState(false);
+  const [companyLoading, setCompanyLoading] = useState(false);
   const [error, setError] = useState('');
 
   // Auth inline state
@@ -53,34 +54,47 @@ const WriteReview = () => {
     localStorage.setItem('recentCompanies', JSON.stringify(updated));
   };
 
-  // Fetch company from URL params
-  useEffect(() => {
-    const fetchSelectedCompany = async () => {
-      // Mock Support
-      if (initialCompanyId === "apple_mock_id") {
-        setSelectedCompany({ _id: "apple_mock_id", name: "Apple", website: "www.apple.com" });
-        return;
-      }
-      if (initialCompanyId === "amazon_mock_id") {
-        setSelectedCompany({ _id: "amazon_mock_id", name: "Amazon", website: "www.amazon.com" });
-        return;
-      }
-
-      if (initialCompanyId) {
-        try {
-          const { data } = await api.get('/companies');
-          const found = data.find(c => c._id === initialCompanyId);
-          if (found) setSelectedCompany(found);
-        } catch (err) { console.error(err); }
-      } else if (companySlug) {
-        try {
-          const { data } = await api.get(`/companies/search?q=${companySlug}`);
-          if (data.length > 0) setSelectedCompany(data[0]);
-        } catch (err) { console.error(err); }
-      }
-    };
-    fetchSelectedCompany();
-  }, [initialCompanyId, companySlug]);
+   // Fetch company from URL params
+   useEffect(() => {
+     const fetchSelectedCompany = async () => {
+       if (!initialCompanyId && !companySlug) return;
+       
+       setCompanyLoading(true);
+       // Mock Support
+       if (initialCompanyId === "apple_mock_id") {
+         setSelectedCompany({ _id: "apple_mock_id", name: "Apple", website: "www.apple.com" });
+         setCompanyLoading(false);
+         return;
+       }
+       if (initialCompanyId === "amazon_mock_id") {
+         setSelectedCompany({ _id: "amazon_mock_id", name: "Amazon", website: "www.amazon.com" });
+         setCompanyLoading(false);
+         return;
+       }
+ 
+       try {
+         const identifier = initialCompanyId || companySlug;
+         const { data } = await api.get(`/companies/${identifier}`);
+         setSelectedCompany(data);
+         if (!initialCompanyId && companySlug) {
+           // If we started with slug, update URL to ID for consistency
+           // navigate(`/company/${data._id}/review`, { replace: true });
+         }
+       } catch (err) { 
+         console.error('Failed to fetch company:', err);
+         // Fallback search if by ID failed
+         if (initialCompanyId) {
+           try {
+             const { data: searchData } = await api.get(`/companies/search?q=${initialCompanyId}`);
+             if (searchData.length > 0) setSelectedCompany(searchData[0]);
+           } catch (e) { console.error(e); }
+         }
+       } finally {
+         setCompanyLoading(false);
+       }
+     };
+     fetchSelectedCompany();
+   }, [initialCompanyId, companySlug]);
 
   // Search
   useEffect(() => {
@@ -186,10 +200,11 @@ const WriteReview = () => {
   };
 
   // Normal submit (when already logged in)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) return;
-    if (rating === 0) return setError('Please select a star rating');
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+     if (!user) return;
+     if (!selectedCompany) return setError('Company data is still loading. Please wait a moment.');
+     if (rating === 0) return setError('Please select a star rating');
     if (title.length < 3) return setError('Please provide a descriptive title');
     if (reviewText.length < 8) return setError('Your review must be at least 10 characters');
     if (!dateOfExperience) return setError('Please select a date of experience');
@@ -232,7 +247,7 @@ const WriteReview = () => {
       });
       setStep(3);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to submit review');
+      setError(err.response?.data?.message || err.message || 'Failed to submit review');
     } finally {
       setLoading(false);
     }
@@ -426,17 +441,32 @@ const WriteReview = () => {
            ═══════════════════════════════════════════ */
         <div className="py-12 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="max-w-xl mx-auto">
-            {/* Selected Company Header */}
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 mb-8">
-              <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center text-xl font-bold shadow-inner">{selectedCompany?.name[0]}</div>
-              <div className="flex-1">
-                <h2 className="text-lg font-bold text-[#1a1c21] tracking-tight">{selectedCompany?.name}</h2>
-                <p className="text-gray-400 font-medium text-sm">{selectedCompany?.website}</p>
-              </div>
-              <button onClick={() => { setStep(1); setSelectedCompany(null); setRating(0); }} className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
+             {/* Selected Company Header */}
+             <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 mb-8">
+               <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center text-xl font-bold shadow-inner uppercase">
+                 {companyLoading ? (
+                   <div className="animate-pulse bg-gray-200 w-full h-full rounded-xl"></div>
+                 ) : (
+                   selectedCompany?.name?.[0] || '?'
+                 )}
+               </div>
+               <div className="flex-1">
+                 {companyLoading ? (
+                   <div className="space-y-2">
+                     <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+                     <div className="h-3 bg-gray-100 rounded w-48 animate-pulse"></div>
+                   </div>
+                 ) : (
+                   <>
+                     <h2 className="text-lg font-bold text-[#1a1c21] tracking-tight">{selectedCompany?.name || 'Unknown Company'}</h2>
+                     <p className="text-gray-400 font-medium text-sm">{selectedCompany?.website || 'Website not available'}</p>
+                   </>
+                 )}
+               </div>
+               <button onClick={() => { setStep(1); setSelectedCompany(null); setRating(0); }} className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+               </button>
+             </div>
 
             <form onSubmit={handleSubmit} className="space-y-8">
               {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-bold border border-red-100">⚠️ {error}</div>}
@@ -491,9 +521,9 @@ const WriteReview = () => {
                   {user ? (
                     /* LOGGED IN: Show Submit button directly */
                     <div className="pt-4">
-                      <button type="submit" disabled={loading} className="w-full bg-[#1a1c21] text-white py-4 rounded-full font-bold text-base hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg">
-                        {loading ? 'Submitting...' : 'Submit review'}
-                      </button>
+                     <button type="submit" disabled={loading || companyLoading || !selectedCompany} className="w-full bg-[#1a1c21] text-white py-4 rounded-full font-bold text-base hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg">
+                       {loading ? 'Submitting...' : companyLoading ? 'Loading company...' : 'Submit review'}
+                     </button>
                     </div>
                   ) : (
                     /* NOT LOGGED IN: Show login options */

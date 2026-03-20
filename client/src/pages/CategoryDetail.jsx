@@ -107,7 +107,7 @@ const CategoryDetail = () => {
       {/* ─── HERO / HEADER SECTION ─── */}
       <section className="bg-white pt-24 pb-12 border-b border-gray-100">
         <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex items-center gap-2 text-[12px] font-bold text-gray-400 mb-8 uppercase tracking-widest leading-none">
+          <div className="flex items-center gap-2 text-[12px] font-semibold text-gray-400 mb-8 uppercase tracking-widest leading-none">
             <Link to="/" className="hover:text-gray-600">Home</Link>
             <span>›</span>
             <Link to="/categories" className="hover:text-gray-600">Categories</Link>
@@ -116,7 +116,7 @@ const CategoryDetail = () => {
           </div>
 
           <div className="flex flex-col md:flex-row items-baseline gap-4 mb-4 relative">
-             <h1 className="text-[48px] font-bold tracking-tight text-[#1c1c1c] leading-none">
+             <h1 className="text-[48px] font-semibold tracking-tight text-[#1c1c1c] leading-none">
                 Best in {category?.name || slug}
              </h1>
              
@@ -172,7 +172,7 @@ const CategoryDetail = () => {
                 setTempFilters(activeFilters);
                 setIsFilterSidebarOpen(true);
               }}
-              className={`flex items-center gap-2 border px-5 py-2.5 rounded-full font-bold text-[14px] active:scale-95 transition-all ${isFilterSidebarOpen ? 'bg-gray-100 border-gray-400' : 'border-gray-300 hover:bg-gray-50'}`}
+              className={`flex items-center gap-2 border px-5 py-2.5 rounded-full font-semibold text-[14px] active:scale-95 transition-all ${isFilterSidebarOpen ? 'bg-gray-100 border-gray-400' : 'border-gray-300 hover:bg-gray-50'}`}
             >
                 <Filter className="w-4 h-4" /> All filters
             </button>
@@ -234,7 +234,7 @@ const CategoryDetail = () => {
           {/* LEFT: COMPANIES LIST */}
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-8">
-               <h2 className="text-[18px] font-bold">Companies ({totalCompanies.toLocaleString()})</h2>
+               <h2 className="text-[18px] font-semibold">Companies ({totalCompanies.toLocaleString()})</h2>
             </div>
 
             {loading && page > 1 ? (
@@ -254,7 +254,7 @@ const CategoryDetail = () => {
                <div className="space-y-4">
                   {companies.map((company) => (
                      <div key={company._id} className="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:translate-y-[-2px] transition-all group flex flex-col md:flex-row gap-8 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 py-1.5 px-4 bg-gray-50 border-l border-b border-gray-100 text-[10px] font-black uppercase tracking-[2px] opacity-40 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute top-0 right-0 py-1.5 px-4 bg-gray-50 border-l border-b border-gray-100 text-[10px] font-bold uppercase tracking-[2px] opacity-40 group-hover:opacity-100 transition-opacity">
                            Most Relevant
                         </div>
 
@@ -445,7 +445,7 @@ const CategoryDetail = () => {
                   className="fixed top-0 right-0 w-full sm:w-[480px] h-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.2)] z-[1001] flex flex-col"
                >
                   <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100 shrink-0">
-                     <h2 className="text-[24px] font-extrabold text-[#111] tracking-tight">All filters</h2>
+                     <h2 className="text-[24px] font-bold text-[#111] tracking-tight">All filters</h2>
                      <button 
                         onClick={() => setIsFilterSidebarOpen(false)}
                         className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors group"
@@ -457,7 +457,7 @@ const CategoryDetail = () => {
                   <div className="flex-1 overflow-y-auto px-8 py-8 space-y-10 custom-scrollbar pb-32">
                      {/* Rating Section */}
                      <div className="space-y-4">
-                        <h3 className="text-[14px] font-black text-gray-900 uppercase tracking-[2px]">Rating</h3>
+                        <h3 className="text-[14px] font-bold text-gray-900 uppercase tracking-[2px]">Rating</h3>
                         <div className="grid grid-cols-4 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                            {[null, 3, 4, 4.5].map((val) => (
                               <button
@@ -473,7 +473,7 @@ const CategoryDetail = () => {
 
                      {/* Location Section */}
                      <div className="space-y-4">
-                        <h3 className="text-[14px] font-black text-gray-900 uppercase tracking-[2px]">Location</h3>
+                        <h3 className="text-[14px] font-bold text-gray-900 uppercase tracking-[2px]">Location</h3>
                         <div className="space-y-3">
                            <div className="relative">
                               <select 
@@ -500,7 +500,7 @@ const CategoryDetail = () => {
 
                      {/* Company Status */}
                      <div className="space-y-4">
-                        <h3 className="text-[14px] font-black text-gray-900 uppercase tracking-[2px]">Company status</h3>
+                        <h3 className="text-[14px] font-bold text-gray-900 uppercase tracking-[2px]">Company status</h3>
                         <label className="flex items-start gap-4 p-5 rounded-2xl border border-gray-100 hover:bg-gray-50 cursor-pointer transition-all group">
                            <div className="relative mt-1">
                               <input 
@@ -540,7 +540,7 @@ const CategoryDetail = () => {
                            setPage(1);
                            setIsFilterSidebarOpen(false);
                         }}
-                        className="flex-1 bg-[#4b66df] text-white py-4 rounded-full font-black text-[16px] hover:bg-blue-700 active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20"
+                        className="flex-1 bg-[#4b66df] text-white py-4 rounded-full font-bold text-[16px] hover:bg-blue-700 active:scale-[0.98] transition-all shadow-lg shadow-blue-500/20"
                      >
                         Show Results
                      </button>

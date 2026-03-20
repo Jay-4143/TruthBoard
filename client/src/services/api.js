@@ -6,28 +6,43 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      const { token } = JSON.parse(userInfo);
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    let token = null;
+    
+    // If it's a business route, try to get business token
+    if (config.url.includes('/business')) {
+      const businessInfo = localStorage.getItem('businessInfo');
+      if (businessInfo) {
+        token = JSON.parse(businessInfo).token;
       }
+    }
+
+    // Fallback to regular user token if no business token or not a business route
+    if (!token) {
+      const userInfo = localStorage.getItem('userInfo');
+      if (userInfo) {
+        token = JSON.parse(userInfo).token;
+      }
+    }
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Auto-logout on 401 responses (expired token, deleted user, etc.)
+// Auto-logout on 401 responses
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      const userInfo = localStorage.getItem('userInfo');
-      if (userInfo) {
+      if (error.config.url.includes('/business')) {
+        localStorage.removeItem('businessInfo');
+      } else {
         localStorage.removeItem('userInfo');
-        window.location.reload(); // Force fresh state
       }
+      // window.location.reload(); // Optional: might be too aggressive
     }
     return Promise.reject(error);
   }

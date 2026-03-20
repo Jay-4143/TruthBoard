@@ -43,7 +43,7 @@ const BusinessCollectReviews = () => {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-black text-gray-900">Get More Reviews</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Get More Reviews</h1>
         <p className="text-gray-500 font-medium mt-1">Boost your TrustScore by inviting more customers to share their feedback.</p>
       </div>
 
@@ -56,7 +56,7 @@ const BusinessCollectReviews = () => {
             </div>
             
             <div className="relative z-10">
-              <h3 className="text-2xl font-black text-gray-900 mb-2">Your unique review link</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Your unique review link</h3>
               <p className="text-gray-500 font-medium mb-8">Share this link directly on your website, in emails, or via SMS.</p>
               
               <div className="flex flex-col sm:flex-row gap-4 p-2 bg-gray-50 rounded-[24px] border border-gray-100">
@@ -97,7 +97,7 @@ const BusinessCollectReviews = () => {
               <p className="text-gray-500 text-sm font-medium leading-relaxed">
                 Send personalized emails to your customers asking for feedback after their purchase.
               </p>
-              <button className="mt-6 text-sm font-black text-blue-600 uppercase tracking-widest hover:underline">Setup Emails</button>
+              <button className="mt-6 text-sm font-bold text-blue-600 uppercase tracking-widest hover:underline">Setup Emails</button>
             </div>
 
             <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-md transition-all group">
@@ -108,7 +108,7 @@ const BusinessCollectReviews = () => {
               <p className="text-gray-500 text-sm font-medium leading-relaxed">
                 Reach customers directly on their mobile phones for higher response rates.
               </p>
-              <button className="mt-6 text-sm font-black text-amber-600 uppercase tracking-widest hover:underline">Setup SMS</button>
+              <button className="mt-6 text-sm font-bold text-amber-600 uppercase tracking-widest hover:underline">Setup SMS</button>
             </div>
           </div>
         </div>

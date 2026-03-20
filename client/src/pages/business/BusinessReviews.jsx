@@ -12,9 +12,10 @@ import {
   ChevronRight,
   Send,
   User,
-  AlertCircle,
-  Loader2
-} from 'lucide-react';
+   AlertCircle,
+   Loader2,
+   Trash2
+ } from 'lucide-react';
 import api from '../../services/api';
 
 const BusinessReviews = () => {
@@ -83,11 +84,23 @@ const BusinessReviews = () => {
     }
   };
 
-  return (
+   const handleDeleteReview = async (reviewId) => {
+     if (!window.confirm('Are you sure you want to delete this review? This action cannot be undone.')) return;
+     
+     try {
+       await api.delete(`/reviews/${reviewId}`);
+       fetchReviews(); // Refresh list
+     } catch (err) {
+       console.error('Failed to delete review:', err);
+       alert('Failed to delete review. Please try again.');
+     }
+   };
+ 
+   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-black text-gray-900">Manage Reviews</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Manage Reviews</h1>
           <p className="text-gray-500 font-medium mt-1">Read and respond to what customers are saying.</p>
         </div>
 
@@ -96,7 +109,7 @@ const BusinessReviews = () => {
             <button
               key={s}
               onClick={() => handleFilterChange(s)}
-              className={`px-6 py-2 rounded-xl text-sm font-black uppercase tracking-widest transition-all ${
+              className={`px-6 py-2 rounded-xl text-sm font-bold uppercase tracking-widest transition-all ${
                 filter === s 
                   ? 'bg-[#1a1c21] text-white shadow-lg' 
                   : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
@@ -158,7 +171,7 @@ const BusinessReviews = () => {
                         )}
                       </div>
                       <div>
-                        <h4 className="text-lg font-black text-gray-900">{review.userId?.name || 'Anonymous User'}</h4>
+                        <h4 className="text-lg font-bold text-gray-900">{review.userId?.name || 'Anonymous User'}</h4>
                         <div className="flex items-center gap-3 mt-1">
                           <div className="flex gap-0.5">
                             {[...Array(5)].map((_, i) => (
@@ -168,33 +181,40 @@ const BusinessReviews = () => {
                               />
                             ))}
                           </div>
-                          <span className="text-xs font-black text-gray-400 uppercase tracking-tighter">
+                          <span className="text-xs font-bold text-gray-400 uppercase tracking-tighter">
                             {new Date(review.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      {review.reply ? (
-                        <div className="flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-black uppercase tracking-widest border border-green-100">
-                          <CheckCircle2 className="w-3 h-3" />
-                          Replied
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-xs font-black uppercase tracking-widest border border-amber-100">
-                          <Clock className="w-3 h-3" />
-                          Waiting
-                        </div>
-                      )}
-                      <button className="p-2 text-gray-300 hover:text-gray-600 transition-colors">
-                        <MoreVertical className="w-5 h-5" />
-                      </button>
-                    </div>
+                     <div className="flex items-center gap-2">
+                       {review.reply ? (
+                         <div className="flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-bold uppercase tracking-widest border border-green-100">
+                           <CheckCircle2 className="w-3 h-3" />
+                           Replied
+                         </div>
+                       ) : (
+                         <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-xs font-bold uppercase tracking-widest border border-amber-100">
+                           <Clock className="w-3 h-3" />
+                           Waiting
+                         </div>
+                       )}
+                       <button 
+                         onClick={() => handleDeleteReview(review._id)}
+                         className="p-2 text-red-300 hover:text-red-600 transition-colors"
+                         title="Delete Review"
+                       >
+                         <Trash2 className="w-5 h-5" />
+                       </button>
+                       <button className="p-2 text-gray-300 hover:text-gray-600 transition-colors">
+                         <MoreVertical className="w-5 h-5" />
+                       </button>
+                     </div>
                   </div>
 
                   <div className="space-y-4 mb-8">
-                    <h5 className="text-xl font-bold text-gray-900">{review.title}</h5>
+                    <h5 className="text-xl font-semibold text-gray-900">{review.title}</h5>
                     <p className="text-gray-600 font-medium leading-relaxed italic">
                       “{review.reviewText}”
                     </p>
@@ -209,13 +229,13 @@ const BusinessReviews = () => {
                             <Star className="w-4 h-4" fill="currentColor" />
                           </div>
                           <div>
-                            <span className="text-sm font-black text-gray-900 uppercase tracking-tighter">Your Response</span>
+                            <span className="text-sm font-bold text-gray-900 uppercase tracking-tighter">Your Response</span>
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
                               {new Date(review.reply.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
-                        <button className="text-xs font-black text-[#00b67a] uppercase hover:underline">Edit</button>
+                        <button className="text-xs font-bold text-[#00b67a] uppercase hover:underline">Edit</button>
                       </div>
                       <p className="text-gray-600 font-medium leading-relaxed">
                         {review.reply.reviewText}
@@ -252,7 +272,7 @@ const BusinessReviews = () => {
                   ) : (
                     <button 
                       onClick={() => setReplyingTo(review._id)}
-                      className="inline-flex items-center gap-2 px-8 py-3 bg-[#1a1c21] text-white rounded-full text-sm font-black uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-black/10"
+                      className="inline-flex items-center gap-2 px-8 py-3 bg-[#1a1c21] text-white rounded-full text-sm font-bold uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-black/10"
                     >
                       <MessageSquare className="w-4 h-4" />
                       Reply to customer
@@ -276,7 +296,7 @@ const BusinessReviews = () => {
                   <button
                     key={i}
                     onClick={() => setPage(i + 1)}
-                    className={`w-12 h-12 rounded-2xl font-black transition-all ${
+                    className={`w-12 h-12 rounded-2xl font-bold transition-all ${
                       page === i + 1 
                         ? 'bg-[#00b67a] text-white shadow-lg' 
                         : 'bg-white text-gray-400 border border-gray-100 hover:bg-gray-50'
@@ -300,13 +320,13 @@ const BusinessReviews = () => {
             <div className="bg-gray-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
               <AlertCircle className="w-12 h-12 text-gray-200" />
             </div>
-            <h3 className="text-2xl font-black text-gray-900">No reviews found</h3>
+            <h3 className="text-2xl font-bold text-gray-900">No reviews found</h3>
             <p className="text-gray-500 font-medium mt-2 max-w-sm mx-auto">
               We couldn't find any reviews matching your current filters. Try adjusting them or clear all filters.
             </p>
             <button 
               onClick={() => { setFilter('all'); setRatingFilter(''); setPage(1); }}
-              className="mt-8 text-[#00b67a] font-black uppercase tracking-widest text-sm hover:underline"
+              className="mt-8 text-[#00b67a] font-bold uppercase tracking-widest text-sm hover:underline"
             >
               Clear all filters
             </button>

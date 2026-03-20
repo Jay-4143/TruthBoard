@@ -29,10 +29,12 @@ app.use(express.urlencoded({ extended: false }));
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/business/auth', require('./routes/businessAuthRoutes'));
 app.use('/api/companies', require('./routes/companyRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/business', require('./routes/businessRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 app.get('/', (req, res) => {
   res.send('API is running...');

@@ -92,9 +92,17 @@ const claimCompany = async (req, res) => {
   }
 };
 
-const getCompanyBySlug = async (req, res) => {
+const getCompanyByIdOrSlug = async (req, res) => {
   try {
-    const company = await Company.findOne({ slug: req.params.slug }).populate('category');
+    const { identifier } = req.params;
+    let company;
+
+    if (mongoose.Types.ObjectId.isValid(identifier)) {
+      company = await Company.findById(identifier).populate('category');
+    } else {
+      company = await Company.findOne({ slug: identifier }).populate('category');
+    }
+
     if (company) {
       res.json(company);
     } else {
@@ -164,7 +172,7 @@ const getCompanyByDomain = async (req, res) => {
 
 module.exports = {
   getCompanies,
-  getCompanyBySlug,
+  getCompanyByIdOrSlug,
   searchCompanies,
   getCompanyByDomain,
   getTrendingCompanies,

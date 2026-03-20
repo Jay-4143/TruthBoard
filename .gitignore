@@ -29,6 +29,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Firebase / Secrets
+server/firebase-admin.json
+
+# Local Debug/Test Files
+server/*.log
+server/test-stats.js
+server/find_users.js
+server/list_users.js
+server/upgrade_user.js
+
 # System Files
 .DS_Store
 Thumb.db

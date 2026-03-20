@@ -1,25 +1,14 @@
 import { useState, useContext } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  MessageSquare, 
-  BarChart3, 
-  UserPlus, 
-  UserCircle, 
-  Settings, 
-  LogOut,
-  Bell,
-  Search,
-  Menu,
-  X,
-  Star
-} from 'lucide-react';
+import { Bell, Search, Menu, X, Star, UserCircle, LogOut, LayoutDashboard, MessageSquare, BarChart3, UserPlus, Settings } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
 
 const BusinessLayout = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { businessUser, logoutBusiness } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const navigation = [
     { name: 'Dashboard', href: '/business/dashboard', icon: LayoutDashboard },
@@ -31,7 +20,7 @@ const BusinessLayout = () => {
   ];
 
   const handleLogout = () => {
-    logout();
+    logoutBusiness();
     navigate('/business');
   };
 
@@ -48,8 +37,8 @@ const BusinessLayout = () => {
             <Star className="w-6 h-6 text-white" fill="currentColor" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-lg tracking-tight">TruthBoard</span>
-            <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Business</span>
+            <span className="font-semibold text-lg tracking-tight">TruthBoard</span>
+            <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Business</span>
           </div>
         </div>
 
@@ -94,25 +83,28 @@ const BusinessLayout = () => {
             >
               {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
-            <h2 className="text-lg font-bold text-gray-900 hidden sm:block">
-              {user?.companyName || 'Business Dashboard'}
+            <h2 className="text-lg font-semibold text-gray-900 hidden sm:block">
+              {businessUser?.companyName || 'Business Dashboard'}
             </h2>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full relative">
+            <button 
+              onClick={() => setShowNotifications(true)}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full relative group"
+            >
               <Bell className="w-5 h-5" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
             <div className="h-8 w-[1px] bg-gray-200 mx-1"></div>
             <div className="flex items-center gap-3 pl-2">
               <div className="flex flex-col items-end hidden md:flex">
-                <span className="text-sm font-bold text-gray-900">{user?.name}</span>
-                <span className="text-xs text-gray-500">{user?.role === 'admin' ? 'Administrator' : 'Company Owner'}</span>
+                <span className="text-sm font-semibold text-gray-900">{businessUser?.name}</span>
+                <span className="text-xs text-gray-500">{businessUser?.role === 'admin' ? 'Administrator' : 'Company Owner'}</span>
               </div>
               <div className="w-9 h-9 bg-[#f0f2f5] rounded-full flex items-center justify-center border border-gray-200 overflow-hidden">
-                {user?.avatar ? (
-                  <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                {businessUser?.avatar ? (
+                  <img src={businessUser.avatar} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
                   <UserCircle className="w-6 h-6 text-gray-400" />
                 )}
@@ -126,6 +118,53 @@ const BusinessLayout = () => {
           <Outlet />
         </main>
       </div>
+
+      {/* ───── NOTIFICATIONS SIDEBAR ───── */}
+      <AnimatePresence>
+        {showNotifications && (
+          <>
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowNotifications(false)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[1000]"
+            />
+            
+            {/* Sidebar */}
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 w-full sm:w-[440px] h-full bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] z-[1001] flex flex-col"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+                <h2 className="text-[24px] font-bold text-gray-900 tracking-tight">Notifications</h2>
+                <button 
+                  onClick={() => setShowNotifications(false)}
+                  className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors group"
+                >
+                  <X className="w-5 h-5 text-gray-400 group-hover:text-gray-900" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 flex flex-col items-center justify-center p-12 text-center space-y-6">
+                <div className="w-20 h-20 rounded-full bg-[#ebfaf5] flex items-center justify-center">
+                  <Bell className="w-9 h-9 text-[#00b67a]" />
+                </div>
+                <div className="space-y-1 text-gray-900">
+                  <h3 className="text-[18px] font-bold">You're all caught up!</h3>
+                  <p className="text-[14px] font-medium text-gray-400">When you get notifications, they'll show up here.</p>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

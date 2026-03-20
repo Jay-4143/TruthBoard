@@ -11,6 +11,9 @@ const generateToken = (id) => {
 
 const registerUser = async (req, res) => {
   try {
+    const fs = require('fs');
+    fs.appendFileSync('debug.log', `[${new Date().toISOString()}] Registration Body: ${JSON.stringify(req.body)}\n`);
+    console.log('Registration Request Body:', req.body);
     const { name, email, password, idToken, role, companyName, website, jobTitle } = req.body;
 
     if (!idToken) {
@@ -37,17 +40,22 @@ const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const finalRole = (role === 'companyOwner' || role === 'admin') ? role : 'user';
+    
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
       phoneNumber,
       isVerified: true,
-      role: role || 'user',
+      role: finalRole,
       companyName: companyName || '',
       website: website || '',
       jobTitle: jobTitle || ''
     });
+
+    fs.appendFileSync('debug.log', `[${new Date().toISOString()}] Created User: ${user.email} with role: ${user.role}\n`);
+    console.log('User created successfully:', user.email, 'Role:', user.role);
 
     if (user) {
       res.status(201).json({
@@ -68,7 +76,12 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email: rawEmail, password } = req.body;
+    const email = rawEmail.toLowerCase();
+    
+    const fs = require('fs');
+    fs.appendFileSync('debug.log', `[${new Date().toISOString()}] Login Attempt: ${email}\n`);
+    
     console.log('Login attempt for email:', email);
 
     const user = await User.findOne({ email });

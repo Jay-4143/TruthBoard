@@ -20,7 +20,7 @@ import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 
 const BusinessOnboarding = () => {
-  const { user, updateUser } = useContext(AuthContext);
+  const { businessUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -28,14 +28,14 @@ const BusinessOnboarding = () => {
   const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
-    name: user?.companyName || '',
-    website: user?.website || '',
+    name: businessUser?.companyName || '',
+    website: businessUser?.website || '',
     category: '',
     description: '',
     logo: '',
     location: 'United States',
-    contactEmail: user?.email || '',
-    phone: user?.phoneNumber || ''
+    contactEmail: businessUser?.email || '',
+    phone: businessUser?.phoneNumber || ''
   });
 
   useEffect(() => {
@@ -60,16 +60,13 @@ const BusinessOnboarding = () => {
   const handleSubmit = async () => {
     setLoading(true);
     setError('');
+    const submissionData = { ...formData };
+    if (!submissionData.category || submissionData.category === '') {
+      delete submissionData.category; // Let it be undefined if not selected
+    }
+
     try {
-      const res = await api.post('/business/create-profile', formData);
-      // Update local user state
-      if (updateUser) {
-        updateUser({ 
-          role: 'companyOwner', 
-          companyName: formData.name, 
-          website: formData.website 
-        });
-      }
+      const res = await api.post('/business/create-profile', submissionData);
       navigate('/business/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create business profile');
@@ -108,7 +105,7 @@ const BusinessOnboarding = () => {
               >
                 {step > s.id ? <CheckCircle2 className="w-6 h-6" /> : <s.icon className="w-6 h-6" />}
               </div>
-              <span className={`absolute top-14 text-xs font-bold whitespace-nowrap uppercase tracking-wider ${
+              <span className={`absolute top-14 text-xs font-semibold whitespace-nowrap uppercase tracking-wider ${
                 step >= s.id ? 'text-[#00b67a]' : 'text-gray-400'
               }`}>
                 {s.title}
@@ -138,13 +135,13 @@ const BusinessOnboarding = () => {
                 className="space-y-6"
               >
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-black text-gray-900">Tell us about your business</h2>
+                  <h2 className="text-3xl font-bold text-gray-900">Tell us about your business</h2>
                   <p className="text-gray-500 mt-2 font-medium">This information helps customers find you.</p>
                 </div>
 
                 <div className="space-y-4">
                   <div className="relative group">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
                       Company Name
                     </label>
                     <div className="relative">
@@ -156,7 +153,7 @@ const BusinessOnboarding = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900"
+                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900"
                         placeholder="e.g. Acme Corp"
                         required
                       />
@@ -164,7 +161,7 @@ const BusinessOnboarding = () => {
                   </div>
 
                   <div className="relative group">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
                       Website URL
                     </label>
                     <div className="relative">
@@ -176,7 +173,7 @@ const BusinessOnboarding = () => {
                         name="website"
                         value={formData.website}
                         onChange={handleChange}
-                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900"
+                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900"
                         placeholder="https://www.acme.com"
                         required
                       />
@@ -184,7 +181,7 @@ const BusinessOnboarding = () => {
                   </div>
 
                   <div className="relative group">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
                       Industry Category
                     </label>
                     <div className="relative">
@@ -195,7 +192,7 @@ const BusinessOnboarding = () => {
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900 appearance-none cursor-pointer"
+                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900 appearance-none cursor-pointer"
                         required
                       >
                         <option value="">Select a category</option>
@@ -207,7 +204,7 @@ const BusinessOnboarding = () => {
                   </div>
 
                   <div className="relative group">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1 group-focus-within:text-[#00b67a] transition-colors">
                       Description
                     </label>
                     <div className="relative">
@@ -219,7 +216,7 @@ const BusinessOnboarding = () => {
                         value={formData.description}
                         onChange={handleChange}
                         rows="3"
-                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900 resize-none"
+                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900 resize-none"
                         placeholder="Tell us what your company does..."
                         required
                       ></textarea>
@@ -238,7 +235,7 @@ const BusinessOnboarding = () => {
                 className="space-y-6"
               >
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-black text-gray-900">Make it yours</h2>
+                  <h2 className="text-3xl font-bold text-gray-900">Make it yours</h2>
                   <p className="text-gray-500 mt-2 font-medium">Add your branding to stand out.</p>
                 </div>
 
@@ -249,14 +246,14 @@ const BusinessOnboarding = () => {
                     ) : (
                       <div className="flex flex-col items-center">
                         <ImageIcon className="w-8 h-8 text-gray-300 group-hover:text-[#00b67a]" />
-                        <span className="text-[10px] font-black text-gray-400 uppercase mt-1">Logo</span>
+                        <span className="text-[10px] font-semibold text-gray-400 uppercase mt-1">Logo</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div className="relative group">
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
                     Logo Image URL
                   </label>
                   <div className="relative">
@@ -268,7 +265,7 @@ const BusinessOnboarding = () => {
                       name="logo"
                       value={formData.logo}
                       onChange={handleChange}
-                      className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900"
+                      className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900"
                       placeholder="https://your-site.com/logo.png"
                     />
                   </div>
@@ -286,13 +283,13 @@ const BusinessOnboarding = () => {
                 className="space-y-6"
               >
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-black text-gray-900">Reach out</h2>
+                  <h2 className="text-3xl font-bold text-gray-900">Reach out</h2>
                   <p className="text-gray-500 mt-2 font-medium">How should customers contact you?</p>
                 </div>
 
                 <div className="space-y-4">
                   <div className="relative group">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
                       Business Email
                     </label>
                     <div className="relative">
@@ -304,7 +301,7 @@ const BusinessOnboarding = () => {
                         name="contactEmail"
                         value={formData.contactEmail}
                         onChange={handleChange}
-                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900"
+                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900"
                         placeholder="contact@acme.com"
                         required
                       />
@@ -312,7 +309,7 @@ const BusinessOnboarding = () => {
                   </div>
 
                   <div className="relative group">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
                       Phone Number
                     </label>
                     <div className="relative">
@@ -324,7 +321,7 @@ const BusinessOnboarding = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900"
+                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900"
                         placeholder="+1 (555) 000-0000"
                         required
                       />
@@ -332,7 +329,7 @@ const BusinessOnboarding = () => {
                   </div>
 
                   <div className="relative group">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block px-1">
                       Location / Head Office
                     </label>
                     <div className="relative">
@@ -344,7 +341,7 @@ const BusinessOnboarding = () => {
                         name="location"
                         value={formData.location}
                         onChange={handleChange}
-                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-bold text-gray-900"
+                        className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00b67a] outline-none transition-all font-semibold text-gray-900"
                         placeholder="New York, USA"
                         required
                       />
@@ -363,7 +360,7 @@ const BusinessOnboarding = () => {
                 className="space-y-6"
               >
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-black text-gray-900">Ready to go!</h2>
+                  <h2 className="text-3xl font-bold text-gray-900">Ready to go!</h2>
                   <p className="text-gray-500 mt-2 font-medium">Review your info and launch your dashboard.</p>
                 </div>
 
@@ -377,8 +374,8 @@ const BusinessOnboarding = () => {
                       )}
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-gray-900">{formData.name}</h3>
-                      <p className="text-[#00b67a] font-bold text-sm tracking-tight">{formData.website}</p>
+                      <h3 className="text-xl font-bold text-gray-900">{formData.name}</h3>
+                      <p className="text-[#00b67a] font-semibold text-sm tracking-tight">{formData.website}</p>
                     </div>
                   </div>
 
@@ -386,17 +383,17 @@ const BusinessOnboarding = () => {
 
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-xs font-black text-gray-400 uppercase block mb-1">Location</span>
-                      <span className="font-bold text-gray-900">{formData.location}</span>
+                      <span className="text-xs font-bold text-gray-400 uppercase block mb-1">Location</span>
+                      <span className="font-semibold text-gray-900">{formData.location}</span>
                     </div>
                     <div>
-                      <span className="text-xs font-black text-gray-400 uppercase block mb-1">Email</span>
-                      <span className="font-bold text-gray-900">{formData.contactEmail}</span>
+                      <span className="text-xs font-bold text-gray-400 uppercase block mb-1">Email</span>
+                      <span className="font-semibold text-gray-900">{formData.contactEmail}</span>
                     </div>
                   </div>
 
                   <div>
-                    <span className="text-xs font-black text-gray-400 uppercase block mb-1">About</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase block mb-1">About</span>
                     <p className="text-gray-600 font-medium leading-relaxed italic line-clamp-2">
                       “{formData.description}”
                     </p>
@@ -431,7 +428,7 @@ const BusinessOnboarding = () => {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex-1 h-14 bg-[#00b67a] text-white rounded-2xl font-bold hover:bg-[#009966] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#00b67a]/20 disabled:opacity-50"
+                className="flex-1 h-14 bg-[#00b67a] text-white rounded-2xl font-semibold hover:bg-[#009966] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#00b67a]/20 disabled:opacity-50"
               >
                 {loading ? (
                   <>

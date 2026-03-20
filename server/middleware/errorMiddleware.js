@@ -1,6 +1,14 @@
 const errorHandler = (err, req, res, next) => {
+  const fs = require('fs');
+  const logMessage = `[${new Date().toISOString()}] ${req.method} ${req.url} - ERROR: ${err.message}\n${err.stack}\n\n`;
   console.error(`ERROR: ${err.message}`);
   if (err.stack) console.error(err.stack);
+  
+  try {
+    fs.appendFileSync('error.log', logMessage);
+  } catch (logErr) {
+    console.error('Failed to write to error.log:', logErr);
+  }
   
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode);
