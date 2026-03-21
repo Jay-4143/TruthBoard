@@ -24,6 +24,17 @@ import SalesforceIntegration from './pages/SalesforceIntegration';
 import Pricing from './pages/Pricing';
 import Blog from './pages/Blog';
 import Settings from './pages/Settings';
+import ReviewDetail from './pages/ReviewDetail';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import Page404 from './pages/Page404';
+
+// Admin Pages
+import AdminLayout from './components/layout/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import UserManagement from './pages/admin/UserManagement';
+import ReviewModeration from './pages/admin/ReviewModeration';
+import CompanyManagement from './pages/admin/CompanyManagement';
+import AdminRoute from './components/auth/AdminRoute';
 
 import { AuthProvider } from './context/AuthContext';
 import { Navigation, Footer } from './components/Navigation';
@@ -52,7 +63,8 @@ function AppContent() {
                          location.pathname === '/pricing' ||
                          location.pathname === '/blog' ||
                          location.pathname.includes('/company') ||
-                         location.pathname.startsWith('/features/');
+                         location.pathname.startsWith('/features/') ||
+                         location.pathname.startsWith('/admin');
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -70,6 +82,8 @@ function AppContent() {
           <Route path="/request demo" element={<RequestDemo />} />
           <Route path="/business/signup" element={<BusinessSignup />} />
           <Route path="/business/login" element={<BusinessLogin />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/forgot password" element={<ForgotPassword />} />
           <Route path="/features/dashboard-analytics" element={<DashboardAnalytics />} />
           <Route path="/features/social-media-tools" element={<SocialMediaTools />} />
           <Route path="/features/trustbox-widgets" element={<TrustBoxWidgets />} />
@@ -89,6 +103,8 @@ function AppContent() {
           <Route path="/write_review" element={<WriteReview />} />
           <Route path="/company/:companyId/review" element={<WriteReview />} />
           
+          <Route path="/review/:id" element={<ReviewDetail />} />
+          <Route path="/reviews/:id" element={<ReviewDetail />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/my-reviews" element={<MyReviews />} />
             <Route path="/edit-review/:reviewId" element={<EditReview />} />
@@ -108,6 +124,20 @@ function AppContent() {
               <Route path="/business/settings" element={<BusinessSettings />} />
             </Route>
           </Route>
+
+          {/* Admin Routes */}
+          <Route element={<AdminRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<UserManagement />} />
+              <Route path="/admin/moderation" element={<ReviewModeration />} />
+              <Route path="/admin/companies" element={<CompanyManagement />} />
+              <Route path="/admin/settings" element={<BusinessSettings />} />
+            </Route>
+          </Route>
+
+          {/* 404 Route */}
+          <Route path="*" element={<Page404 />} />
         </Routes>
       </main>
       {!isBusinessPage && <Footer />}

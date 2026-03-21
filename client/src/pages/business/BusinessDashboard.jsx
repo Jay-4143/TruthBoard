@@ -103,6 +103,49 @@ const BusinessDashboard = () => {
         </Link>
       </div>
 
+      {/* Critical Alerts (Phase 5/6 AI Detection) */}
+      {stats.negativeAlerts?.length > 0 && (
+        <div className="bg-red-50 border border-red-100 rounded-[32px] p-8 overflow-hidden relative group">
+          <div className="absolute top-0 right-0 p-8 text-red-100 group-hover:text-red-200 transition-colors">
+             <AlertTriangle size={120} />
+          </div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-6">
+               <div className="w-10 h-10 bg-red-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-red-600/20">
+                  <AlertTriangle size={20} />
+               </div>
+               <h2 className="text-xl font-black text-red-900 uppercase tracking-tight italic">Critical Alerts: AI Flagged Reviews</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+               {stats.negativeAlerts.map(alert => (
+                 <div key={alert._id} className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-red-200 shadow-sm flex flex-col justify-between hover:bg-white transition-all">
+                    <div>
+                       <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                             <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold text-xs">
+                                {alert.userId.name?.[0]}
+                             </div>
+                             <span className="text-xs font-black text-red-900 uppercase tracking-widest">{alert.userId.name}</span>
+                          </div>
+                          <span className="text-[10px] font-black text-red-400 uppercase tracking-[2px]">{new Date(alert.createdAt).toLocaleDateString()}</span>
+                       </div>
+                       <p className="text-sm font-bold text-gray-900 mb-2 leading-tight">"{alert.title}"</p>
+                       <p className="text-xs font-medium text-gray-500 line-clamp-2 italic mb-4">"{alert.reviewText}"</p>
+                    </div>
+                    <Link 
+                      to={`/business/reviews?reviewId=${alert._id}`}
+                      className="inline-flex items-center justify-center py-3 bg-red-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-700 transition-all"
+                    >
+                      Respond Immediately
+                    </Link>
+                 </div>
+               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {statCards.map((card) => (

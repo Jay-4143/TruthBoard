@@ -90,6 +90,10 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    if (!user.isActive) {
+      return res.status(403).json({ message: 'This account has been deactivated by an administrator.' });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     console.log('Password match results:', isMatch);
 
@@ -219,6 +223,10 @@ const phoneLogin = async (req, res) => {
         isVerified: true,
         role: 'user'
       });
+    }
+
+    if (!user.isActive) {
+      return res.status(403).json({ message: 'This account has been deactivated by an administrator.' });
     }
 
     // Role recovery: If user is 'user' but has a company, upgrade to 'companyOwner'

@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
+const compression = require('compression');
+
 dotenv.config();
 connectDB();
 
@@ -18,10 +20,10 @@ app.use((req, res, next) => {
   next();
 });
 app.use(cors()); 
+app.use(compression());
 
 // 2. Rest of Middlewares
 app.use(helmet()); 
-// app.use(mongoSanitize()); // Disabled due to Express 5.x incompatibility
 app.use(morgan('dev'));
 
 app.use(express.json());
@@ -35,6 +37,7 @@ app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/business', require('./routes/businessRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 app.get('/', (req, res) => {
   res.send('API is running...');

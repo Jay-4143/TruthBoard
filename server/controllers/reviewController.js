@@ -1,7 +1,8 @@
 const Review = require('../models/Review');
 const Company = require('../models/Company');
-const Notification = require('../models/Notification');
 const { updateCompanyStats } = require('../utils/ratingService');
+const { analyze } = require('../services/sentimentService');
+const { createNotification } = require('../services/notificationService');
 
 const createReview = async (req, res) => {
   try {
@@ -30,13 +31,19 @@ const createReview = async (req, res) => {
       return res.status(401).json({ message: 'Your session has expired. Please log in again.' });
     }
 
+    // Phase 5: AI Sentiment Analysis
+    const sentimentScore = analyze(reviewText);
+    const isNegativeFlagged = rating <= 2 && sentimentScore >= 0.6;
+
     const review = await Review.create({
       userId: req.user._id,
       companyId,
       rating,
       title,
       reviewText,
-      dateOfExperience
+      dateOfExperience,
+      sentimentScore,
+      isNegativeFlagged
     });
 
     // Increment review count for user
@@ -49,17 +56,28 @@ const createReview = async (req, res) => {
     // Create notification for company owner
     if (company.isClaimed && company.claimedBy) {
       try {
-        await Notification.create({
+        const notificationTitle = isNegativeFlagged 
+          ? 'Critical: Negative Review Detected' 
+          : 'New Review Received';
+        
+        await createNotification({
           recipient: company.claimedBy,
-          type: 'NEW_REVIEW',
-          title: 'New Review Received',
-          message: `You received a ${rating}-star review from ${req.user.name}`,
+          type: isNegativeFlagged ? 'NEGATIVE_REVIEW' : 'NEW_REVIEW',
+          title: notificationTitle,
+          message: isNegativeFlagged 
+            ? `AI detected a high negative sentiment (Score: ${sentimentScore}) in a ${rating}-star review from ${req.user.name}`
+            : `You received a ${rating}-star review from ${req.user.name}`,
           reviewId: review._id,
-          link: '/business/reviews'
+          link: '/business/reviews',
+          emailHighPriority: isNegativeFlagged // Only send email for critical negative reviews
         });
+
+        // Phase 5: Log the flagging event if negative
+        if (isNegativeFlagged) {
+          console.log(`[AI-FLAG] Review ${review._id} auto-flagged. Sentiment: ${sentimentScore}`);
+        }
       } catch (notifyError) {
         console.error('Failed to create notification:', notifyError);
-        // Don't fail the review creation if notification fails
       }
     }
     
@@ -93,7 +111,8 @@ const getCompanyReviews = async (req, res) => {
       .populate('userId', 'name avatar location isVerified')
       .sort(sortQuery)
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(parseInt(limit))
+      .lean();
 
     const total = await Review.countDocuments(query);
 
@@ -196,6 +215,25 @@ const flagReview = async (req, res) => {
       review.status = 'flagged';
     }
     await review.save();
+
+    // Notify Admin about manual flag
+    try {
+      const User = require('../models/User');
+      const adminUsers = await User.find({ role: 'admin' });
+      
+      for (const adminUser of adminUsers) {
+        await createNotification({
+          recipient: adminUser._id,
+          type: 'REVIEW_FLAGGED',
+          title: 'Review Flagged for Moderation',
+          message: `A review for ${review.companyId} has been flagged (Reason: ${reason}). Total flags: ${review.flagCount}`,
+          reviewId: review._id,
+          link: '/admin/moderation' // Assuming admin panel path
+        });
+      }
+    } catch (adminNotifyError) {
+      console.error('Failed to notify admin of flag:', adminNotifyError);
+    }
 
     res.json({ message: 'Review flagged successfully' });
   } catch (error) {

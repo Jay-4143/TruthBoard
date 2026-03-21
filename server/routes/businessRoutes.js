@@ -3,6 +3,7 @@ const router = express.Router();
 const { protectBusiness } = require('../middleware/authMiddleware');
 const Company = require('../models/Company');
 const Review = require('../models/Review');
+const { createNotification } = require('../services/notificationService');
 
 // @desc    Get company associated with the logged in user
 // @route   GET /api/business/profile
@@ -45,6 +46,16 @@ router.get('/stats', protectBusiness, async (req, res) => {
       createdAt: { $gte: thirtyDaysAgo }
     });
 
+    // Get auto-flagged negative reviews (Phase 5/6)
+    const negativeAlerts = await Review.find({
+      companyId: company._id,
+      isNegativeFlagged: true,
+      status: 'active' // Only show alerts for active reviews that need attention
+    })
+    .populate('userId', 'name avatar')
+    .sort({ createdAt: -1 })
+    .limit(3);
+
     res.json({
       averageRating: company.averageRating,
       totalReviews: company.totalReviews,
@@ -52,6 +63,7 @@ router.get('/stats', protectBusiness, async (req, res) => {
       ratingDistribution: company.ratingDistribution,
       newReviewsLast30Days: newReviewsCount,
       recentReviews,
+      negativeAlerts,
       company: {
         name: company.name,
         logo: company.logo,
@@ -194,6 +206,21 @@ router.post('/reviews/:id/reply', protectBusiness, async (req, res) => {
     };
 
     await review.save();
+
+    // Notify the reviewer that the company has responded
+    try {
+      await createNotification({
+        recipient: review.userId,
+        type: 'REVIEW_REPLY',
+        title: `${company.name} responded to your review`,
+        message: 'The company has posted a response to your review. Check it out!',
+        reviewId: review._id,
+        link: `/company/${company.slug}`
+      });
+    } catch (replyNotifyError) {
+      console.error('Failed to notify user of reply:', replyNotifyError);
+    }
+
     res.json(review);
   } catch (error) {
     res.status(500).json({ message: error.message });

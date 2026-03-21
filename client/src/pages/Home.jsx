@@ -197,9 +197,18 @@ const Home = () => {
                   /* Recent Searches Section */
                   <div className="p-2">
                     <div className="px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider">Recent Searches</div>
-                    {localStorage.getItem('recentCompanies') ? (
+                    {(() => {
+                      try {
+                        const recents = localStorage.getItem('recentCompanies');
+                        if (recents && recents !== 'undefined' && recents !== 'null') {
+                          const parsed = JSON.parse(recents);
+                          return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+                        }
+                      } catch (e) { return null; }
+                      return null;
+                    })() ? (
                       <ul>
-                        {JSON.parse(localStorage.getItem('recentCompanies')).map(company => (
+                        {JSON.parse(localStorage.getItem('recentCompanies') || '[]').map(company => (
                           <li key={company._id}>
                             <Link to={`/company/${company.slug}`}
                               className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors duration-150 rounded-xl">

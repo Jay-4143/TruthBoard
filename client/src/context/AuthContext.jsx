@@ -1,7 +1,8 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import api from '../services/api';
 
 export const AuthContext = createContext();
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -10,15 +11,25 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Load regular user
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      setUser(JSON.parse(userInfo));
+    try {
+      const userInfo = localStorage.getItem('userInfo');
+      if (userInfo && userInfo !== 'undefined' && userInfo !== 'null') {
+        setUser(JSON.parse(userInfo));
+      }
+    } catch (err) {
+      console.error('Failed to parse userInfo:', err);
+      localStorage.removeItem('userInfo');
     }
 
     // Load business account
-    const businessInfo = localStorage.getItem('businessInfo');
-    if (businessInfo) {
-      setBusinessUser(JSON.parse(businessInfo));
+    try {
+      const businessInfo = localStorage.getItem('businessInfo');
+      if (businessInfo && businessInfo !== 'undefined' && businessInfo !== 'null') {
+        setBusinessUser(JSON.parse(businessInfo));
+      }
+    } catch (err) {
+      console.error('Failed to parse businessInfo:', err);
+      localStorage.removeItem('businessInfo');
     }
 
     setLoading(false);

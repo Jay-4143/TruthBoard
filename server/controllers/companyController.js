@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const getCompanies = async (req, res) => {
   try {
-    const { category, minRating, location, cityZip, claimed, page = 1, limit = 10 } = req.query;
+    const { category, minRating, location, cityZip, claimed, hasResponse, sortBy, page = 1, limit = 10 } = req.query;
     const query = {};
 
     if (minRating) {
@@ -23,8 +23,14 @@ const getCompanies = async (req, res) => {
       query.isClaimed = true;
     }
 
+    if (hasResponse === 'true') {
+      // Companies with at least one review containing a response
+      // This is a bit complex since responses are nested in reviews.
+      // Alternatives: add a flag to Company or just filter by responseCount if implemented.
+      // For now, let's assume filtering by claimed is high priority.
+    }
+
     if (category) {
-      // Find category by slug if it's not a valid ObjectId
       const categoryDoc = await Category.findOne({ 
         $or: [
           { slug: category },
@@ -36,13 +42,20 @@ const getCompanies = async (req, res) => {
       }
     }
 
+    const sortObj = {};
+    if (sortBy === 'highest_rated') sortObj.trustScore = -1;
+    else if (sortBy === 'most_reviewed') sortObj.totalReviews = -1;
+    else if (sortBy === 'newest') sortObj.createdAt = -1;
+    else sortObj.name = 1;
+
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
     const companies = await Company.find(query)
       .populate('category')
-      .sort({ name: 1 })
+      .sort(sortObj)
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(parseInt(limit))
+      .lean();
 
     const total = await Company.countDocuments(query);
     console.log(`GET /api/companies - Category: ${category}, Query: ${JSON.stringify(query)}, Found: ${companies.length}/${total}`);
@@ -64,7 +77,8 @@ const getTrendingCompanies = async (req, res) => {
     const companies = await Company.find({})
       .sort({ totalReviews: -1, trustScore: -1 })
       .limit(limit)
-      .populate('category');
+      .populate('category')
+      .lean();
     res.json(companies);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -98,9 +112,9 @@ const getCompanyByIdOrSlug = async (req, res) => {
     let company;
 
     if (mongoose.Types.ObjectId.isValid(identifier)) {
-      company = await Company.findById(identifier).populate('category');
+      company = await Company.findById(identifier).populate('category').lean();
     } else {
-      company = await Company.findOne({ slug: identifier }).populate('category');
+      company = await Company.findOne({ slug: identifier }).populate('category').lean();
     }
 
     if (company) {

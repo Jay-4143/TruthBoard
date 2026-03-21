@@ -41,13 +41,17 @@ const CategoryDetail = () => {
     minRating: null,
     country: "United States",
     cityZip: "",
-    isClaimed: false
+    isClaimed: false,
+    hasResponse: false,
+    sortBy: 'relevance'
   });
   const [activeFilters, setActiveFilters] = useState({
     minRating: null,
     country: "United States",
     cityZip: "",
-    isClaimed: false
+    isClaimed: false,
+    hasResponse: false,
+    sortBy: 'relevance'
   });
 
   useEffect(() => {
@@ -73,7 +77,9 @@ const CategoryDetail = () => {
           minRating: activeFilters.minRating || undefined,
           location: activeFilters.country,
           cityZip: activeFilters.cityZip || undefined,
-          claimed: activeFilters.isClaimed || undefined
+          claimed: activeFilters.isClaimed || undefined,
+          hasResponse: activeFilters.hasResponse || undefined,
+          sortBy: activeFilters.sortBy
         };
         const { data } = await api.get('/companies', { params });
         setCompanies(data.companies || []);
@@ -471,6 +477,27 @@ const CategoryDetail = () => {
                         </div>
                      </div>
 
+                      {/* Sort Section */}
+                      <div className="space-y-4">
+                        <h3 className="text-[14px] font-bold text-gray-900 uppercase tracking-[2px]">Sort By</h3>
+                        <div className="grid grid-cols-2 gap-3">
+                          {[
+                            { id: 'relevance', label: 'Relevance' },
+                            { id: 'highest_rated', label: 'Highest Rated' },
+                            { id: 'most_reviewed', label: 'Most Reviewed' },
+                            { id: 'newest', label: 'Newest' }
+                          ].map((sort) => (
+                            <button
+                              key={sort.id}
+                              onClick={() => setTempFilters(prev => ({ ...prev, sortBy: sort.id }))}
+                              className={`py-4 px-4 rounded-xl font-bold text-[13px] border transition-all ${tempFilters.sortBy === sort.id ? 'bg-[#002e21] text-white border-[#002e21]' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'}`}
+                            >
+                              {sort.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                      {/* Location Section */}
                      <div className="space-y-4">
                         <h3 className="text-[14px] font-bold text-gray-900 uppercase tracking-[2px]">Location</h3>
@@ -525,11 +552,10 @@ const CategoryDetail = () => {
 
                   {/* Sidebar Footer */}
                   <div className="absolute bottom-0 left-0 right-0 p-8 pt-6 bg-white border-t border-gray-100 flex items-center justify-between gap-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-                     <button 
-                        onClick={() => {
-                           const reset = { minRating: null, country: "United States", cityZip: "", isClaimed: false };
-                           setTempFilters(reset);
-                        }}
+                     <button                         onClick={() => {
+                            const reset = { minRating: null, country: "United States", cityZip: "", isClaimed: false, hasResponse: false, sortBy: 'relevance' };
+                            setTempFilters(reset);
+                         }}
                         className="text-[15px] font-bold text-blue-600 hover:text-blue-800 transition-colors"
                      >
                         Reset
