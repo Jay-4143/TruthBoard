@@ -38,6 +38,7 @@ app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/business', require('./routes/businessRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/invite', require('./routes/inviteRoutes'));
 
 app.get('/', (req, res) => {
   res.send('API is running...');

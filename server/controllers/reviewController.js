@@ -78,8 +78,54 @@ const createReview = async (req, res) => {
         if (isNegativeFlagged) {
           console.log(`[AI-FLAG] Review ${review._id} auto-flagged. Sentiment: ${sentimentScore}`);
         }
+
+        // Send company notification email for ALL new reviews
+        try {
+          const BusinessAccount = require('../models/BusinessAccount');
+          const { sendEmail } = require('../services/emailService');
+          const ownerAccount = await BusinessAccount.findById(company.claimedBy);
+          if (ownerAccount && ownerAccount.email) {
+            const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            await sendEmail(
+              ownerAccount.email,
+              `[TruthBoard] New ${rating}-star review for ${company.name}`,
+              `New review from ${req.user.name}\nRating: ${rating}/5\nTitle: ${title}\nComment: ${reviewText}`,
+              `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: #1a1c21; padding: 24px 32px; text-align: center;">
+                  <h1 style="color: #00b67a; margin: 0; font-size: 22px;">⭐ TruthBoard</h1>
+                </div>
+                <div style="padding: 32px;">
+                  <h2 style="color: #1a1c21; margin-top: 0;">New Review for ${company.name}</h2>
+                  <p style="font-size: 28px; margin: 16px 0; color: #00b67a;">${stars}</p>
+                  <p style="color: #555; font-size: 15px;"><strong>From:</strong> ${req.user.name}</p>
+                  <p style="color: #555; font-size: 15px;"><strong>Title:</strong> ${title}</p>
+                  <p style="color: #555; font-size: 15px; font-style: italic; border-left: 3px solid #00b67a; padding-left: 12px;">"${reviewText}"</p>
+                  <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/business/reviews"
+                     style="display: inline-block; background: #00b67a; color: white; padding: 12px 28px; text-decoration: none; border-radius: 50px; font-weight: bold; margin-top: 16px;">
+                    View & Respond
+                  </a>
+                </div>
+              </div>`
+            );
+          }
+        } catch (emailErr) {
+          console.error('[EMAIL] Failed to send review notification email:', emailErr.message);
+        }
       } catch (notifyError) {
         console.error('Failed to create notification:', notifyError);
+      }
+    }
+
+    // Mark invite as completed if this review came from an invite token
+    if (req.body.inviteToken) {
+      try {
+        const Invite = require('../models/Invite');
+        await Invite.findOneAndUpdate(
+          { token: req.body.inviteToken, status: 'pending' },
+          { status: 'completed', completedAt: new Date() }
+        );
+      } catch (inviteErr) {
+        console.error('[INVITE] Failed to mark invite as completed:', inviteErr.message);
       }
     }
     

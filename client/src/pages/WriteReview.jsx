@@ -9,6 +9,7 @@ const WriteReview = () => {
   const { companyId: initialCompanyId } = useParams();
   const [searchParams] = useSearchParams();
   const companySlug = searchParams.get('slug');
+  const inviteTokenParam = searchParams.get('token');
   
   // Steps: 1 = search, 2 = review form, 3 = confirmation
   const [step, setStep] = useState(initialCompanyId || companySlug ? 2 : 1);
@@ -38,9 +39,32 @@ const WriteReview = () => {
 
   // Submitted review data for confirmation page
   const [submittedReview, setSubmittedReview] = useState(null);
+  const [inviteToken, setInviteToken] = useState(inviteTokenParam || null);
+  const [inviteData, setInviteData] = useState(null);
   
   const { user, businessUser, login, register, loginWithPhone } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Verify invite token from URL
+  useEffect(() => {
+    if (!inviteTokenParam) return;
+    const verifyToken = async () => {
+      try {
+        setCompanyLoading(true);
+        const { data } = await api.get(`/invite/verify/${inviteTokenParam}`);
+        setInviteData(data);
+        setInviteToken(inviteTokenParam);
+        setSelectedCompany(data.company);
+        setStep(2);
+      } catch (err) {
+        console.error('Invalid invite token:', err);
+        setError(err.response?.data?.message || 'Invalid or expired invitation link');
+      } finally {
+        setCompanyLoading(false);
+      }
+    };
+    verifyToken();
+  }, [inviteTokenParam]);
 
   // Load Recent Companies
   useEffect(() => {
@@ -183,7 +207,8 @@ const WriteReview = () => {
         rating,
         title,
         reviewText,
-        dateOfExperience
+        dateOfExperience,
+        ...(inviteToken && { inviteToken })
       });
       setSubmittedReview({
         ...data,
@@ -236,7 +261,8 @@ const WriteReview = () => {
         rating,
         title,
         reviewText,
-        dateOfExperience
+        dateOfExperience,
+        ...(inviteToken && { inviteToken })
       });
       setSubmittedReview({
         ...data,
