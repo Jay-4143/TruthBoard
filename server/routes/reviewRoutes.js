@@ -4,10 +4,10 @@ const { getCompanyReviews, createReview, getMyReviews, updateReview, deleteRevie
 const { protect, protectEither } = require('../middleware/authMiddleware');
 
 router.get('/company/:companyId', getCompanyReviews);
-router.get('/me', protect, getMyReviews);
-router.post('/', protect, createReview);
+router.get('/me', protectEither, getMyReviews);
+router.post('/', protectEither, createReview);
 router.post('/:id/flag', protectEither, flagReview);
-router.put('/:id', protect, updateReview);
+router.put('/:id', protectEither, updateReview);
 router.delete('/:id', protectEither, deleteReview);
 
 module.exports = router;

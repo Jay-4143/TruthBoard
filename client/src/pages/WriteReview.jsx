@@ -39,7 +39,7 @@ const WriteReview = () => {
   // Submitted review data for confirmation page
   const [submittedReview, setSubmittedReview] = useState(null);
   
-  const { user, login, register, loginWithPhone } = useContext(AuthContext);
+  const { user, businessUser, login, register, loginWithPhone } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Load Recent Companies
@@ -202,7 +202,8 @@ const WriteReview = () => {
   // Normal submit (when already logged in)
    const handleSubmit = async (e) => {
      e.preventDefault();
-     if (!user) return;
+     const currentUser = user || businessUser;
+     if (!currentUser) return;
      if (!selectedCompany) return setError('Company data is still loading. Please wait a moment.');
      if (rating === 0) return setError('Please select a star rating');
     if (title.length < 3) return setError('Please provide a descriptive title');
@@ -300,7 +301,7 @@ const WriteReview = () => {
                 {user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U'}
               </div>
               <div>
-                <p className="font-bold text-[#1a1c21] text-sm">{user?.name || 'User'}</p>
+                <p className="font-bold text-[#1a1c21] text-sm">{user?.name || businessUser?.name || 'User'}</p>
                 <p className="text-xs text-gray-500">0 reviews &nbsp;•&nbsp; 🌐 IN</p>
               </div>
             </div>
@@ -518,7 +519,7 @@ const WriteReview = () => {
                   </div>
 
                   {/* ─── AUTH / SUBMIT SECTION ─── */}
-                  {user ? (
+                  {(user || businessUser) ? (
                     /* LOGGED IN: Show Submit button directly */
                     <div className="pt-4">
                      <button type="submit" disabled={loading || companyLoading || !selectedCompany} className="w-full bg-[#1a1c21] text-white py-4 rounded-full font-bold text-base hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg">

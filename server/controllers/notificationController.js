@@ -1,6 +1,6 @@
 const Notification = require('../models/Notification');
 
-const getBusinessNotifications = async (req, res) => {
+const getNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find({ recipient: req.user._id })
       .sort({ createdAt: -1 })
@@ -43,7 +43,7 @@ const markAllAsRead = async (req, res) => {
 };
 
 module.exports = {
-  getBusinessNotifications,
+  getNotifications,
   markAsRead,
   markAllAsRead
 };

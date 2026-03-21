@@ -8,23 +8,32 @@ api.interceptors.request.use(
   (config) => {
     let token = null;
     
-    // If it's a business route, try to get business token
-    if (config.url.includes('/business')) {
-      const businessInfo = localStorage.getItem('businessInfo');
-      if (businessInfo) {
-        token = JSON.parse(businessInfo).token;
+    const getSafeToken = (key) => {
+      try {
+        const info = localStorage.getItem(key);
+        if (info && info !== 'undefined' && info !== 'null') {
+          const parsed = JSON.parse(info);
+          return parsed ? parsed.token : null;
+        }
+      } catch (err) {
+        console.error(`Error parsing ${key} from localStorage`, err);
       }
-    }
+      return null;
+    };
 
-    // Fallback to regular user token if no business token or not a business route
-    if (!token) {
-      const userInfo = localStorage.getItem('userInfo');
-      if (userInfo) {
-        token = JSON.parse(userInfo).token;
-      }
+    const bToken = getSafeToken('businessInfo');
+    const uToken = getSafeToken('userInfo');
+
+    // Determine which token to use
+    if (config.url.includes('/business')) {
+      token = bToken || uToken;
+    } else {
+      // For shared or user routes
+      token = uToken || bToken;
     }
 
     if (token) {
+      // console.log(`Sending token for ${config.url}`);
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -32,17 +41,19 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Auto-logout on 401 responses
+// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      if (error.config.url.includes('/business')) {
-        localStorage.removeItem('businessInfo');
-      } else {
+      // If we get a 401, check which token was used and clear it
+      // This prevents logging out the 'wrong' type if one is still valid
+      const authHeader = error.config.headers.Authorization;
+      if (authHeader) {
         localStorage.removeItem('userInfo');
+        localStorage.removeItem('businessInfo');
+        // window.location.reload();
       }
-      // window.location.reload(); // Optional: might be too aggressive
     }
     return Promise.reject(error);
   }

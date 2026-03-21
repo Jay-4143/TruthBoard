@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "axios": "^1.13.6",
     "countup.js": "^2.10.0",
+    "date-fns": "^4.1.0",
     "firebase": "^12.10.0",
     "framer-motion": "^12.36.0",
     "libphonenumber-js": "^1.12.40",

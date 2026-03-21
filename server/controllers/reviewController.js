@@ -46,9 +46,11 @@ const createReview = async (req, res) => {
       isNegativeFlagged
     });
 
-    // Increment review count for user
-    const User = require('../models/User');
-    await User.findByIdAndUpdate(req.user._id, { $inc: { reviewCount: 1 } });
+    // Increment review count for author (if regular user)
+    if (req.user.type === 'user') {
+      const User = require('../models/User');
+      await User.findByIdAndUpdate(req.user._id, { $inc: { reviewCount: 1 } });
+    }
 
     // Update company stats
     await updateCompanyStats(companyId);

@@ -9,7 +9,8 @@ import {
   ChevronRight,
   MoreHorizontal,
   ThumbsUp,
-  Clock
+  Clock,
+  AlertTriangle
 } from 'lucide-react';
 import api from '../../services/api';
 

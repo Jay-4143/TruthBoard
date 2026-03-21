@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef, useContext, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 const Navigation = () => {
   const { user, businessUser, logout } = useContext(AuthContext);
@@ -14,6 +15,8 @@ const Navigation = () => {
   const [showResults, setShowResults] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
 
   const profileRef = useRef(null);
   const searchRef = useRef(null);
@@ -40,6 +43,49 @@ const Navigation = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const fetchNotifications = useCallback(async () => {
+    if (!user && !businessUser) return;
+    try {
+      setLoadingNotifications(true);
+      const { data } = await api.get('/notifications');
+      setNotifications(data);
+    } catch (err) {
+      console.error('Failed to fetch notifications:', err);
+    } finally {
+      setLoadingNotifications(false);
+    }
+  }, [user, businessUser]);
+
+  useEffect(() => {
+    if (user || businessUser) {
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [user, businessUser, fetchNotifications]);
+
+  const markAsRead = async (id) => {
+    try {
+      await api.put(`/notifications/${id}/read`);
+      setNotifications(prev => 
+        prev.map(n => n._id === id ? { ...n, read: true } : n)
+      );
+    } catch (err) {
+      console.error('Failed to mark notification as read:', err);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      await api.put('/notifications/read-all');
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    } catch (err) {
+      console.error('Failed to mark all as read:', err);
+    }
+  };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   useEffect(() => {
     const debounceSearch = setTimeout(async () => {
@@ -119,13 +165,19 @@ const Navigation = () => {
           <Link to="/categories" className="text-sm font-bold hover:text-[#00b67a] transition-colors">Categories</Link>
           <Link to="/blog" className="text-sm font-bold hover:text-[#00b67a] transition-colors">Blog</Link>
           
-          <button 
-             onClick={() => setShowNotifications(true)}
-             className="relative text-white hover:text-[#00b67a] transition-colors ml-2 group"
-          >
-             <Bell className="h-5 w-5" />
-             <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-[#191919]"></div>
-          </button>
+          {(user || businessUser) && (
+            <button 
+               onClick={() => setShowNotifications(true)}
+               className="relative text-white hover:text-[#00b67a] transition-colors ml-2 group"
+            >
+               <Bell className="h-5 w-5" />
+               {unreadCount > 0 && (
+                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-[#191919] text-[10px] text-white flex items-center justify-center font-bold">
+                   {unreadCount > 9 ? '9+' : unreadCount}
+                 </div>
+               )}
+            </button>
+          )}
 
           {user ? (
             <div className="relative flex items-center gap-4 ml-2" ref={profileRef}>
@@ -286,14 +338,70 @@ const Navigation = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 flex flex-col items-center justify-center p-12 text-center space-y-6">
-                     <div className="w-20 h-20 rounded-full bg-[#ebfaf5] flex items-center justify-center">
-                        <Bell className="w-9 h-9 text-[#00b67a]" />
-                     </div>
-                     <div className="space-y-1 text-gray-900">
-                        <h3 className="text-[18px] font-bold">You're all caught up!</h3>
-                        <p className="text-[14px] font-medium text-gray-400">When you get notifications, they'll show up here.</p>
-                     </div>
+                  <div className="flex-1 overflow-y-auto">
+                    {loadingNotifications && notifications.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center h-full space-y-4">
+                        <div className="w-8 h-8 border-4 border-[#00b67a] border-t-transparent rounded-full animate-spin"></div>
+                        <p className="text-sm text-gray-500 font-medium font-sans">Loading notifications...</p>
+                      </div>
+                    ) : notifications.length > 0 ? (
+                      <div className="divide-y divide-gray-50 flex flex-col font-sans">
+                        <div className="px-8 py-3 bg-gray-50/50 flex justify-between items-center">
+                          <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">{unreadCount} Unread</span>
+                          <button 
+                            onClick={markAllAsRead}
+                            className="text-[12px] font-black text-[#00b67a] hover:underline uppercase tracking-tight"
+                          >
+                            Mark all as read
+                          </button>
+                        </div>
+                        {notifications.map((notification) => (
+                          <div 
+                            key={notification._id}
+                            onClick={() => {
+                              if (!notification.read) markAsRead(notification._id);
+                              if (notification.link) navigate(notification.link);
+                              setShowNotifications(false);
+                            }}
+                            className={`px-8 py-6 cursor-pointer transition-all hover:bg-gray-50 relative group ${!notification.read ? 'bg-blue-50/30' : ''}`}
+                          >
+                            {!notification.read && (
+                              <div className="absolute left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#00b67a] rounded-full"></div>
+                            )}
+                            <div className="flex gap-4">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
+                                notification.type === 'NEGATIVE_REVIEW' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-[#00b67a]'
+                              }`}>
+                                <Bell className="w-5 h-5" />
+                              </div>
+                              <div className="flex-1 space-y-1">
+                                <div className="flex justify-between items-start gap-2">
+                                  <h4 className={`text-[15px] font-bold leading-tight ${!notification.read ? 'text-gray-900' : 'text-gray-600'}`}>
+                                    {notification.title}
+                                  </h4>
+                                  <span className="text-[11px] font-bold text-gray-400 whitespace-nowrap">
+                                    {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                                  </span>
+                                </div>
+                                <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 font-semibold">
+                                  {notification.message}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center p-12 text-center space-y-6 h-full font-sans">
+                        <div className="w-20 h-20 rounded-full bg-[#ebfaf5] flex items-center justify-center">
+                          <Bell className="w-9 h-9 text-[#00b67a]" />
+                        </div>
+                        <div className="space-y-1 text-gray-900">
+                          <h3 className="text-[18px] font-black tracking-tight">You're all caught up!</h3>
+                          <p className="text-[14px] font-bold text-gray-400">When you get notifications, they'll show up here.</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                </motion.div>
             </>

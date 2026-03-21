@@ -8,7 +8,7 @@ const notificationSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['NEW_REVIEW', 'GENERAL'],
+    enum: ['NEW_REVIEW', 'GENERAL', 'NEGATIVE_REVIEW', 'REVIEW_REPLY', 'REVIEW_FLAGGED'],
     default: 'NEW_REVIEW'
   },
   title: {
